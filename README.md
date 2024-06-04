@@ -38,23 +38,31 @@ const titleSpan = <span style={{
   }}>...</span>;
 const arr = [1, 2, 3];
 
+function handleClick() {
+  console.log("Click");
+}
+
 export default function MyComponent() {
   return (
-    <h1>{titleSpan}</h1>
+    <>
+      <h1>{titleSpan}</h1>
 
-    {Math.random() > 0.5 ? (
-      <h2>...1...</h2>
-    ) : (
-      <h2>...2...</h2>
-    )}
+      <button onClick={handleClick}>...</button>
 
-    <ul>
-      {arr.map(item =>
-        <li key={item}>
-          {item}
-        </li>
+      {Math.random() > 0.5 ? (
+        <h2>...1...</h2>
+      ) : (
+        <h2>...2...</h2>
       )}
-    </ul>
+
+      <ul>
+        {arr.map(item =>
+          <li key={item}>
+            {item}
+          </li>
+        )}
+      </ul>
+    </>
   );
 }
 ```
