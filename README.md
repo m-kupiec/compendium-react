@@ -11,6 +11,8 @@
 > [React](https://react.dev/learn)
 
 JSX:
+- Definition:
+  - "The markup syntax . . . is called *JSX*" ([React](https://react.dev/learn))
 - Escaping into JavaScript:
   - "JSX lets you put markup into JavaScript. Curly braces let you “escape back” into JavaScript" ([React](https://react.dev/learn))
   - "You can also “escape into JavaScript” from JSX attributes, but you have to use curly braces *instead of quotes*" ([React](https://react.dev/learn))
