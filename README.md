@@ -6,9 +6,11 @@
 
 # Fundamentals
 
-> React components are JavaScript functions that return markup
->
-> [React](https://react.dev/learn)
+Components:
+- "React components are JavaScript functions that return markup" ([React](https://react.dev/learn))
+- "Components are used to render, manage, and update the UI elements in your application" ([React](https://react.dev/learn/tutorial-tic-tac-toe))
+
+Styling:
 
 > React does not prescribe how you add CSS files. In the simplest case, you’ll add a `<link>` tag to your HTML.
 >
