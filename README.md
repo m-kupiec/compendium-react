@@ -17,6 +17,7 @@ JSX:
   - "JSX lets you put markup into JavaScript. Curly braces let you “escape back” into JavaScript" ([React](https://react.dev/learn))
   - "You can also “escape into JavaScript” from JSX attributes, but you have to use curly braces *instead of quotes*" ([React](https://react.dev/learn))
   - "`style={{}}` is not a special syntax, but a regular `{}` object inside the `style={ }` JSX curly braces. You can use the `style` attribute when your styles depend on JavaScript variables." ([React](https://react.dev/learn))
+  - "you can use the conditional `?` operator. Unlike `if`, it works inside JSX . . . you can also use a shorter logical `&&` syntax" ([React](https://react.dev/learn))
 - Requirements:
   - "You have to close tags like `<br />`." ([React](https://react.dev/learn))
   - "Your component also can’t return multiple JSX tags. You have to wrap them into a shared parent, like a `<div>...</div>` or an empty `<>...</>` wrapper" ([React](https://react.dev/learn))
@@ -35,6 +36,11 @@ const titleSpan = <span style={{
 export default function MyComponent() {
   return (
     <h1>{titleSpan}</h1>
+    {Math.random() > 0.5 ? (
+      <h2>...1...</h2>
+    ) : (
+      <h2>...2...</h2>
+    )}
   );
 }
 ```
