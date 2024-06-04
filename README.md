@@ -69,3 +69,15 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   </React.StrictMode>
 )
 ```
+
+```html
+<!-- index.html -->
+
+<!-- ... -->
+  <body>
+    <div id="root"></div>
+
+    <script src="/src/main.jsx" type="module"></script>
+  </body>
+</html>
+```
