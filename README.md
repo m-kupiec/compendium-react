@@ -15,9 +15,13 @@ JSX:
   - "The markup syntax . . . is called *JSX*" ([React](https://react.dev/learn))
 - Escaping into JavaScript:
   - "JSX lets you put markup into JavaScript. Curly braces let you “escape back” into JavaScript" ([React](https://react.dev/learn))
-  - "You can also “escape into JavaScript” from JSX attributes, but you have to use curly braces *instead of quotes*" ([React](https://react.dev/learn))
-  - "`style={{}}` is not a special syntax, but a regular `{}` object inside the `style={ }` JSX curly braces. You can use the `style` attribute when your styles depend on JavaScript variables." ([React](https://react.dev/learn))
-  - "you can use the conditional `?` operator. Unlike `if`, it works inside JSX . . . you can also use a shorter logical `&&` syntax" ([React](https://react.dev/learn))
+  - HTML attributes:
+    - "You can also “escape into JavaScript” from JSX attributes, but you have to use curly braces *instead of quotes*" ([React](https://react.dev/learn))
+    - "`style={{}}` is not a special syntax, but a regular `{}` object inside the `style={ }` JSX curly braces. You can use the `style` attribute when your styles depend on JavaScript variables." ([React](https://react.dev/learn))
+  - Control flow:
+    - "you can use the conditional `?` operator. Unlike `if`, it works inside JSX . . . you can also use a shorter logical `&&` syntax" ([React](https://react.dev/learn))
+    - "You will rely on JavaScript features like `for` loop and the array `map()` function to render lists of components." ([React](https://react.dev/learn))
+    - "`<li>` has a `key` attribute. For each item in a list, you should pass a string or a number that uniquely identifies that item among its siblings." ([React](https://react.dev/learn))
 - Requirements:
   - "You have to close tags like `<br />`." ([React](https://react.dev/learn))
   - "Your component also can’t return multiple JSX tags. You have to wrap them into a shared parent, like a `<div>...</div>` or an empty `<>...</>` wrapper" ([React](https://react.dev/learn))
@@ -32,15 +36,25 @@ JSX:
 const titleSpan = <span style={{
     color: 'blue',
   }}>...</span>;
+const arr = [1, 2, 3];
 
 export default function MyComponent() {
   return (
     <h1>{titleSpan}</h1>
+
     {Math.random() > 0.5 ? (
       <h2>...1...</h2>
     ) : (
       <h2>...2...</h2>
     )}
+
+    <ul>
+      {arr.map(item =>
+        <li key={item}>
+          {item}
+        </li>
+      )}
+    </ul>
   );
 }
 ```
