@@ -10,9 +10,11 @@
 >
 > [React](https://react.dev/learn)
 
-JSX requirements:
-- "You have to close tags like `<br />`." ([React](https://react.dev/learn))
-- "Your component also can’t return multiple JSX tags. You have to wrap them into a shared parent, like a `<div>...</div>` or an empty `<>...</>` wrapper" ([React](https://react.dev/learn))
+JSX:
+- "JSX lets you put markup into JavaScript. Curly braces let you “escape back” into JavaScript . . . You can also “escape into JavaScript” from JSX attributes, but you have to use curly braces *instead of quotes*" ([React](https://react.dev/learn))
+- Requirements:
+  - "You have to close tags like `<br />`." ([React](https://react.dev/learn))
+  - "Your component also can’t return multiple JSX tags. You have to wrap them into a shared parent, like a `<div>...</div>` or an empty `<>...</>` wrapper" ([React](https://react.dev/learn))
 
 > React does not prescribe how you add CSS files. In the simplest case, you’ll add a `<link>` tag to your HTML.
 >
@@ -21,9 +23,11 @@ JSX requirements:
 ```jsx
 /* MyComponent.jsx */
 
+const titleSpan = <span>...</span>;
+
 export default function MyComponent() {
   return (
-    <h1>...</h1>
+    <h1>{titleSpan}</h1>
   );
 }
 ```
