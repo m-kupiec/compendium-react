@@ -6,7 +6,7 @@
 
 ### Application Design & Development
 
-- **Step 1: Creating a Component Hierarchy**
+- **Step 1: Designing a Component Hierarchy**
 - **Step 2: Building a Static Prototype**
 
 # Fundamentals
@@ -145,7 +145,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
 # Application Design & Development
 
-## Step 1: Creating a Component Hierarchy
+## Step 1: Designing a Component Hierarchy
 
 > Imagine that you already have a JSON API and a mockup from a designer. The JSON API returns some data that looks like this:
 >
