@@ -7,6 +7,7 @@
 ### Application Design & Development
 
 - **Step 1: Creating a Component Hierarchy**
+- **Step 2: Building a Static Prototype**
 
 # Fundamentals
 
@@ -175,3 +176,15 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 >     - ProductRow
 >
 > [React](https://react.dev/learn/thinking-in-react)
+
+## Step 2: Building a Static Prototype
+
+> The most straightforward approach is to build a version that renders the UI from your data model without adding any interactivity… yet! It’s often easier to build the static version first and add interactivity later. Building a static version requires a lot of typing and no thinking, but adding interactivity requires a lot of thinking and not a lot of typing.
+>
+> . . . you’ll want to build components that reuse other components and pass data using props
+>
+> . . . don’t use state at all to build this static version. State is reserved only for interactivity, that is, data that changes over time.
+>
+> . . . You can either build “top down” by starting with building the components higher up in the hierarchy . . . or “bottom up” by working from components lower down . . . In simpler examples, it’s usually easier to go top-down, and on larger projects, it’s easier to go bottom-up.
+>
+> . . . After building your components, you’ll have a library of reusable components that render your data model. . . . The component at the top of the hierarchy . . . will take your data model as a prop. This is called *one-way data flow* because the data flows down from the top-level component to the ones at the bottom of the tree.
