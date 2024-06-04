@@ -10,6 +10,10 @@
 >
 > [React](https://react.dev/learn)
 
+> React does not prescribe how you add CSS files. In the simplest case, you’ll add a `<link>` tag to your HTML.
+>
+> [React](https://react.dev/learn)
+
 JSX:
 - Definition:
   - "The markup syntax . . . is called *JSX*" ([React](https://react.dev/learn))
@@ -26,9 +30,13 @@ JSX:
   - "You have to close tags like `<br />`." ([React](https://react.dev/learn))
   - "Your component also can’t return multiple JSX tags. You have to wrap them into a shared parent, like a `<div>...</div>` or an empty `<>...</>` wrapper" ([React](https://react.dev/learn))
 
-> React does not prescribe how you add CSS files. In the simplest case, you’ll add a `<link>` tag to your HTML.
->
-> [React](https://react.dev/learn)
+Hooks:
+- "Functions starting with `use` are called Hooks." ([React](https://react.dev/learn))
+- "You can only call Hooks at the top of your components (or other Hooks). If you want to use `useState` in a condition or a loop, extract a new component and put it there." ([React](https://react.dev/learn))
+
+State and props:
+- "The information you pass down like this is called props" ([React](https://react.dev/learn))
+- "By moving state up, you’ve shared it between components." ([React](https://react.dev/learn))
 
 ```jsx
 /* MyComponent.jsx */
@@ -38,16 +46,12 @@ const titleSpan = <span style={{
   }}>...</span>;
 const arr = [1, 2, 3];
 
-function handleClick() {
-  console.log("Click");
-}
-
-export default function MyComponent() {
+export default function MyComponent({ counter, handler }) {
   return (
     <>
       <h1>{titleSpan}</h1>
 
-      <button onClick={handleClick}>...</button>
+      <button onClick={handler}>{counter}</button>
 
       {Math.random() > 0.5 ? (
         <h2>...1...</h2>
@@ -70,14 +74,23 @@ export default function MyComponent() {
 ```jsx
 /* App.jsx */
 
-import MyComponent from './components/MyComponent.jsx';
-import myLogo      from './assets/logo.svg';
-import                  './styles/App.css';
+import { useState } from 'react';
+import MyComponent  from './components/MyComponent.jsx';
+import myLogo       from './assets/logo.svg';
+import                   './styles/App.css';
 
 export default function App() {
+  const [ count, setCount ] = useState(0);
+
+  function handleClick() {
+    setCount(count + 1);
+    // OR:
+    // setCount(c => c + 1);
+  }
+
   return (
     <>
-      <MyComponent />
+      <MyComponent counter={count} handler={handleClick} />
       <p className="class1">...</p>
       <img src={myLogo} alt="App">
     </>
