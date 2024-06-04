@@ -4,11 +4,7 @@
 
 ### Funamentals
 
-- **Components**
-
 # Fundamentals
-
-## Components
 
 > React components are JavaScript functions that return markup
 >
@@ -33,19 +29,34 @@ export default function MyComponent() {
 ```
 
 ```jsx
-/* MyApp.jsx */
+/* App.jsx */
 
 import MyComponent from './components/MyComponent.jsx';
 import myLogo      from './assets/logo.svg';
-import                  './styles/MyApp.css';
+import                  './styles/App.css';
 
-export default function MyApp() {
+export default function App() {
   return (
     <>
       <MyComponent />
       <p className="class1">...</p>
-      <img src={myLogo} alt="MyApp">
+      <img src={myLogo} alt="App">
     </>
   )
 }
+```
+
+```jsx
+/* main.jsx */
+
+import React    from 'react';
+import ReactDOM from 'react-dom/client';
+import App      from './App.jsx';
+import               './styles/index.css';
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+)
 ```
