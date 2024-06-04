@@ -4,6 +4,10 @@
 
 ### Funamentals
 
+### Application Design & Development
+
+- **Step 1: Creating a Component Hierarchy**
+
 # Fundamentals
 
 Components:
@@ -137,3 +141,37 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   </body>
 </html>
 ```
+
+# Application Design & Development
+
+## Step 1: Creating a Component Hierarchy
+
+> Imagine that you already have a JSON API and a mockup from a designer. The JSON API returns some data that looks like this:
+>
+> ```json
+> [
+>   { category: "Fruits", price: "$1", stocked: true, name: "Apple" },
+>   { category: "Fruits", price: "$1", stocked: true, name: "Dragonfruit" },
+>   { category: "Fruits", price: "$2", stocked: false, name: "Passionfruit" },
+>   { category: "Vegetables", price: "$2", stocked: true, name: "Spinach" },
+>   { category: "Vegetables", price: "$4", stocked: false, name: "Pumpkin" },
+>   { category: "Vegetables", price: "$1", stocked: true, name: "Peas" }
+> ]
+> ```
+>
+> Start by drawing boxes around every component and subcomponent in the mockup and naming them. If you work with a designer, they may have already named these components in their design tool.
+>
+> . . . a component should ideally only do one thing. If it ends up growing, it should be decomposed into smaller subcomponents.
+>
+> . . . Separate your UI into components, where each component matches one piece of your data model.
+>
+> ![Image](/assets/s_thinking-in-react_ui_outline.png)
+>
+> Now that you’ve identified the components in the mockup, arrange them into a hierarchy. . . .
+> - FilterableProductTable
+>   - SearchBar
+>   - ProductTable
+>     - ProductCategoryRow
+>     - ProductRow
+>
+> [React](https://react.dev/learn/thinking-in-react)
