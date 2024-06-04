@@ -29,7 +29,7 @@ export default function MyApp() {
   return (
     <>
       <MyComponent />
-      <p>...</p>
+      <p className="class1">...</p>
     </>
   )
 }
