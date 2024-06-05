@@ -47,6 +47,38 @@ Components:
       >
       > [React](https://react.dev/learn/passing-props-to-a-component)
   - "If you want to give a prop a default value to fall back on when no value is specified, you can do it with the destructuring by putting `=` and the default value right after the parameter" ([React](https://react.dev/learn/passing-props-to-a-component))
+  - > Forwarding props with the JSX spread syntax . . .
+    >
+    > ```jsx
+    > function Profile({ person, size, isSepia, thickBorder }) {
+    >   return (
+    >     <div className="card">
+    >       <Avatar
+    >         person={person}
+    >         size={size}
+    >         isSepia={isSepia}
+    >         thickBorder={thickBorder}
+    >       />
+    >     </div>
+    >   );
+    > }
+    > ```
+    >
+    > Some components forward all of their props to their children, like how this `Profile` does with `Avatar`. Because they don’t use any of their props directly, it can make sense to use a more concise “spread” syntax:
+    >
+    > ```jsx
+    > function Profile(props) {
+    >   return (
+    >     <div className="card">
+    >       <Avatar {...props} />
+    >     </div>
+    >   );
+    > }
+    > ```
+    >
+    > Use spread syntax with restraint. If you’re using it in every other component, something is wrong. Often, it indicates that you should split your components and pass children as JSX.
+    >
+    > [React](https://react.dev/learn/passing-props-to-a-component)
   - "In React, it’s conventional to use `onSomething` names for props which represent events and `handleSomething` for the function definitions which handle those events." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
 - Organization:
   - "many websites only use React to add interactivity to existing HTML pages. They have many root components instead of a single one for the entire page." ([React](https://react.dev/learn/your-first-component))
