@@ -79,6 +79,33 @@ Components:
     > Use spread syntax with restraint. If you’re using it in every other component, something is wrong. Often, it indicates that you should split your components and pass children as JSX.
     >
     > [React](https://react.dev/learn/passing-props-to-a-component)
+  - "When you nest content inside a JSX tag, the parent component will receive that content in a prop called `children`. . . . You can think of a component with a `children` prop as having a “hole” that can be “filled in” by its parent components with arbitrary JSX. You will often use the `children` prop for visual wrappers: panels, grids, etc." ([React](https://react.dev/learn/passing-props-to-a-component))
+    - ```jsx
+      import MyComponent from './components/MyComponent.jsx';
+      import NestedComponent from './components/NestedComponent.jsx';
+
+      export default function App() {
+        return (
+          <>
+            <MyComponent>
+              <NestedComponent />
+            </MyComponent>
+          </>
+        )
+      }
+      ```
+    - ```jsx
+      export default function MyComponent({ children }) {
+        return (
+          <>
+            <h1>MyComponent</h1>
+            <section>
+              {children}
+            </section>
+          </>
+        );
+      }
+      ```
   - "In React, it’s conventional to use `onSomething` names for props which represent events and `handleSomething` for the function definitions which handle those events." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
 - Organization:
   - "many websites only use React to add interactivity to existing HTML pages. They have many root components instead of a single one for the entire page." ([React](https://react.dev/learn/your-first-component))
