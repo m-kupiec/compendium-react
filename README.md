@@ -8,6 +8,7 @@
 
 - **Step 1: Designing a Component Hierarchy**
 - **Step 2: Building a Static Prototype**
+- **Step 3: Identifying the State**
 
 # Fundamentals
 
@@ -188,5 +189,28 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 > . . . You can either build “top down” by starting with building the components higher up in the hierarchy . . . or “bottom up” by working from components lower down . . . In simpler examples, it’s usually easier to go top-down, and on larger projects, it’s easier to go bottom-up.
 >
 > . . . After building your components, you’ll have a library of reusable components that render your data model. . . . The component at the top of the hierarchy . . . will take your data model as a prop. This is called *one-way data flow* because the data flows down from the top-level component to the ones at the bottom of the tree.
+>
+> [React](https://react.dev/learn/thinking-in-react)
+
+## Step 3: Identifying the State
+
+> To make the UI interactive, you need to let users change your underlying data model. You will use *state* for this.
+>
+> Think of state as the minimal set of changing data that your app needs to remember. The most important principle for structuring state is to keep it DRY (Don’t Repeat Yourself). Figure out the absolute minimal representation of the state your application needs and compute everything else on-demand. . . .
+>
+> - Does it **remain unchanged** over time? If so, it isn’t state.
+> - Is it **passed in from a parent** via props? If so, it isn’t state.
+> - **Can you compute it** based on existing state or props in your component? If so, it *definitely* isn’t state!
+>
+> [React](https://react.dev/learn/thinking-in-react)
+
+> 1. The original list of products is **passed in as props, so it’s not state**.
+> 2. The search text seems to be state since it changes over time and can’t be computed from anything.
+> 3. The value of the checkbox seems to be state since it changes over time and can’t be computed from anything.
+> 4. The filtered list of products **isn’t state because it can be computed** by taking the original list of products and filtering it according to the search text and value of the checkbox.
+>
+> [React](https://react.dev/learn/thinking-in-react)
+
+> Props and state are different, but they work together. A parent component will often keep some information in state (so that it can change it), and *pass it down* to child components as their props.
 >
 > [React](https://react.dev/learn/thinking-in-react)
