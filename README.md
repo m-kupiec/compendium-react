@@ -47,6 +47,7 @@ Components:
       >
       > [React](https://react.dev/learn/passing-props-to-a-component)
   - "If you want to give a prop a default value to fall back on when no value is specified, you can do it with the destructuring by putting `=` and the default value right after the parameter" ([React](https://react.dev/learn/passing-props-to-a-component))
+  - "props are immutable . . . When a component needs to change its props (for example, in response to a user interaction or new data), it will have to “ask” its parent component to pass it different props—a new object! Its old props will then be cast aside, and eventually the JavaScript engine will reclaim the memory taken by them." ([React](https://react.dev/learn/passing-props-to-a-component))
   - > Forwarding props with the JSX spread syntax . . .
     >
     > ```jsx
