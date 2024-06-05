@@ -9,6 +9,7 @@
 - **Step 1: Designing a Component Hierarchy**
 - **Step 2: Building a Static Prototype**
 - **Step 3: Identifying the State**
+- **Step 4: Implementing the State Flowing Down**
 
 # Fundamentals
 
@@ -212,5 +213,21 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 > [React](https://react.dev/learn/thinking-in-react)
 
 > Props and state are different, but they work together. A parent component will often keep some information in state (so that it can change it), and *pass it down* to child components as their props.
+>
+> [React](https://react.dev/learn/thinking-in-react)
+
+## Step 4: Implementing the State Flowing Down
+
+> you need to identify which component is responsible for changing this state, or owns the state. Remember: React uses one-way data flow, passing data down the component hierarchy from parent to child component. . . .
+>
+> For each piece of state in your application:
+> 1. Identify *every* component that renders something based on that state.
+> 2. Find their closest common parent component—a component above them all in the hierarchy.
+> 3. Decide where the state should live:
+>    1. Often, you can put the state directly into their common parent.
+>    2. You can also put the state into some component above their common parent.
+>    3. If you can’t find a component where it makes sense to own the state, create a new component solely for holding the state and add it somewhere in the hierarchy above the common parent component.
+>
+> Add state to the component with the `useState()` Hook. . . . Add . . . state variables at the top . . . and specify their initial state . . . Then, pass . . . as props
 >
 > [React](https://react.dev/learn/thinking-in-react)
