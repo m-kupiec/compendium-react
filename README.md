@@ -30,6 +30,23 @@ Components:
   - `<Fragment>`:
     - "empty tag is called a *Fragment*. Fragments let you group things without leaving any trace in the browser HTML tree." ([React](https://react.dev/learn/writing-markup-with-jsx))
 - Props:
+  - "React component functions accept a single argument, a `props` object . . . Usually you don’t need the whole `props` object itself, so you destructure it into individual props." ([React](https://react.dev/learn/passing-props-to-a-component))
+    - > ```jsx
+      > function Avatar(props) {
+      >   let person = props.person;
+      >   let size = props.size;
+      >   // ...
+      > }
+      > ```
+      >
+      > ```jsx
+      > function Avatar({ person, size }) {
+      >   // ...
+      > }
+      > ```
+      >
+      > [React](https://react.dev/learn/passing-props-to-a-component)
+  - "If you want to give a prop a default value to fall back on when no value is specified, you can do it with the destructuring by putting `=` and the default value right after the parameter" ([React](https://react.dev/learn/passing-props-to-a-component))
   - "In React, it’s conventional to use `onSomething` names for props which represent events and `handleSomething` for the function definitions which handle those events." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
 - Organization:
   - "many websites only use React to add interactivity to existing HTML pages. They have many root components instead of a single one for the entire page." ([React](https://react.dev/learn/your-first-component))
