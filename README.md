@@ -10,6 +10,7 @@
 - **Step 2: Building a Static Prototype**
 - **Step 3: Identifying the State**
 - **Step 4: Implementing the State Flowing Down**
+- **Step 5: Implementing the State Updates**
 
 # Fundamentals
 
@@ -229,5 +230,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 >    3. If you can’t find a component where it makes sense to own the state, create a new component solely for holding the state and add it somewhere in the hierarchy above the common parent component.
 >
 > Add state to the component with the `useState()` Hook. . . . Add . . . state variables at the top . . . and specify their initial state . . . Then, pass . . . as props
+>
+> [React](https://react.dev/learn/thinking-in-react)
+
+## Step 5: Implementing the State Updates
+
+> to change the state according to user input, you will need to support data flowing the other way: the form components deep in the hierarchy need to update the state . . .
+>
+> The state is owned by `FilterableProductTable`, so only it can call `setFilterText` and `setInStockOnly`. To let `SearchBar` update the `FilterableProductTable`’s state, you need to pass these functions down to `SearchBar`
 >
 > [React](https://react.dev/learn/thinking-in-react)
