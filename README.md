@@ -2,7 +2,47 @@
 
 ## TOC
 
-### Funamentals
+### Overview
+
+### Components
+
+- **General**
+- **Internals**
+- **Built-In Components**
+  - HTML Elements
+  - `<Fragment>`
+- **Props**
+- **Purity**
+  - General
+  - `StrictMode`
+  - Side Effects
+- **Returned Value**
+- **The Render Tree**
+- **The Module Dependency Tree**
+- **Organization**
+
+### Styling
+
+### JSX
+
+- **Definition**
+- **Escaping Into JavaScript**
+  - General
+  - HTML Attributes
+  - Control Flow
+    - Conditionals
+    - Loops
+- **Requirements**
+
+### Hooks
+
+### Events
+
+### State
+
+- **Defining State**
+- **Sharing State**
+- **Data Immutability and Rendering**
 
 ### Application Design & Development
 
@@ -12,241 +52,8 @@
 - **Step 4: Implementing the State Flowing Down**
 - **Step 5: Implementing the State Updates**
 
-# Fundamentals
+# Overview
 
-Components:
-- General:
-  - "React components are JavaScript functions that return markup" ([React](https://react.dev/learn))
-    - "They return JSX markup" ([React](https://react.dev/learn/your-first-component))
-  - "Components are used to render, manage, and update the UI elements in your application" ([React](https://react.dev/learn/tutorial-tic-tac-toe))
-- Internals:
-  - "JSX looks like HTML, but under the hood it is transformed into plain JavaScript objects. You can’t return two objects from a function without wrapping them into an array. This explains why you also can’t return two JSX tags without wrapping them into another tag or a Fragment." ([React](https://react.dev/learn/writing-markup-with-jsx))
-- Built-in components:
-  - HTML elements:
-    - "`className="square"` is a button property or *prop* . . . The DOM `<button>` element’s `onClick` attribute has a special meaning to React because it is a built-in component. For custom components like `Square`, the naming is up to you. You could give any name to the `Square`’s `onSquareClick` prop or `Board`’s `handleClick` function, and the code would work the same." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
-    - "`<img />` is written like HTML, but it is actually JavaScript under the hood!" ([React](https://react.dev/learn/your-first-component))
-    - "JavaScript has limitations on variable names. For example, their names can’t contain dashes or be reserved words like `class`. Since `class` is a reserved word, in React you write `className` instead, named after the corresponding DOM property" ([React](https://react.dev/learn/writing-markup-with-jsx))
-    - "For historical reasons, `aria-*` and `data-*` attributes are written as in HTML with dashes." ([React](https://react.dev/learn/writing-markup-with-jsx))
-    - "JSX elements aren’t “instances” because they don’t hold any internal state and aren’t real DOM nodes." ([React](https://react.dev/learn/conditional-rendering))
-  - `<Fragment>`:
-    - "empty tag is called a *Fragment*. Fragments let you group things without leaving any trace in the browser HTML tree." ([React](https://react.dev/learn/writing-markup-with-jsx))
-    - "What do you do when each item needs to render not one, but several DOM nodes? The short `<>...</>` Fragment syntax won’t let you pass a key, so you need to either group them into a single `<div>`, or use the slightly longer and more explicit `<Fragment>` syntax . .  . Fragments disappear from the DOM, so this will produce a flat list" ([React](https://react.dev/learn/rendering-lists))
-- Props:
-  - "React component functions accept a single argument, a `props` object . . . Usually you don’t need the whole `props` object itself, so you destructure it into individual props." ([React](https://react.dev/learn/passing-props-to-a-component))
-    - > ```jsx
-      > function Avatar(props) {
-      >   let person = props.person;
-      >   let size = props.size;
-      >   // ...
-      > }
-      > ```
-      >
-      > ```jsx
-      > function Avatar({ person, size }) {
-      >   // ...
-      > }
-      > ```
-      >
-      > [React](https://react.dev/learn/passing-props-to-a-component)
-  - "If you want to give a prop a default value to fall back on when no value is specified, you can do it with the destructuring by putting `=` and the default value right after the parameter" ([React](https://react.dev/learn/passing-props-to-a-component))
-  - "props are immutable . . . When a component needs to change its props (for example, in response to a user interaction or new data), it will have to “ask” its parent component to pass it different props—a new object! Its old props will then be cast aside, and eventually the JavaScript engine will reclaim the memory taken by them." ([React](https://react.dev/learn/passing-props-to-a-component))
-  - > Forwarding props with the JSX spread syntax . . .
-    >
-    > ```jsx
-    > function Profile({ person, size, isSepia, thickBorder }) {
-    >   return (
-    >     <div className="card">
-    >       <Avatar
-    >         person={person}
-    >         size={size}
-    >         isSepia={isSepia}
-    >         thickBorder={thickBorder}
-    >       />
-    >     </div>
-    >   );
-    > }
-    > ```
-    >
-    > Some components forward all of their props to their children, like how this `Profile` does with `Avatar`. Because they don’t use any of their props directly, it can make sense to use a more concise “spread” syntax:
-    >
-    > ```jsx
-    > function Profile(props) {
-    >   return (
-    >     <div className="card">
-    >       <Avatar {...props} />
-    >     </div>
-    >   );
-    > }
-    > ```
-    >
-    > Use spread syntax with restraint. If you’re using it in every other component, something is wrong. Often, it indicates that you should split your components and pass children as JSX.
-    >
-    > [React](https://react.dev/learn/passing-props-to-a-component)
-  - "When you nest content inside a JSX tag, the parent component will receive that content in a prop called `children`. . . . You can think of a component with a `children` prop as having a “hole” that can be “filled in” by its parent components with arbitrary JSX. You will often use the `children` prop for visual wrappers: panels, grids, etc." ([React](https://react.dev/learn/passing-props-to-a-component))
-    - ```jsx
-      import MyComponent from './components/MyComponent.jsx';
-      import NestedComponent from './components/NestedComponent.jsx';
-
-      export default function App() {
-        return (
-          <>
-            <MyComponent>
-              <NestedComponent />
-            </MyComponent>
-          </>
-        )
-      }
-      ```
-    - ```jsx
-      export default function MyComponent({ children }) {
-        return (
-          <>
-            <h1>MyComponent</h1>
-            <section>
-              {children}
-            </section>
-          </>
-        );
-      }
-      ```
-  - "In React, it’s conventional to use `onSomething` names for props which represent events and `handleSomething` for the function definitions which handle those events." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
-- Purity:
-  - > a pure function is a function with the following characteristics:
-    > - **It minds its own business.** It does not change any objects or variables that existed before it was called.
-    > - **Same inputs, same output.** Given the same inputs, a pure function should always return the same result.
-    >
-    > [React](https://react.dev/learn/keeping-components-pure)
-  - "React assumes that every component you write is a pure function. This means that React components you write must always return the same JSX given the same inputs" ([React](https://react.dev/learn/keeping-components-pure))
-  - "Components should only *return* their JSX, and not *change* any objects or variables that existed before rendering—that would make them impure!" ([React](https://react.dev/learn/keeping-components-pure))
-  - "Pure functions don’t mutate variables outside of the function’s scope or objects that were created before the call—that makes them impure!  However, it’s completely fine to change variables and objects that you’ve *just* created while rendering. . . . it’s fine because you’ve created them during the same render . . . No code outside of [it] . . . will ever know that this happened. This is called “local mutation”—it’s like your component’s little secret." ([React](https://react.dev/learn/keeping-components-pure))
-  - `StrictMode`:
-    - "You should never change preexisting variables or objects while your component is rendering. React offers a “Strict Mode” in which it calls each component’s function twice during development. By calling the component functions twice, Strict Mode helps find components that break these rules. . . . Pure functions only calculate, so calling them twice won’t change anything" ([React](https://react.dev/learn/keeping-components-pure))
-    - "Strict Mode has no effect in production, so it won’t slow down the app for your users." ([React](https://react.dev/learn/keeping-components-pure))
-    - "To opt into Strict Mode, you can wrap your root component into `<React.StrictMode>`" ([React](https://react.dev/learn/keeping-components-pure))
-  - Side effects:
-    - "changes—updating the screen, starting an animation, changing the data—are called **side effects**. They’re things that happen *“on the side”*, not during rendering." ([React](https://react.dev/learn/keeping-components-pure))
-    - "In React, side effects usually belong inside event handlers. . . . Even though event handlers are defined *inside* your component, they don’t run *during* rendering! So event handlers don’t need to be pure." ([React](https://react.dev/learn/keeping-components-pure))
-    - "If you’ve exhausted all other options and can’t find the right event handler for your side effect, you can still attach it to your returned JSX with a `useEffect` call in your component. This tells React to execute it later, after rendering, when side effects are allowed. However, this approach should be your last resort. When possible, try to express your logic with rendering alone." ([React](https://react.dev/learn/keeping-components-pure))
-- Returned value:
-  - "In some situations, you won’t want to render anything at all. . . . A component must return something. In this case, you can return `null` . . . In practice, returning `null` from a component isn’t common . . . More often, you would conditionally include or exclude the component in the parent component’s JSX." ([React](https://react.dev/learn/conditional-rendering))
-- The render tree:
-  - "As we nest components, we have the concept of parent and child components, where each parent component may itself be a child of another component.  When we render a React app, we can model this relationship in a tree, known as the render tree." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
-  - > The root node in a React render tree is the root component of the app. In this case, the root component is `App` and it is the first component React renders. . . .
-    >
-    > ![Image](/assets/conditional_render_tree.webp)
-    >
-    > With conditional rendering, across different renders, the render tree may render different components.
-    >
-    > [React](https://react.dev/learn/understanding-your-ui-as-a-tree)
-  - "the render tree is only composed of React components. React, as a UI framework, is platform agnostic. On react.dev, we showcase examples that render to the web, which uses HTML markup as its UI primitives. But a React app could just as likely render to a mobile or desktop platform, which may use different UI primitives like UIView or FrameworkElement. These platform UI primitives are not a part of React. React render trees can provide insight to our React app regardless of what platform your app renders to." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
-  - "Although render trees may differ across render passes, these trees are generally helpful for identifying what the `top-level` and `leaf components` are in a React app. Top-level components are the components nearest to the root component and affect the rendering performance of all the components beneath them and often contain the most complexity. Leaf components are near the bottom of the tree and have no child components and are often frequently re-rendered." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
-  - "Top-level components affect the rendering performance of all components beneath them and leaf components are often re-rendered frequently. Identifying them is useful for understanding and debugging rendering performance." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
-- The module dependency tree:
-  - > As we break up our components and logic into separate files, we create JS modules where we may export components, functions, or constants. . . .
-    >
-    > ![Image](/assets/module_dependency_tree.webp)
-    >
-    > . . . The root node of the tree is the root module, also known as the entrypoint file. It often is the module that contains the root component.
-    >
-    > . . . Non-component modules, like `inspirations.js`, are also represented in this tree.
-    >
-    > . . . `Copyright.js` appears under `App.js` but in the render tree, `Copyright`, the component, appears as a child of `InspirationGenerator`. This is because `InspirationGenerator` accepts JSX as children props, so it renders `Copyright` as a child component but does not import the module.
-    >
-    > [React](https://react.dev/learn/understanding-your-ui-as-a-tree)
-  - "bundlers will use the dependency tree to determine what modules should be included." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
-  - "Large bundle sizes can delay the time for your UI to get drawn. Getting a sense of your app’s dependency tree may help with debugging these issues. . . . Dependency trees are useful for debugging large bundle sizes that slow time to paint" ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
-- Organization:
-  - "many websites only use React to add interactivity to existing HTML pages. They have many root components instead of a single one for the entire page." ([React](https://react.dev/learn/your-first-component))
-  - "a root component file, named `App.js` . . . Depending on your setup, your root component could be in another file, though. If you use a framework with file-based routing, such as Next.js, your root component will be different for every page." ([React](https://react.dev/learn/importing-and-exporting-components))
-  - "Components are regular JavaScript functions, so you can keep multiple components in the same file. This is convenient when components are relatively small or tightly related to each other. If this file gets crowded, you can always move . . . to a separate file." ([React](https://react.dev/learn/your-first-component))
-
-Styling:
-
-> React does not prescribe how you add CSS files. In the simplest case, you’ll add a `<link>` tag to your HTML.
->
-> [React](https://react.dev/learn)
-
-JSX:
-- Definition:
-  - "The markup syntax . . . is called *JSX*" ([React](https://react.dev/learn))
-- Escaping into JavaScript:
-  - General:
-    - "JSX lets you put markup into JavaScript. Curly braces let you “escape back” into JavaScript" ([React](https://react.dev/learn))
-    - "JavaScript inside the JSX `{` and `}` executes right away" ([React](https://react.dev/learn/responding-to-events))
-  - HTML attributes:
-    - "You can also “escape into JavaScript” from JSX attributes, but you have to use curly braces *instead of quotes*" ([React](https://react.dev/learn))
-    - "`style={{}}` is not a special syntax, but a regular `{}` object inside the `style={ }` JSX curly braces. You can use the `style` attribute when your styles depend on JavaScript variables." ([React](https://react.dev/learn))
-  - Control flow:
-    - "you can use the conditional `?` operator. Unlike `if`, it works inside JSX . . . you can also use a shorter logical `&&` syntax" ([React](https://react.dev/learn))
-      - If the first operand of the `&&` operator after the automatic `Boolean` conversion becomes `false` but itself is not strictly `false` nor `null`/`undefined`, it will be rendered by React - examples include `0`, `NaN`, or `""` (see [React](https://react.dev/learn/conditional-rendering))
-    - "You will rely on JavaScript features like `for` loop and the array `map()` function to render lists of components." ([React](https://react.dev/learn))
-    - The `key` attribute:
-      - "JSX elements directly inside a `map()` call always need keys!" ([React](https://react.dev/learn/rendering-lists))
-      - "`<li>` has a `key` attribute. For each item in a list, you should pass a string or a number that uniquely identifies that item among its siblings." ([React](https://react.dev/learn))
-      - Key generation rules:
-        - "**Keys must be unique among siblings.** However, it’s okay to use the same keys for JSX nodes in different arrays." ([React](https://react.dev/learn/rendering-lists))
-        - **Keys must not change** or that defeats their purpose! Don’t generate them while rendering. . . . do not generate keys on the fly, e.g. with `key={Math.random()}`. This will cause keys to never match up between renders, leading to all your components and DOM being recreated every time. Not only is this slow, but it will also lose any user input inside the list items. Instead, use a stable ID based on the data." ([React](https://react.dev/learn/rendering-lists))
-        - "It’s strongly recommended that you assign proper keys whenever you build dynamic lists. If you don’t have an appropriate key, you may want to consider restructuring your data so that you do." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
-        - "If your data is coming from a database, you can use the database keys/IDs, which are unique by nature. . . . If your data is generated and persisted locally (e.g. notes in a note-taking app), use an incrementing counter, `crypto.randomUUID()` or a package like `uuid` when creating items." ([React](https://react.dev/learn/rendering-lists))
-        - "You might be tempted to use an item’s index in the array as its key. In fact, that’s what React will use if you don’t specify a `key` at all. But the order in which you render items will change over time if an item is inserted, deleted, or if the array gets reordered. Index as a key often leads to subtle and confusing bugs." ([React](https://react.dev/learn/rendering-lists))
-- Requirements:
-  - "You have to close tags like `<br />`." ([React](https://react.dev/learn))
-  - "Your component also can’t return multiple JSX tags. You have to wrap them into a shared parent, like a `<div>...</div>` or an empty `<>...</>` wrapper" ([React](https://react.dev/learn))
-
-Hooks:
-- "Functions starting with `use` are called Hooks." ([React](https://react.dev/learn))
-- "You can only call Hooks at the top of your components (or other Hooks). If you want to use `useState` in a condition or a loop, extract a new component and put it there." ([React](https://react.dev/learn))
-
-Events:
-- "By convention, it is common to name event handlers as `handle` followed by the event name. You’ll often see `onClick={handleClick}`, `onMouseEnter={handleMouseEnter}`, and so on." ([React](https://react.dev/learn/responding-to-events))
-- "If you use a design system, it’s common for components like buttons to contain styling but not specify behavior. Instead, components like `PlayButton` and `UploadButton` will pass event handlers down." ([React](https://react.dev/learn/responding-to-events))
-- "Event handlers will also catch events from any children your component might have. We say that an event “bubbles” or “propagates” up the tree" ([React](https://react.dev/learn/responding-to-events))
-- "All events propagate in React except `onScroll`, which only works on the JSX tag you attach it to." ([React](https://react.dev/learn/responding-to-events))
-- > In rare cases, you might need to catch all events on child elements, even if they stopped propagation. For example, maybe you want to log every click to analytics, regardless of the propagation logic. You can do this by adding `Capture` at the end of the event name:
-  >
-  > ```jsx
-  > <div onClickCapture={() => { /* this runs first */ }}>
-  >   <button onClick={e => e.stopPropagation()} />
-  >   <button onClick={e => e.stopPropagation()} />
-  > </div>
-  > ```
-  >
-  > . . . Capture events are useful for code like routers or analytics, but you probably won’t use them in app code.
-  >
-  > [React](https://react.dev/learn/responding-to-events)
-- *Passing handlers as alternative to propagation* pattern:
-  - "Explicitly calling an event handler prop from a child handler is a good alternative to propagation." ([React](https://react.dev/learn/responding-to-events))
-  - > this click handler runs a line of code and then calls the onClick prop passed by the parent:
-    >
-    > ```jsx
-    > function Button({ onClick, children }) {
-    >   return (
-    >     <button onClick={e => {
-    >       e.stopPropagation();
-    >       onClick();
-    >     }}>
-    >       {children}
-    >     </button>
-    >   );
-    > }
-    > ```
-    >
-    > You could add more code to this handler before calling the parent `onClick` event handler, too. This pattern provides an *alternative* to propagation. It lets the child component handle the event, while also letting the parent component specify some additional behavior. Unlike propagation, it’s not automatic. But the benefit of this pattern is that you can clearly follow the whole chain of code that executes as a result of some event.
-    >
-    > If you rely on propagation and it’s difficult to trace which handlers execute and why, try this approach instead.
-    >
-    > [React](https://react.dev/learn/responding-to-events)
-
-State:
-- Defining state:
-  - "you may notice that `xIsNext === true` when `currentMove` is even and `xIsNext === false` when `currentMove` is odd. In other words, if you know the value of `currentMove`, then you can always figure out what `xIsNext` should be. There’s no reason for you to store both of these in state. In fact, always try to avoid redundant state. Simplifying what you store in state reduces bugs and makes your code easier to understand. Change `Game` so that it doesn’t store `xIsNext` as a separate state variable and instead figures it out based on the `currentMove` . . . You no longer need the `xIsNext` state declaration or the calls to `setXIsNext`. Now, there’s no chance for `xIsNext` to get out of sync with `currentMove`, even if you make a mistake while coding the components." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
-- Sharing state:
-  - "To collect data from multiple children, or to have two child components communicate with each other, declare the shared state in their parent component instead. The parent component can pass that state back down to the children via props. This keeps the child components in sync with each other and with their parent." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
-  - "Lifting state into a parent component is common when React components are refactored." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
-- Data immutability and rendering:
-  - "Calling the `setSquares` function lets React know the state of the component has changed. This will trigger a re-render of the components that use the `squares` state (`Board`) as well as its child components (the `Square` components that make up the board)." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
-  - "Avoiding direct data mutation lets you keep previous versions of the data intact, and reuse them later." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
-  - "By default, all child components re-render automatically when the state of a parent component changes. . . . Immutability makes it very cheap for components to compare whether their data has changed or not. You can learn more about how React chooses when to re-render a component in the `memo` API reference." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
 
 ```jsx
 /* MyComponent.jsx */
@@ -334,6 +141,291 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   </body>
 </html>
 ```
+
+# Components
+
+## General
+
+- "React components are JavaScript functions that return markup" ([React](https://react.dev/learn))
+  - "They return JSX markup" ([React](https://react.dev/learn/your-first-component))
+- "Components are used to render, manage, and update the UI elements in your application" ([React](https://react.dev/learn/tutorial-tic-tac-toe))
+
+## Internals
+
+- "JSX looks like HTML, but under the hood it is transformed into plain JavaScript objects. You can’t return two objects from a function without wrapping them into an array. This explains why you also can’t return two JSX tags without wrapping them into another tag or a Fragment." ([React](https://react.dev/learn/writing-markup-with-jsx))
+
+## Built-In Components
+
+### HTML Elements
+
+- "`className="square"` is a button property or *prop* . . . The DOM `<button>` element’s `onClick` attribute has a special meaning to React because it is a built-in component. For custom components like `Square`, the naming is up to you. You could give any name to the `Square`’s `onSquareClick` prop or `Board`’s `handleClick` function, and the code would work the same." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
+- "`<img />` is written like HTML, but it is actually JavaScript under the hood!" ([React](https://react.dev/learn/your-first-component))
+- "JavaScript has limitations on variable names. For example, their names can’t contain dashes or be reserved words like `class`. Since `class` is a reserved word, in React you write `className` instead, named after the corresponding DOM property" ([React](https://react.dev/learn/writing-markup-with-jsx))
+- "For historical reasons, `aria-*` and `data-*` attributes are written as in HTML with dashes." ([React](https://react.dev/learn/writing-markup-with-jsx))
+- "JSX elements aren’t “instances” because they don’t hold any internal state and aren’t real DOM nodes." ([React](https://react.dev/learn/conditional-rendering))
+
+### `<Fragment>`
+
+- "empty tag is called a *Fragment*. Fragments let you group things without leaving any trace in the browser HTML tree." ([React](https://react.dev/learn/writing-markup-with-jsx))
+- "What do you do when each item needs to render not one, but several DOM nodes? The short `<>...</>` Fragment syntax won’t let you pass a key, so you need to either group them into a single `<div>`, or use the slightly longer and more explicit `<Fragment>` syntax . .  . Fragments disappear from the DOM, so this will produce a flat list" ([React](https://react.dev/learn/rendering-lists))
+
+## Props
+  
+- "React component functions accept a single argument, a `props` object . . . Usually you don’t need the whole `props` object itself, so you destructure it into individual props." ([React](https://react.dev/learn/passing-props-to-a-component))
+  - > ```jsx
+    > function Avatar(props) {
+    >   let person = props.person;
+    >   let size = props.size;
+    >   // ...
+    > }
+    > ```
+    >
+    > ```jsx
+    > function Avatar({ person, size }) {
+    >   // ...
+    > }
+    > ```
+    >
+    > [React](https://react.dev/learn/passing-props-to-a-component)
+- "If you want to give a prop a default value to fall back on when no value is specified, you can do it with the destructuring by putting `=` and the default value right after the parameter" ([React](https://react.dev/learn/passing-props-to-a-component))
+- "props are immutable . . . When a component needs to change its props (for example, in response to a user interaction or new data), it will have to “ask” its parent component to pass it different props—a new object! Its old props will then be cast aside, and eventually the JavaScript engine will reclaim the memory taken by them." ([React](https://react.dev/learn/passing-props-to-a-component))
+- > Forwarding props with the JSX spread syntax . . .
+  >
+  > ```jsx
+  > function Profile({ person, size, isSepia, thickBorder }) {
+  >   return (
+  >     <div className="card">
+  >       <Avatar
+  >         person={person}
+  >         size={size}
+  >         isSepia={isSepia}
+  >         thickBorder={thickBorder}
+  >       />
+  >     </div>
+  >   );
+  > }
+  > ```
+  >
+  > Some components forward all of their props to their children, like how this `Profile` does with `Avatar`. Because they don’t use any of their props directly, it can make sense to use a more concise “spread” syntax:
+  >
+  > ```jsx
+  > function Profile(props) {
+  >   return (
+  >     <div className="card">
+  >       <Avatar {...props} />
+  >     </div>
+  >   );
+  > }
+  > ```
+  >
+  > Use spread syntax with restraint. If you’re using it in every other component, something is wrong. Often, it indicates that you should split your components and pass children as JSX.
+  >
+  > [React](https://react.dev/learn/passing-props-to-a-component)
+- "When you nest content inside a JSX tag, the parent component will receive that content in a prop called `children`. . . . You can think of a component with a `children` prop as having a “hole” that can be “filled in” by its parent components with arbitrary JSX. You will often use the `children` prop for visual wrappers: panels, grids, etc." ([React](https://react.dev/learn/passing-props-to-a-component))
+  - ```jsx
+    import MyComponent from './components/MyComponent.jsx';
+    import NestedComponent from './components/NestedComponent.jsx';
+
+    export default function App() {
+      return (
+        <>
+          <MyComponent>
+            <NestedComponent />
+          </MyComponent>
+        </>
+      )
+    }
+    ```
+  - ```jsx
+    export default function MyComponent({ children }) {
+      return (
+        <>
+          <h1>MyComponent</h1>
+          <section>
+            {children}
+          </section>
+        </>
+      );
+    }
+    ```
+- "In React, it’s conventional to use `onSomething` names for props which represent events and `handleSomething` for the function definitions which handle those events." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
+
+## Purity
+
+### General
+
+- > a pure function is a function with the following characteristics:
+  > - **It minds its own business.** It does not change any objects or variables that existed before it was called.
+  > - **Same inputs, same output.** Given the same inputs, a pure function should always return the same result.
+  >
+  > [React](https://react.dev/learn/keeping-components-pure)
+- "React assumes that every component you write is a pure function. This means that React components you write must always return the same JSX given the same inputs" ([React](https://react.dev/learn/keeping-components-pure))
+- "Components should only *return* their JSX, and not *change* any objects or variables that existed before rendering—that would make them impure!" ([React](https://react.dev/learn/keeping-components-pure))
+- "Pure functions don’t mutate variables outside of the function’s scope or objects that were created before the call—that makes them impure!  However, it’s completely fine to change variables and objects that you’ve *just* created while rendering. . . . it’s fine because you’ve created them during the same render . . . No code outside of [it] . . . will ever know that this happened. This is called “local mutation”—it’s like your component’s little secret." ([React](https://react.dev/learn/keeping-components-pure))
+
+### `StrictMode`
+
+- "You should never change preexisting variables or objects while your component is rendering. React offers a “Strict Mode” in which it calls each component’s function twice during development. By calling the component functions twice, Strict Mode helps find components that break these rules. . . . Pure functions only calculate, so calling them twice won’t change anything" ([React](https://react.dev/learn/keeping-components-pure))
+- "Strict Mode has no effect in production, so it won’t slow down the app for your users." ([React](https://react.dev/learn/keeping-components-pure))
+- "To opt into Strict Mode, you can wrap your root component into `<React.StrictMode>`" ([React](https://react.dev/learn/keeping-components-pure))
+
+### Side Effects
+
+- "changes—updating the screen, starting an animation, changing the data—are called **side effects**. They’re things that happen *“on the side”*, not during rendering." ([React](https://react.dev/learn/keeping-components-pure))
+- "In React, side effects usually belong inside event handlers. . . . Even though event handlers are defined *inside* your component, they don’t run *during* rendering! So event handlers don’t need to be pure." ([React](https://react.dev/learn/keeping-components-pure))
+- "If you’ve exhausted all other options and can’t find the right event handler for your side effect, you can still attach it to your returned JSX with a `useEffect` call in your component. This tells React to execute it later, after rendering, when side effects are allowed. However, this approach should be your last resort. When possible, try to express your logic with rendering alone." ([React](https://react.dev/learn/keeping-components-pure))
+
+## Returned Value
+
+  - "In some situations, you won’t want to render anything at all. . . . A component must return something. In this case, you can return `null` . . . In practice, returning `null` from a component isn’t common . . . More often, you would conditionally include or exclude the component in the parent component’s JSX." ([React](https://react.dev/learn/conditional-rendering))
+
+## The Render Tree
+
+- "As we nest components, we have the concept of parent and child components, where each parent component may itself be a child of another component.  When we render a React app, we can model this relationship in a tree, known as the render tree." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
+- > The root node in a React render tree is the root component of the app. In this case, the root component is `App` and it is the first component React renders. . . .
+  >
+  > ![Image](/assets/conditional_render_tree.webp)
+  >
+  > With conditional rendering, across different renders, the render tree may render different components.
+  >
+  > [React](https://react.dev/learn/understanding-your-ui-as-a-tree)
+- "the render tree is only composed of React components. React, as a UI framework, is platform agnostic. On react.dev, we showcase examples that render to the web, which uses HTML markup as its UI primitives. But a React app could just as likely render to a mobile or desktop platform, which may use different UI primitives like UIView or FrameworkElement. These platform UI primitives are not a part of React. React render trees can provide insight to our React app regardless of what platform your app renders to." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
+- "Although render trees may differ across render passes, these trees are generally helpful for identifying what the `top-level` and `leaf components` are in a React app. Top-level components are the components nearest to the root component and affect the rendering performance of all the components beneath them and often contain the most complexity. Leaf components are near the bottom of the tree and have no child components and are often frequently re-rendered." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
+- "Top-level components affect the rendering performance of all components beneath them and leaf components are often re-rendered frequently. Identifying them is useful for understanding and debugging rendering performance." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
+
+## The Module Dependency Tree
+
+- > As we break up our components and logic into separate files, we create JS modules where we may export components, functions, or constants. . . .
+  >
+  > ![Image](/assets/module_dependency_tree.webp)
+  >
+  > . . . The root node of the tree is the root module, also known as the entrypoint file. It often is the module that contains the root component.
+  >
+  > . . . Non-component modules, like `inspirations.js`, are also represented in this tree.
+  >
+  > . . . `Copyright.js` appears under `App.js` but in the render tree, `Copyright`, the component, appears as a child of `InspirationGenerator`. This is because `InspirationGenerator` accepts JSX as children props, so it renders `Copyright` as a child component but does not import the module.
+  >
+  > [React](https://react.dev/learn/understanding-your-ui-as-a-tree)
+- "bundlers will use the dependency tree to determine what modules should be included." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
+- "Large bundle sizes can delay the time for your UI to get drawn. Getting a sense of your app’s dependency tree may help with debugging these issues. . . . Dependency trees are useful for debugging large bundle sizes that slow time to paint" ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
+
+## Organization
+
+- "many websites only use React to add interactivity to existing HTML pages. They have many root components instead of a single one for the entire page." ([React](https://react.dev/learn/your-first-component))
+- "a root component file, named `App.js` . . . Depending on your setup, your root component could be in another file, though. If you use a framework with file-based routing, such as Next.js, your root component will be different for every page." ([React](https://react.dev/learn/importing-and-exporting-components))
+- "Components are regular JavaScript functions, so you can keep multiple components in the same file. This is convenient when components are relatively small or tightly related to each other. If this file gets crowded, you can always move . . . to a separate file." ([React](https://react.dev/learn/your-first-component))
+
+# Styling
+
+> React does not prescribe how you add CSS files. In the simplest case, you’ll add a `<link>` tag to your HTML.
+>
+> [React](https://react.dev/learn)
+
+# JSX
+
+## Definition
+
+- "The markup syntax . . . is called *JSX*" ([React](https://react.dev/learn))
+
+## Escaping Into JavaScript
+
+### General
+
+- "JSX lets you put markup into JavaScript. Curly braces let you “escape back” into JavaScript" ([React](https://react.dev/learn))
+- "JavaScript inside the JSX `{` and `}` executes right away" ([React](https://react.dev/learn/responding-to-events))
+
+### HTML Attributes
+
+- "You can also “escape into JavaScript” from JSX attributes, but you have to use curly braces *instead of quotes*" ([React](https://react.dev/learn))
+- "`style={{}}` is not a special syntax, but a regular `{}` object inside the `style={ }` JSX curly braces. You can use the `style` attribute when your styles depend on JavaScript variables." ([React](https://react.dev/learn))
+
+### Control Flow
+
+#### Conditionals
+
+- "you can use the conditional `?` operator. Unlike `if`, it works inside JSX . . . you can also use a shorter logical `&&` syntax" ([React](https://react.dev/learn))
+  - If the first operand of the `&&` operator after the automatic `Boolean` conversion becomes `false` but itself is not strictly `false` nor `null`/`undefined`, it will be rendered by React - examples include `0`, `NaN`, or `""` (see [React](https://react.dev/learn/conditional-rendering))
+
+#### Loops
+
+- "You will rely on JavaScript features like `for` loop and the array `map()` function to render lists of components." ([React](https://react.dev/learn))
+- The `key` attribute:
+  - "JSX elements directly inside a `map()` call always need keys!" ([React](https://react.dev/learn/rendering-lists))
+  - "`<li>` has a `key` attribute. For each item in a list, you should pass a string or a number that uniquely identifies that item among its siblings." ([React](https://react.dev/learn))
+  - Key generation rules:
+    - "**Keys must be unique among siblings.** However, it’s okay to use the same keys for JSX nodes in different arrays." ([React](https://react.dev/learn/rendering-lists))
+    - **Keys must not change** or that defeats their purpose! Don’t generate them while rendering. . . . do not generate keys on the fly, e.g. with `key={Math.random()}`. This will cause keys to never match up between renders, leading to all your components and DOM being recreated every time. Not only is this slow, but it will also lose any user input inside the list items. Instead, use a stable ID based on the data." ([React](https://react.dev/learn/rendering-lists))
+    - "It’s strongly recommended that you assign proper keys whenever you build dynamic lists. If you don’t have an appropriate key, you may want to consider restructuring your data so that you do." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
+    - "If your data is coming from a database, you can use the database keys/IDs, which are unique by nature. . . . If your data is generated and persisted locally (e.g. notes in a note-taking app), use an incrementing counter, `crypto.randomUUID()` or a package like `uuid` when creating items." ([React](https://react.dev/learn/rendering-lists))
+    - "You might be tempted to use an item’s index in the array as its key. In fact, that’s what React will use if you don’t specify a `key` at all. But the order in which you render items will change over time if an item is inserted, deleted, or if the array gets reordered. Index as a key often leads to subtle and confusing bugs." ([React](https://react.dev/learn/rendering-lists))
+
+## Requirements
+
+- "You have to close tags like `<br />`." ([React](https://react.dev/learn))
+- "Your component also can’t return multiple JSX tags. You have to wrap them into a shared parent, like a `<div>...</div>` or an empty `<>...</>` wrapper" ([React](https://react.dev/learn))
+
+# Hooks
+
+- "Functions starting with `use` are called Hooks." ([React](https://react.dev/learn))
+- "You can only call Hooks at the top of your components (or other Hooks). If you want to use `useState` in a condition or a loop, extract a new component and put it there." ([React](https://react.dev/learn))
+
+# Events
+
+- "By convention, it is common to name event handlers as `handle` followed by the event name. You’ll often see `onClick={handleClick}`, `onMouseEnter={handleMouseEnter}`, and so on." ([React](https://react.dev/learn/responding-to-events))
+- "If you use a design system, it’s common for components like buttons to contain styling but not specify behavior. Instead, components like `PlayButton` and `UploadButton` will pass event handlers down." ([React](https://react.dev/learn/responding-to-events))
+- "Event handlers will also catch events from any children your component might have. We say that an event “bubbles” or “propagates” up the tree" ([React](https://react.dev/learn/responding-to-events))
+- "All events propagate in React except `onScroll`, which only works on the JSX tag you attach it to." ([React](https://react.dev/learn/responding-to-events))
+- > In rare cases, you might need to catch all events on child elements, even if they stopped propagation. For example, maybe you want to log every click to analytics, regardless of the propagation logic. You can do this by adding `Capture` at the end of the event name:
+  >
+  > ```jsx
+  > <div onClickCapture={() => { /* this runs first */ }}>
+  >   <button onClick={e => e.stopPropagation()} />
+  >   <button onClick={e => e.stopPropagation()} />
+  > </div>
+  > ```
+  >
+  > . . . Capture events are useful for code like routers or analytics, but you probably won’t use them in app code.
+  >
+  > [React](https://react.dev/learn/responding-to-events)
+- *Passing handlers as alternative to propagation* pattern:
+  - "Explicitly calling an event handler prop from a child handler is a good alternative to propagation." ([React](https://react.dev/learn/responding-to-events))
+  - > this click handler runs a line of code and then calls the onClick prop passed by the parent:
+    >
+    > ```jsx
+    > function Button({ onClick, children }) {
+    >   return (
+    >     <button onClick={e => {
+    >       e.stopPropagation();
+    >       onClick();
+    >     }}>
+    >       {children}
+    >     </button>
+    >   );
+    > }
+    > ```
+    >
+    > You could add more code to this handler before calling the parent `onClick` event handler, too. This pattern provides an *alternative* to propagation. It lets the child component handle the event, while also letting the parent component specify some additional behavior. Unlike propagation, it’s not automatic. But the benefit of this pattern is that you can clearly follow the whole chain of code that executes as a result of some event.
+    >
+    > If you rely on propagation and it’s difficult to trace which handlers execute and why, try this approach instead.
+    >
+    > [React](https://react.dev/learn/responding-to-events)
+
+# State
+
+## Defining State
+
+  - "you may notice that `xIsNext === true` when `currentMove` is even and `xIsNext === false` when `currentMove` is odd. In other words, if you know the value of `currentMove`, then you can always figure out what `xIsNext` should be. There’s no reason for you to store both of these in state. In fact, always try to avoid redundant state. Simplifying what you store in state reduces bugs and makes your code easier to understand. Change `Game` so that it doesn’t store `xIsNext` as a separate state variable and instead figures it out based on the `currentMove` . . . You no longer need the `xIsNext` state declaration or the calls to `setXIsNext`. Now, there’s no chance for `xIsNext` to get out of sync with `currentMove`, even if you make a mistake while coding the components." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
+
+## Sharing State
+
+  - "To collect data from multiple children, or to have two child components communicate with each other, declare the shared state in their parent component instead. The parent component can pass that state back down to the children via props. This keeps the child components in sync with each other and with their parent." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
+  - "Lifting state into a parent component is common when React components are refactored." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
+
+## Data Immutability and Rendering
+
+  - "Calling the `setSquares` function lets React know the state of the component has changed. This will trigger a re-render of the components that use the `squares` state (`Board`) as well as its child components (the `Square` components that make up the board)." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
+  - "Avoiding direct data mutation lets you keep previous versions of the data intact, and reuse them later." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
+  - "By default, all child components re-render automatically when the state of a parent component changes. . . . Immutability makes it very cheap for components to compare whether their data has changed or not. You can learn more about how React chooses when to re-render a component in the `memo` API reference." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
 
 # Application Design & Development
 
