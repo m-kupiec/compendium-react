@@ -140,6 +140,20 @@ Components:
     > [React](https://react.dev/learn/understanding-your-ui-as-a-tree)
   - "the render tree is only composed of React components. React, as a UI framework, is platform agnostic. On react.dev, we showcase examples that render to the web, which uses HTML markup as its UI primitives. But a React app could just as likely render to a mobile or desktop platform, which may use different UI primitives like UIView or FrameworkElement. These platform UI primitives are not a part of React. React render trees can provide insight to our React app regardless of what platform your app renders to." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
   - "Although render trees may differ across render passes, these trees are generally helpful for identifying what the `top-level` and `leaf components` are in a React app. Top-level components are the components nearest to the root component and affect the rendering performance of all the components beneath them and often contain the most complexity. Leaf components are near the bottom of the tree and have no child components and are often frequently re-rendered." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
+- The module dependency tree:
+  - > As we break up our components and logic into separate files, we create JS modules where we may export components, functions, or constants. . . .
+    >
+    > ![Image](/assets/module_dependency_tree.webp)
+    >
+    > . . . The root node of the tree is the root module, also known as the entrypoint file. It often is the module that contains the root component.
+    >
+    > . . . Non-component modules, like `inspirations.js`, are also represented in this tree.
+    >
+    > . . . `Copyright.js` appears under `App.js` but in the render tree, `Copyright`, the component, appears as a child of `InspirationGenerator`. This is because `InspirationGenerator` accepts JSX as children props, so it renders `Copyright` as a child component but does not import the module.
+    >
+    > [React](https://react.dev/learn/understanding-your-ui-as-a-tree)
+  - "bundlers will use the dependency tree to determine what modules should be included." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
+  - "Large bundle sizes can delay the time for your UI to get drawn. Getting a sense of your app’s dependency tree may help with debugging these issues." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
 - Organization:
   - "many websites only use React to add interactivity to existing HTML pages. They have many root components instead of a single one for the entire page." ([React](https://react.dev/learn/your-first-component))
   - "a root component file, named `App.js` . . . Depending on your setup, your root component could be in another file, though. If you use a framework with file-based routing, such as Next.js, your root component will be different for every page." ([React](https://react.dev/learn/importing-and-exporting-components))
