@@ -131,9 +131,11 @@ Components:
   - "In some situations, you won’t want to render anything at all. . . . A component must return something. In this case, you can return `null` . . . In practice, returning `null` from a component isn’t common . . . More often, you would conditionally include or exclude the component in the parent component’s JSX." ([React](https://react.dev/learn/conditional-rendering))
 - The render tree:
   - "As we nest components, we have the concept of parent and child components, where each parent component may itself be a child of another component.  When we render a React app, we can model this relationship in a tree, known as the render tree." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
-  - > ![Image](/assets/render_tree.webp)
+  - > The root node in a React render tree is the root component of the app. In this case, the root component is `App` and it is the first component React renders. . . .
     >
-    > . . . The root node in a React render tree is the root component of the app. In this case, the root component is `App` and it is the first component React renders.
+    > ![Image](/assets/conditional_render_tree.webp)
+    >
+    > With conditional rendering, across different renders, the render tree may render different components.
     >
     > [React](https://react.dev/learn/understanding-your-ui-as-a-tree)
   - "the render tree is only composed of React components. React, as a UI framework, is platform agnostic. On react.dev, we showcase examples that render to the web, which uses HTML markup as its UI primitives. But a React app could just as likely render to a mobile or desktop platform, which may use different UI primitives like UIView or FrameworkElement. These platform UI primitives are not a part of React. React render trees can provide insight to our React app regardless of what platform your app renders to." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
