@@ -199,6 +199,43 @@ Hooks:
 
 Events:
 - "By convention, it is common to name event handlers as `handle` followed by the event name. You’ll often see `onClick={handleClick}`, `onMouseEnter={handleMouseEnter}`, and so on." ([React](https://react.dev/learn/responding-to-events))
+- "If you use a design system, it’s common for components like buttons to contain styling but not specify behavior. Instead, components like `PlayButton` and `UploadButton` will pass event handlers down." ([React](https://react.dev/learn/responding-to-events))
+- "Event handlers will also catch events from any children your component might have. We say that an event “bubbles” or “propagates” up the tree" ([React](https://react.dev/learn/responding-to-events))
+- "All events propagate in React except `onScroll`, which only works on the JSX tag you attach it to." ([React](https://react.dev/learn/responding-to-events))
+- > In rare cases, you might need to catch all events on child elements, even if they stopped propagation. For example, maybe you want to log every click to analytics, regardless of the propagation logic. You can do this by adding `Capture` at the end of the event name:
+  >
+  > ```jsx
+  > <div onClickCapture={() => { /* this runs first */ }}>
+  >   <button onClick={e => e.stopPropagation()} />
+  >   <button onClick={e => e.stopPropagation()} />
+  > </div>
+  > ```
+  >
+  > . . . Capture events are useful for code like routers or analytics, but you probably won’t use them in app code.
+  >
+  > [React](https://react.dev/learn/responding-to-events)
+- *Passing handlers as alternative to propagation* pattern:
+  - "Explicitly calling an event handler prop from a child handler is a good alternative to propagation." ([React](https://react.dev/learn/responding-to-events))
+  - > this click handler runs a line of code and then calls the onClick prop passed by the parent:
+    >
+    > ```jsx
+    > function Button({ onClick, children }) {
+    >   return (
+    >     <button onClick={e => {
+    >       e.stopPropagation();
+    >       onClick();
+    >     }}>
+    >       {children}
+    >     </button>
+    >   );
+    > }
+    > ```
+    >
+    > You could add more code to this handler before calling the parent `onClick` event handler, too. This pattern provides an *alternative* to propagation. It lets the child component handle the event, while also letting the parent component specify some additional behavior. Unlike propagation, it’s not automatic. But the benefit of this pattern is that you can clearly follow the whole chain of code that executes as a result of some event.
+    >
+    > If you rely on propagation and it’s difficult to trace which handlers execute and why, try this approach instead.
+    >
+    > [React](https://react.dev/learn/responding-to-events)
 
 State:
 - Defining state:
