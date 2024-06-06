@@ -170,7 +170,9 @@ JSX:
 - Definition:
   - "The markup syntax . . . is called *JSX*" ([React](https://react.dev/learn))
 - Escaping into JavaScript:
-  - "JSX lets you put markup into JavaScript. Curly braces let you “escape back” into JavaScript" ([React](https://react.dev/learn))
+  - General:
+    - "JSX lets you put markup into JavaScript. Curly braces let you “escape back” into JavaScript" ([React](https://react.dev/learn))
+    - "JavaScript inside the JSX `{` and `}` executes right away" ([React](https://react.dev/learn/responding-to-events))
   - HTML attributes:
     - "You can also “escape into JavaScript” from JSX attributes, but you have to use curly braces *instead of quotes*" ([React](https://react.dev/learn))
     - "`style={{}}` is not a special syntax, but a regular `{}` object inside the `style={ }` JSX curly braces. You can use the `style` attribute when your styles depend on JavaScript variables." ([React](https://react.dev/learn))
