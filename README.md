@@ -12,6 +12,7 @@
   - HTML Elements
   - `<Fragment>`
 - **Props**
+- **Rendering**
 - **Purity**
   - General
   - `StrictMode`
@@ -249,6 +250,20 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     }
     ```
 - "In React, it’s conventional to use `onSomething` names for props which represent events and `handleSomething` for the function definitions which handle those events." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
+
+## Rendering
+
+- "Local variables don’t persist between renders." ([React](https://react.dev/learn/state-a-components-memory))
+- "Changes to local variables won’t trigger renders." ([React](https://react.dev/learn/state-a-components-memory))
+- > To update a component with new data, two things need to happen:
+  > 1. **Retain** the data between renders.
+  > 2. **Trigger** React to render the component with new data (re-rendering).
+  >
+  > The useState Hook provides those two things:
+  > 1. A **state variable** to retain the data between renders.
+  > 2. A **state setter function** to update the variable and trigger React to render the component again.
+  >
+  > [React](https://react.dev/learn/state-a-components-memory)
 
 ## Purity
 
