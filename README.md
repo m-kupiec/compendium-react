@@ -264,6 +264,31 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   > 2. A **state setter function** to update the variable and trigger React to render the component again.
   >
   > [React](https://react.dev/learn/state-a-components-memory)
+- > process of requesting and serving UI has three steps:
+  > 1. Triggering a render . . .
+  > 2. Rendering the component . . .
+  > 3. Committing to the DOM
+  >
+  > [React](https://react.dev/learn/render-and-commit)
+- > There are two reasons for a component to render:
+  > 1. It’s the component’s **initial render**.
+  > 2. The component’s (or one of its ancestors’) **state has been updated**.
+  >
+  > [React](https://react.dev/learn/render-and-commit)
+- > After you trigger a render, React calls your components to figure out what to display on screen. “Rendering” is React calling your components.
+  > - On initial render, React will call the root component.
+  > - For subsequent renders, React will call the function component whose state update triggered the render.
+  >
+  > This process is recursive: if the updated component returns some other component, React will render that component next, and if that component also returns something, it will render that component next, and so on. The process will continue until there are no more nested components and React knows exactly what should be displayed on screen.
+  >
+  > [React](https://react.dev/learn/render-and-commit)
+- > After rendering (calling) your components, React will modify the DOM.
+  > - For the initial render, React will use the appendChild() DOM API to put all the DOM nodes it has created on screen.
+  > - For re-renders, React will apply the minimal necessary operations (calculated while rendering!) to make the DOM match the latest rendering output.
+  >
+  > [React](https://react.dev/learn/render-and-commit)
+- "React only changes the DOM nodes if there’s a difference between renders. . . . you can add some text into the `<input>`, updating its `value`, but the text doesn’t disappear when the component re-renders" ([React](https://react.dev/learn/render-and-commit))
+- "After rendering is done and React updated the DOM, the browser will repaint the screen. Although this process is known as “browser rendering”, we’ll refer to it as “painting” to avoid confusion throughout the docs." ([React](https://react.dev/learn/render-and-commit))
 
 ## Purity
 
