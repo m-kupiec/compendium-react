@@ -436,6 +436,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
 ## Sharing State
 
+- "State is local to a component instance . . . if you render the same component twice, each copy will have completely isolated state" ([React](https://react.dev/learn/state-a-components-memory))
+- "state is fully private to the component declaring it. The parent component can’t change it." ([React](https://react.dev/learn/state-a-components-memory))
 - "To collect data from multiple children, or to have two child components communicate with each other, declare the shared state in their parent component instead. The parent component can pass that state back down to the children via props. This keeps the child components in sync with each other and with their parent." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
 - "Lifting state into a parent component is common when React components are refactored." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
 
