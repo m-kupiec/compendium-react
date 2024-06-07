@@ -382,7 +382,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 # Hooks
 
 - "Functions starting with `use` are called Hooks." ([React](https://react.dev/learn))
-- "You can only call Hooks at the top of your components (or other Hooks). If you want to use `useState` in a condition or a loop, extract a new component and put it there." ([React](https://react.dev/learn))
+- "*Hooks* are special functions that are only available while React is rendering . . . They let you “hook into” different React features." ([React](https://react.dev/learn/state-a-components-memory))
+- "Hooks—functions starting with use—can only be called at the top level of your components or your own Hooks. You can’t call Hooks inside conditions, loops, or other nested functions. Hooks are functions, but it’s helpful to think of them as unconditional declarations about your component’s needs. You “use” React features at the top of your component similar to how you “import” modules at the top of your file." ([React](https://react.dev/learn/state-a-components-memory))
+- "If you want to use `useState` in a condition or a loop, extract a new component and put it there." ([React](https://react.dev/learn))
 
 # Events
 
