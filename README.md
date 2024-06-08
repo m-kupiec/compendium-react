@@ -66,6 +66,7 @@
 
 - **Overview**
 - **Grouping Related State Variables**
+- **Avoiding State Contradictions**
 
 # Overview
 
@@ -766,3 +767,7 @@ Component design and development phases:
 
 - "if some two state variables always change together, it might be a good idea to unify them into a single state variable." ([React](https://react.dev/learn/choosing-the-state-structure))
 - "Another case where you’ll group data into an object or an array is when you don’t know how many pieces of state you’ll need. For example, it’s helpful when you have a form where the user can add custom fields." ([React](https://react.dev/learn/choosing-the-state-structure))
+
+## Avoiding State Contradictions
+
+"For example, if you forget to call `setIsSent` and `setIsSending` together, you may end up in a situation where both `isSending` and `isSent` are `true` at the same time. The more complex your component is, the harder it is to understand what happened. Since `isSending` and `isSent` should never be `true` at the same time, it is better to replace them with one `status` state variable" ([React](https://react.dev/learn/choosing-the-state-structure))
