@@ -57,6 +57,7 @@
 
 - **Overview**
 - **Step 1: Identifying Visual States**
+- **Step 2: Identifying and Setting State Triggers**
 
 # Overview
 
@@ -684,5 +685,29 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 > ```
 >
 > Pages like this are often called “living styleguides” or “storybooks”.
+>
+> [React](https://react.dev/learn/reacting-to-input-with-state)
+
+## Step 2: Identifying and Setting State Triggers
+
+> You can trigger state updates in response to two kinds of inputs:
+> 1. **Human inputs**, like clicking a button, typing in a field, navigating a link.
+> 2. **Computer inputs**, like a network response arriving, a timeout completing, an image loading.
+>
+> [React](https://react.dev/learn/reacting-to-input-with-state)
+
+"you must set state variables to update the UI." ([React](https://react.dev/learn/reacting-to-input-with-state))
+
+> For the form you’re developing, you will need to change state in response to a few different inputs:
+> - **Changing the text input** (human) should switch it from the *Empty* state to the *Typing* state or back, depending on whether the text box is empty or not.
+> - **Clicking the Submit button** (human) should switch it to the *Submitting* state.
+> - **Successful network response** (computer) should switch it to the *Success* state.
+> - **Failed network response** (computer) should switch it to the *Error* state with the matching error message.
+>
+> [React](https://react.dev/learn/reacting-to-input-with-state)
+
+> To help visualize . . . [the] flow, try drawing each state on paper as a labeled circle, and each change between two states as an arrow. You can sketch out many flows this way and sort out bugs long before implementation.
+>
+> ![Image](/assets/responding_to_input_flow.webp)
 >
 > [React](https://react.dev/learn/reacting-to-input-with-state)
