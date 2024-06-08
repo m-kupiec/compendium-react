@@ -59,6 +59,7 @@
 - **Step 1: Identifying Visual States**
 - **Step 2: Identifying State Triggers**
 - **Step 3: Drafting State**
+- **Step 4: Refactoring State**
 
 # Overview
 
@@ -716,3 +717,18 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 "you’ll need to represent the visual states of your component in memory with `useState`. Simplicity is key" ([React](https://react.dev/learn/reacting-to-input-with-state))
 
 "you’ll need to store the `answer` for the input, and the `error` (if it exists) to store the last error . . . Then, you’ll need a state variable representing which one of the visual states that you want to display. There’s usually more than a single way to represent that in memory, so you’ll need to experiment with it. . . . start by adding enough state that you’re *definitely* sure that all the possible visual states are covered . . . Your first idea likely won’t be the best, but that’s ok—refactoring state is a part of the process!" ([React](https://react.dev/learn/reacting-to-input-with-state))
+
+## Step 4: Refactoring State
+
+"Spending a little time on refactoring your state structure will make your components easier to understand, reduce duplication, and avoid unintended meanings." ([React](https://react.dev/learn/reacting-to-input-with-state))
+
+> Here are some questions you can ask about your state variables:
+> - **Does this state cause a paradox?** For example, `isTyping` and `isSubmitting` can’t both be `true`. A paradox usually means that the state is not constrained enough. There are four possible combinations of two booleans, but only three correspond to valid states. To remove the “impossible” state, you can combine these into a `status` that must be one of three values: `'typing'`, `'submitting'`, or `'success'`.
+> - **Is the same information available in another state variable already?** . . .
+> - **Can you get the same information from the inverse of another state variable?**
+>
+> [React](https://react.dev/learn/reacting-to-input-with-state)
+
+"You know they are essential, because you can’t remove any of them without breaking the functionality." ([React](https://react.dev/learn/reacting-to-input-with-state))
+
+"a non-null `error` doesn’t make sense when `status` is `'success'`. To model the state more precisely, you can extract it into a reducer. Reducers let you unify multiple state variables into a single object and consolidate all the related logic!" ([React](https://react.dev/learn/reacting-to-input-with-state))
