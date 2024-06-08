@@ -57,7 +57,7 @@
 
 - **Overview**
 - **Step 1: Identifying Visual States**
-- **Step 2: Identifying and Setting State Triggers**
+- **Step 2: Identifying State Triggers**
 
 # Overview
 
@@ -688,15 +688,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 >
 > [React](https://react.dev/learn/reacting-to-input-with-state)
 
-## Step 2: Identifying and Setting State Triggers
+## Step 2: Identifying State Triggers
 
 > You can trigger state updates in response to two kinds of inputs:
 > 1. **Human inputs**, like clicking a button, typing in a field, navigating a link.
 > 2. **Computer inputs**, like a network response arriving, a timeout completing, an image loading.
 >
 > [React](https://react.dev/learn/reacting-to-input-with-state)
-
-"you must set state variables to update the UI." ([React](https://react.dev/learn/reacting-to-input-with-state))
 
 > For the form you’re developing, you will need to change state in response to a few different inputs:
 > - **Changing the text input** (human) should switch it from the *Empty* state to the *Typing* state or back, depending on whether the text box is empty or not.
