@@ -60,6 +60,7 @@
 - **Step 2: Identifying State Triggers**
 - **Step 3: Drafting State**
 - **Step 4: Refactoring State**
+- **Step 5: Connecting State and Triggers**
 
 # Overview
 
@@ -732,3 +733,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 "You know they are essential, because you can’t remove any of them without breaking the functionality." ([React](https://react.dev/learn/reacting-to-input-with-state))
 
 "a non-null `error` doesn’t make sense when `status` is `'success'`. To model the state more precisely, you can extract it into a reducer. Reducers let you unify multiple state variables into a single object and consolidate all the related logic!" ([React](https://react.dev/learn/reacting-to-input-with-state))
+
+## Step 5: Connecting State and Triggers
+
+"create event handlers that update the state." ([React](https://react.dev/learn/reacting-to-input-with-state))
+
+"Expressing all interactions as state changes lets you later introduce new visual states without breaking existing ones. It also lets you change what should be displayed in each state without changing the logic of the interaction itself." ([React](https://react.dev/learn/reacting-to-input-with-state))
