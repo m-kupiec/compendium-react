@@ -65,6 +65,7 @@
 ### State Structuring
 
 - **Overview**
+- **Grouping Related State Variables**
 
 # Overview
 
@@ -760,3 +761,8 @@ Component design and development phases:
 > The goal behind these principles is *to make state easy to update without introducing mistakes*.
 >
 > [React](https://react.dev/learn/choosing-the-state-structure)
+
+## Grouping Related State Variables
+
+- "if some two state variables always change together, it might be a good idea to unify them into a single state variable." ([React](https://react.dev/learn/choosing-the-state-structure))
+- "Another case where you’ll group data into an object or an array is when you don’t know how many pieces of state you’ll need. For example, it’s helpful when you have a form where the user can add custom fields." ([React](https://react.dev/learn/choosing-the-state-structure))
