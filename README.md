@@ -511,6 +511,35 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     > ```
     >
     > [React](https://react.dev/learn/updating-objects-in-state)
+- "In general, you should only mutate objects that you have just created." ([React](https://react.dev/learn/updating-arrays-in-state))
+- "Arrays are mutable in JavaScript, but you should treat them as immutable when you store them in state. Just like with objects, when you want to update an array stored in state, you need to create a new one (or make a copy of an existing one), and then set state to use the new array. . . . In JavaScript, arrays are just another kind of object." ([React](https://react.dev/learn/updating-arrays-in-state))
+- "even if you copy an array, you can’t mutate existing items inside of it directly. This is because copying is shallow—the new array will contain the same items as the original one. So if you modify an object inside the copied array, you are mutating the existing state. . . . When updating nested state, you need to create copies from the point where you want to update, and all the way up to the top level." ([React](https://react.dev/learn/updating-arrays-in-state))
+- > you should treat arrays in React state as read-only. This means that you shouldn’t reassign items inside an array like `arr[0] = 'bird'`, and you also shouldn’t use methods that mutate the array, such as `push()` and `pop()`. Instead, every time you want to update an array, you’ll want to pass a new array to your state setting function. . . .
+  >
+  > |         |avoid (mutates the array) |prefer (returns a new array)|
+  > |---------|--------------------------|----------------------------|
+  > |adding   |`push`, `unshift`         |`concat`, `[...arr]` . . .  |
+  > |removing |`pop`, `shift`, `splice`  |`filter`, `slice` . . .     |
+  > |replacing|`splice`, `arr[i] =` . . .|`map` . . .                 |
+  > |sorting  |`reverse`, `sort`         |copy the array first . . .  |
+  >
+  > [React](https://react.dev/learn/updating-arrays-in-state)
+  - "to remove an item from an array is to *filter it out*. In other words, you will produce a new array that will not contain that item. To do this, use the `filter` method" ([React](https://react.dev/learn/updating-arrays-in-state))
+  - "To replace an item, create a new array with `map`. Inside your `map` call, you will receive the item index as the second argument. Use it to decide whether to return the original item (the first argument) or something else" ([React](https://react.dev/learn/updating-arrays-in-state))
+  - > to insert an item at a particular position that’s neither at the beginning nor at the end. To do this, you can use the `...` array spread syntax together with the `slice()` method. . . .
+    >
+    > ```jsx
+    > const nextArtists = [
+    >   // Items before the insertion point:
+    >   ...artists.slice(0, insertAt),
+    >   // New item:
+    >   { id: nextId++, name: name },
+    >   // Items after the insertion point:
+    >   ...artists.slice(insertAt)
+    > ];
+    > ```
+    >
+    > [React](https://react.dev/learn/updating-arrays-in-state)
 
 # Application Design & Development
 
