@@ -53,6 +53,11 @@
 - **Step 4: Implementing the State Flowing Down**
 - **Step 5: Implementing the State Updates**
 
+### Component Design & Development
+
+- **Overview**
+- **Step 1: Identifying Visual States**
+
 # Overview
 
 "React provides a declarative way to manipulate the UI. Instead of manipulating individual pieces of the UI directly, you describe the different states that your component can be in, and switch between them in response to the user input. This is similar to how designers think about the UI. . . . In imperative programming . . . you have to write the exact instructions to manipulate the UI depending on what just happened. . . . Manipulating the UI imperatively works well enough for isolated examples, but it gets exponentially more difficult to manage in more complex systems. Imagine updating a page full of different forms like this one. Adding a new UI element or a new interaction would require carefully checking all existing code to make sure you haven’t introduced a bug (for example, forgetting to show or hide something). React was built to solve this problem. In React, you don’t directly manipulate the UI . . . Instead, you declare what you want to show, and React figures out how to update the UI." ([React](https://react.dev/learn/reacting-to-input-with-state))
@@ -636,3 +641,48 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 > The state is owned by `FilterableProductTable`, so only it can call `setFilterText` and `setInStockOnly`. To let `SearchBar` update the `FilterableProductTable`’s state, you need to pass these functions down to `SearchBar`
 >
 > [React](https://react.dev/learn/thinking-in-react)
+
+# Component Design & Development
+
+## Overview
+
+> 1. **Identify** your component’s different visual states
+> 2. **Determine** what triggers those state changes
+> 3. **Represent** the state in memory using useState
+> 4. **Remove** any non-essential state variables
+> 5. **Connect** the event handlers to set the state
+>
+> [React](https://react.dev/learn/reacting-to-input-with-state)
+
+## Step 1: Identifying Visual States
+
+"you need to visualize all the different “states” of the UI the user might see . . . Just like a designer, you’ll want to “mock up” or create “mocks” for the different states before you add logic. . . . a mock for just the visual part of the form . . . mock is controlled by a prop . . . Mocking lets you quickly iterate on the UI before you wire up any logic. . . . prototype of the same component . . . “controlled” by the . . . prop" ([React](https://react.dev/learn/reacting-to-input-with-state))
+
+> If a component has a lot of visual states, it can be convenient to show them all on one page:
+>
+> ```jsx
+> let statuses = [
+>   'empty',
+>   'typing',
+>   'submitting',
+>   'success',
+>   'error',
+> ];
+>
+> export default function App() {
+>   return (
+>     <>
+>       {statuses.map(status => (
+>         <section key={status}>
+>           <h4>Form ({status}):</h4>
+>           <Form status={status} />
+>         </section>
+>       ))}
+>     </>
+>   );
+> }
+> ```
+>
+> Pages like this are often called “living styleguides” or “storybooks”.
+>
+> [React](https://react.dev/learn/reacting-to-input-with-state)
