@@ -69,6 +69,7 @@
 - **Avoiding State Contradictions**
 - **Avoiding State Redundancies**
 - **Avoiding State Duplications**
+- **Avoiding Deep State Nesting**
 
 # Overview
 
@@ -783,3 +784,11 @@ Component design and development phases:
 ## Avoiding State Duplications
 
 "instead of a `selectedItem` object (which creates a duplication with objects inside `items`), you hold the `selectedId` in state, and then get the `selectedItem` by searching the `items` array for an item with that ID . . . You didn’t need to hold *the selected item* in state, because only the *selected ID* is essential. The rest could be calculated during render." ([React](https://react.dev/learn/choosing-the-state-structure))
+
+## Avoiding Deep State Nesting
+
+"Updating nested state involves making copies of objects all the way up from the part that changed." ([React](https://react.dev/learn/choosing-the-state-structure))
+
+"If the state is too nested to update easily, consider making it “flat” . . . (also known as “normalized”)" ([React](https://react.dev/learn/choosing-the-state-structure))
+
+"Sometimes, you can also reduce state nesting by moving some of the nested state into the child components. This works well for ephemeral UI state that doesn’t need to be stored, like whether an item is hovered." ([React](https://react.dev/learn/choosing-the-state-structure))
