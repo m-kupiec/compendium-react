@@ -68,6 +68,7 @@
 - **Grouping Related State Variables**
 - **Avoiding State Contradictions**
 - **Avoiding State Redundancies**
+- **Avoiding State Duplications**
 
 # Overview
 
@@ -778,3 +779,7 @@ Component design and development phases:
 "If you can calculate some information from the component’s props or its existing state variables during rendering, you should not put that information into that component’s state." ([React](https://react.dev/learn/choosing-the-state-structure))
 
 "Don’t mirror props in state . . . if the parent component passes a different value . . . state variable would not be updated! The state is only initialized during the first render. . . . ”Mirroring” props into state only makes sense when you want to ignore all updates for a specific prop. By convention, start the prop name with `initial` or `default` to clarify that its new values are ignored" ([React](https://react.dev/learn/choosing-the-state-structure))
+
+## Avoiding State Duplications
+
+"instead of a `selectedItem` object (which creates a duplication with objects inside `items`), you hold the `selectedId` in state, and then get the `selectedItem` by searching the `items` array for an item with that ID . . . You didn’t need to hold *the selected item* in state, because only the *selected ID* is essential. The rest could be calculated during render." ([React](https://react.dev/learn/choosing-the-state-structure))
