@@ -58,6 +58,7 @@
 - **Overview**
 - **Step 1: Identifying Visual States**
 - **Step 2: Identifying State Triggers**
+- **Step 3: Drafting State**
 
 # Overview
 
@@ -709,3 +710,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 > ![Image](/assets/responding_to_input_flow.webp)
 >
 > [React](https://react.dev/learn/reacting-to-input-with-state)
+
+## Step 3: Drafting State
+
+"you’ll need to represent the visual states of your component in memory with `useState`. Simplicity is key" ([React](https://react.dev/learn/reacting-to-input-with-state))
+
+"you’ll need to store the `answer` for the input, and the `error` (if it exists) to store the last error . . . Then, you’ll need a state variable representing which one of the visual states that you want to display. There’s usually more than a single way to represent that in memory, so you’ll need to experiment with it. . . . start by adding enough state that you’re *definitely* sure that all the possible visual states are covered . . . Your first idea likely won’t be the best, but that’s ok—refactoring state is a part of the process!" ([React](https://react.dev/learn/reacting-to-input-with-state))
