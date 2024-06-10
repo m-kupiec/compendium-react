@@ -917,6 +917,7 @@ Usage:
 Rules:
 - "**Reducers must be pure.** Similar to state updater functions, reducers run during rendering! (Actions are queued until the next render.) This means that reducers must be pure—same inputs always result in the same output. They should not send requests, schedule timeouts, or perform any side effects (operations that impact things outside the component). They should update objects and arrays without mutations." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
 - "**Each action describes a single user interaction, even if that leads to multiple changes in the data.** For example, if a user presses “Reset” on a form with five fields managed by a reducer, it makes more sense to dispatch one reset_form action rather than five separate set_field actions." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+- "Because the reducer function takes state . . . as an argument, you can declare it outside of your component. This decreases the indentation level and can make your code easier to read." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
 - "it’s a convention to use `switch` statements inside reducers. . . . We recommend wrapping each case block into the `{` and `}` curly braces so that variables declared inside of different `case`s don’t clash with each other." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
 
 Example (taken from [React](https://react.dev/learn/extracting-state-logic-into-a-reducer)):
