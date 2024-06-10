@@ -916,6 +916,7 @@ Usage:
 
 Rules:
 - Actions:
+  - "it should contain the minimal information about *what happened*." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
   - "An action object can have any shape. By convention, it is common to give it a string `type` that describes what happened, and pass any additional information in other fields. The `type` is specific to a component, so in this example either `'added'` or `'added_task'` would be fine. Choose a name that says what happened!" ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
   - "**Each action describes a single user interaction, even if that leads to multiple changes in the data.** For example, if a user presses “Reset” on a form with five fields managed by a reducer, it makes more sense to dispatch one reset_form action rather than five separate set_field actions." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
 - Reducer:
