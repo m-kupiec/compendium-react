@@ -901,6 +901,12 @@ Component design and development phases:
 
 # Reducers
 
+Definition:
+
+"named after the `reduce()` operation that you can perform on arrays. . . . The function you pass to `reduce` is known as a “reducer”. It takes the *result so far* and the *current item*, then it returns the *next result*. React reducers are an example of the same idea: they take the *state so far* and the *action*, and return the *next state*. In this way, they accumulate actions over time into state." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+
+Usage:
+
 > To convert from `useState` to `useReducer`:
 > 1. Dispatch actions from event handlers.
 > 2. Write a reducer function that returns the next state for a given state and action.
