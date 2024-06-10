@@ -394,6 +394,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   > Remember that it’s the position in the UI tree—not in the JSX markup—that matters to React! . . . React doesn’t know where you place the conditions in your function. All it “sees” is the tree you return. In both cases, the `App` component returns a `<div>` with `<Counter />` as a first child. To React, these two counters have the same “address”: the first child of the first child of the root. This is how React matches them up between the previous and next renders, regardless of how you structure your logic.
   >
   > [React](https://react.dev/learn/preserving-and-resetting-state)
+- "Different components at the same position reset state . . . you switch between different component types at the same position. Initially, the first child of the `<div>` contained a `Counter`. But when you swapped in a `p`, React removed the `Counter` from the UI tree and destroyed its state." ([React](https://react.dev/learn/preserving-and-resetting-state))
+- "Also, when you render a different component in the same position, it resets the state of its entire subtree." ([React](https://react.dev/learn/preserving-and-resetting-state))
+- "As a rule of thumb, if you want to preserve the state between re-renders, the structure of your tree needs to “match up” from one render to another. If the structure is different, the state gets destroyed because React destroys state when it removes a component from the tree." ([React](https://react.dev/learn/preserving-and-resetting-state))
 
 ## The Module Dependency Tree
 
