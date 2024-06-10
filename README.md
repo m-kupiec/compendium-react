@@ -458,6 +458,19 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   > Each Counter’s state gets destroyed each time it’s removed from the DOM. . . .  This solution is convenient when you only have a few independent components rendered in the same place.
   >
   > [React](https://react.dev/learn/preserving-and-resetting-state)
+- > There is also another, more generic, way to reset a component’s state. . . . You can use keys to make React distinguish between any components. By default, React uses order within the parent (“first counter”, “second counter”) to discern between components. But keys let you tell React that this is not just a *first* counter, or a *second* counter, but a specific counter . . . In this example, the two `<Counter />`s don’t share state even though they appear in the same place in JSX:
+  >
+  > ```jsx
+  > {isPlayerA ? (
+  >   <Counter key="Taylor" person="Taylor" />
+  > ) : (
+  >   <Counter key="Sarah" person="Sarah" />
+  > )}
+  > ```
+  >
+  > [React](https://react.dev/learn/preserving-and-resetting-state)
+    - "keys are not globally unique. They only specify the position *within* the parent." ([React](https://react.dev/learn/preserving-and-resetting-state))
+- "Resetting state with a key is particularly useful when dealing with forms." ([React](https://react.dev/learn/preserving-and-resetting-state))
 
 ## The Module Dependency Tree
 
