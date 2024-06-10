@@ -397,6 +397,39 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 - "Different components at the same position reset state . . . you switch between different component types at the same position. Initially, the first child of the `<div>` contained a `Counter`. But when you swapped in a `p`, React removed the `Counter` from the UI tree and destroyed its state." ([React](https://react.dev/learn/preserving-and-resetting-state))
 - "Also, when you render a different component in the same position, it resets the state of its entire subtree." ([React](https://react.dev/learn/preserving-and-resetting-state))
 - "As a rule of thumb, if you want to preserve the state between re-renders, the structure of your tree needs to “match up” from one render to another. If the structure is different, the state gets destroyed because React destroys state when it removes a component from the tree." ([React](https://react.dev/learn/preserving-and-resetting-state))
+- > you should not nest component function definitions.
+  >
+  > ```jsx
+  > import { useState } from 'react';
+  >
+  > export default function MyComponent() {
+  >   const [counter, setCounter] = useState(0);
+  >
+  >   function MyTextField() {
+  >     const [text, setText] = useState('');
+  >
+  >     return (
+  >       <input
+  >         value={text}
+  >         onChange={e => setText(e.target.value)}
+  >       />
+  >     );
+  >   }
+  >
+  >   return (
+  >     <>
+  >       <MyTextField />
+  >       <button onClick={() => {
+  >         setCounter(counter + 1)
+  >       }}>Clicked {counter} times</button>
+  >     </>
+  >   );
+  > }
+  > ```
+  >
+  > Every time you click the button, the input state disappears! This is because a *different* `MyTextField` function is created for every render of `MyComponent`. You’re rendering a *different* component in the same position, so React resets all state below. This leads to bugs and performance problems. To avoid this problem, always declare component functions at the top level, and don’t nest their definitions.
+  >
+  > [React](https://react.dev/learn/preserving-and-resetting-state)
 
 ## The Module Dependency Tree
 
