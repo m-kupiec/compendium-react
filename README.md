@@ -374,6 +374,26 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 - "the render tree is only composed of React components. React, as a UI framework, is platform agnostic. On react.dev, we showcase examples that render to the web, which uses HTML markup as its UI primitives. But a React app could just as likely render to a mobile or desktop platform, which may use different UI primitives like UIView or FrameworkElement. These platform UI primitives are not a part of React. React render trees can provide insight to our React app regardless of what platform your app renders to." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
 - "Although render trees may differ across render passes, these trees are generally helpful for identifying what the `top-level` and `leaf components` are in a React app. Top-level components are the components nearest to the root component and affect the rendering performance of all the components beneath them and often contain the most complexity. Leaf components are near the bottom of the tree and have no child components and are often frequently re-rendered." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
 - "Top-level components affect the rendering performance of all components beneath them and leaf components are often re-rendered frequently. Identifying them is useful for understanding and debugging rendering performance." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
+- "when React removes a component, it destroys its state. . . . React preserves a component’s state for as long as it’s being rendered at its position in the UI tree." ([React](https://react.dev/learn/preserving-and-resetting-state))
+- > In this example, there are two different `<Counter />` tags:
+  >
+  > ```jsx
+  > /* ... */
+  > return (
+  >   <div>
+  >     {isFancy ? (
+  >       <Counter isFancy={true} />
+  >     ) : (
+  >       <Counter isFancy={false} />
+  >     )}
+  > /* ... */
+  > ```
+  >
+  > When you tick or clear the checkbox, the counter state does not get reset. Whether `isFancy` is `true` or `false`, you always have a `<Counter />` as the first child of the `div` returned from the root `App` component . . . It’s the same component at the same position, so from React’s perspective, it’s the same counter.
+  >
+  > Remember that it’s the position in the UI tree—not in the JSX markup—that matters to React! . . . React doesn’t know where you place the conditions in your function. All it “sees” is the tree you return. In both cases, the `App` component returns a `<div>` with `<Counter />` as a first child. To React, these two counters have the same “address”: the first child of the first child of the root. This is how React matches them up between the previous and next renders, regardless of how you structure your logic.
+  >
+  > [React](https://react.dev/learn/preserving-and-resetting-state)
 
 ## The Module Dependency Tree
 
