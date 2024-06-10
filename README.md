@@ -430,6 +430,34 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   > Every time you click the button, the input state disappears! This is because a *different* `MyTextField` function is created for every render of `MyComponent`. You’re rendering a *different* component in the same position, so React resets all state below. This leads to bugs and performance problems. To avoid this problem, always declare component functions at the top level, and don’t nest their definitions.
   >
   > [React](https://react.dev/learn/preserving-and-resetting-state)
+- > By default, React preserves state of a component while it stays at the same position.
+  >
+  > ```jsx
+  > /* ... */
+  > {isPlayerA ? (
+  >   <Counter person="Taylor" />
+  > ) : (
+  >   <Counter person="Sarah" />
+  > )}
+  > /* ... */
+  > ```
+  >
+  > Currently, when you change the player, the score is preserved. The two `Counter`s appear in the same position, so React sees them as *the same* `Counter` whose `person` prop has changed. . . . If you want these two `Counter`s to be independent, you can render them in two different positions:
+  >
+  > ```jsx
+  > /* ... */
+  > {isPlayerA &&
+  >   <Counter person="Taylor" />
+  > }
+  > {!isPlayerA &&
+  >   <Counter person="Sarah" />
+  > }
+  > /* ... */
+  > ```
+  >
+  > Each Counter’s state gets destroyed each time it’s removed from the DOM. . . .  This solution is convenient when you only have a few independent components rendered in the same place.
+  >
+  > [React](https://react.dev/learn/preserving-and-resetting-state)
 
 ## The Module Dependency Tree
 
