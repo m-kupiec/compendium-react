@@ -471,6 +471,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   > [React](https://react.dev/learn/preserving-and-resetting-state)
     - "keys are not globally unique. They only specify the position *within* the parent." ([React](https://react.dev/learn/preserving-and-resetting-state))
 - "Resetting state with a key is particularly useful when dealing with forms." ([React](https://react.dev/learn/preserving-and-resetting-state))
+- > There are a few ways to keep the state “alive” for a component that’s no longer visible:
+  > - You could render *all* chats instead of just the current one, but hide all the others with CSS. The chats would not get removed from the tree, so their local state would be preserved. This solution works great for simple UIs. But it can get very slow if the hidden trees are large and contain a lot of DOM nodes.
+  > - You could lift the state up and hold the pending message for each recipient in the parent component. This way, when the child components get removed, it doesn’t matter, because it’s the parent that keeps the important information. This is the most common solution.
+  > - You might also use a different source in addition to React state. For example, you probably want a message draft to persist even if the user accidentally closes the page. To implement this, you could have the `Chat` component initialize its state by reading from the `localStorage`, and save the drafts there too.
+  >
+  > [React](https://react.dev/learn/preserving-and-resetting-state)
 
 ## The Module Dependency Tree
 
