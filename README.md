@@ -71,6 +71,8 @@
 - **Avoiding State Duplications**
 - **Avoiding Deep State Nesting**
 
+### Reducers
+
 # Overview
 
 ```jsx
@@ -896,3 +898,113 @@ Component design and development phases:
 "If the state is too nested to update easily, consider making it “flat” . . . (also known as “normalized”)" ([React](https://react.dev/learn/choosing-the-state-structure))
 
 "Sometimes, you can also reduce state nesting by moving some of the nested state into the child components. This works well for ephemeral UI state that doesn’t need to be stored, like whether an item is hovered." ([React](https://react.dev/learn/choosing-the-state-structure))
+
+# Reducers
+
+Use cases:
+- General:
+  - "It’s a matter of preference. You can always convert between `useState` and `useReducer` back and forth: they are equivalent!" ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+  - "We recommend using a reducer if you often encounter bugs due to incorrect state updates in some component, and want to introduce more structure to its code." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+  - "You don’t have to use reducers for everything: feel free to mix and match! You can even `useState` and `useReducer` in the same component." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+- Code maintainability:
+  - "`useReducer` can help cut down on the code if many event handlers modify state in a similar way." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+  - "when the state updates . . . get more complex, they can bloat your component’s code and make it difficult to scan. In this case, `useReducer` lets you cleanly separate the `how` of update logic from the `what happened` of event handlers." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+  - "Component logic can be easier to read when you separate concerns like this. Now the event handlers only specify *what happened* by dispatching actions, and the reducer function determines *how the state updates* in response to them." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+- Debugging:
+  - "When you have a bug with `useState`, it can be difficult to tell *where* the state was set incorrectly, and *why*. With `useReducer`, you can add a console log into your reducer to see every state update, and *why* it happened (due to which `action`). If each `action` is correct, you’ll know that the mistake is in the reducer logic itself." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+- Testing:
+  - "A reducer is a pure function that doesn’t depend on your component. This means that you can export and test it separately in isolation. While generally it’s best to test components in a more realistic environment, for complex state update logic it can be useful to assert that your reducer returns a particular state for a particular initial state and action." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+
+Rules:
+- "**Reducers must be pure.** Similar to state updater functions, reducers run during rendering! (Actions are queued until the next render.) This means that reducers must be pure—same inputs always result in the same output. They should not send requests, schedule timeouts, or perform any side effects (operations that impact things outside the component). They should update objects and arrays without mutations." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+- "**Each action describes a single user interaction, even if that leads to multiple changes in the data.** For example, if a user presses “Reset” on a form with five fields managed by a reducer, it makes more sense to dispatch one reset_form action rather than five separate set_field actions." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+
+> To convert from `useState` to `useReducer`:
+> 1. Dispatch actions from event handlers.
+> 2. Write a reducer function that returns the next state for a given state and action.
+> 3. Replace `useState` with `useReducer`.
+>
+> [React](https://react.dev/learn/extracting-state-logic-into-a-reducer)
+
+Example (taken from [React](https://react.dev/learn/extracting-state-logic-into-a-reducer)):
+
+```jsx
+import { useReducer } from 'react';
+import AddTask from './AddTask.js';
+import TaskList from './TaskList.js';
+
+export default function TaskApp() {
+  const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);
+
+  function handleAddTask(text) {
+    dispatch({
+      type: 'added',
+      id: nextId++,
+      text: text,
+    });
+  }
+
+  function handleChangeTask(task) {
+    dispatch({
+      type: 'changed',
+      task: task,
+    });
+  }
+
+  function handleDeleteTask(taskId) {
+    dispatch({
+      type: 'deleted',
+      id: taskId,
+    });
+  }
+
+  return (
+    <>
+      <h1>Prague itinerary</h1>
+      <AddTask onAddTask={handleAddTask} />
+      <TaskList
+        tasks={tasks}
+        onChangeTask={handleChangeTask}
+        onDeleteTask={handleDeleteTask}
+      />
+    </>
+  );
+}
+
+function tasksReducer(tasks, action) {
+  switch (action.type) {
+    case 'added': {
+      return [
+        ...tasks,
+        {
+          id: action.id,
+          text: action.text,
+          done: false,
+        },
+      ];
+    }
+    case 'changed': {
+      return tasks.map((t) => {
+        if (t.id === action.task.id) {
+          return action.task;
+        } else {
+          return t;
+        }
+      });
+    }
+    case 'deleted': {
+      return tasks.filter((t) => t.id !== action.id);
+    }
+    default: {
+      throw Error('Unknown action: ' + action.type);
+    }
+  }
+}
+
+let nextId = 3;
+const initialTasks = [
+  {id: 0, text: 'Visit Kafka Museum', done: true},
+  {id: 1, text: 'Watch a puppet show', done: false},
+  {id: 2, text: 'Lennon Wall pic', done: false},
+];
+```
