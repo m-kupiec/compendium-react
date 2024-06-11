@@ -587,7 +587,7 @@ Definition:
   > [React](https://react.dev/learn/referencing-values-with-refs)
 
 Rules:
-- "Don’t read or write `ref.current` during rendering. This makes your component hard to predict." ([React](https://react.dev/learn/referencing-values-with-refs))
+- "Don’t read or write `ref.current` during rendering. If some information is needed during rendering, use state instead. Since React doesn’t know when `ref.current` changes, even reading it while rendering makes your component’s behavior difficult to predict." ([React](https://react.dev/learn/referencing-values-with-refs))
 
 Use cases:
 - "If your component needs to store some value, but it doesn’t impact the rendering logic, choose refs." ([React](https://react.dev/learn/referencing-values-with-refs))
