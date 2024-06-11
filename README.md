@@ -620,6 +620,29 @@ Usage:
   >
   > [React](https://react.dev/learn/manipulating-the-dom-with-refs)
 
+Example (from [React](https://react.dev/learn/manipulating-the-dom-with-refs)):
+
+```jsx
+import { useRef } from 'react';
+
+export default function Form() {
+  const inputRef = useRef(null);
+
+  function handleClick() {
+    inputRef.current.focus();
+  }
+
+  return (
+    <>
+      <input ref={inputRef} />
+      <button onClick={handleClick}>
+        Focus the input
+      </button>
+    </>
+  );
+}
+```
+
 Use cases:
 - "If your component needs to store some value, but it doesn’t impact the rendering logic, choose refs." ([React](https://react.dev/learn/referencing-values-with-refs))
 - "sometimes you might need access to the DOM elements managed by React—for example, to focus a node, scroll to it, or measure its size and position. There is no built-in way to do those things in React, so you will need a *ref* to the DOM node." ([React](https://react.dev/learn/manipulating-the-dom-with-refs))
