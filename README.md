@@ -1146,6 +1146,12 @@ Alternatives:
 >
 > [React](https://react.dev/learn/scaling-up-with-reducer-and-context)
 
+> You can further declutter the components by moving all wiring into one file.
+> - You can export a component like `TasksProvider` that provides context.
+> - You can also export custom Hooks like `useTasks` and `useTasksDispatch` to read it.
+>
+> [React](https://react.dev/learn/scaling-up-with-reducer-and-context)
+
 Example (slightly modified version of the code from [React](https://react.dev/learn/scaling-up-with-reducer-and-context)):
 
 ```jsx
