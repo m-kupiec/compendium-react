@@ -574,6 +574,20 @@ Unlike state, setting the ref’s `current` value does not trigger a re-render."
 
 "the `ref.current` property . . . value is intentionally mutable, meaning you can both read and write to it." ([React](https://react.dev/learn/referencing-values-with-refs))
 
+> You can imagine that inside of React, useRef is implemented like this:
+>
+> ```jsx
+> // Inside of React
+> function useRef(initialValue) {
+>   const [ref, unused] = useState({ current: initialValue });
+>   return ref;
+> }
+> ```
+>
+> During the first render, `useRef` returns `{ current: initialValue }`. This object is stored by React, so during the next render the same object will be returned. Note how the state setter is unused in this example. It is unnecessary because `useRef` always needs to return the same object!
+>
+> [React](https://react.dev/learn/referencing-values-with-refs)
+
 "Don’t read or write `ref.current` during rendering. This makes your component hard to predict." ([React](https://react.dev/learn/referencing-values-with-refs))
 
 # Events
