@@ -38,6 +38,7 @@
 ### Hooks
 
 - **General**
+- **`useRef`**
 
 ### Events
 
@@ -565,6 +566,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 - "*Hooks* are special functions that are only available while React is rendering . . . They let you “hook into” different React features." ([React](https://react.dev/learn/state-a-components-memory))
 - "Hooks—functions starting with use—can only be called at the top level of your components or your own Hooks. You can’t call Hooks inside conditions, loops, or other nested functions. Hooks are functions, but it’s helpful to think of them as unconditional declarations about your component’s needs. You “use” React features at the top of your component similar to how you “import” modules at the top of your file." ([React](https://react.dev/learn/state-a-components-memory))
 - "If you want to use `useState` in a condition or a loop, extract a new component and put it there." ([React](https://react.dev/learn))
+
+## `useRef`
+
+"Refs are an escape hatch to hold onto values that aren’t used for rendering. . . .Like state, refs let you retain information between re-renders of a component.
+Unlike state, setting the ref’s `current` value does not trigger a re-render." ([React](https://react.dev/learn/referencing-values-with-refs))
+
+"Don’t read or write `ref.current` during rendering. This makes your component hard to predict." ([React](https://react.dev/learn/referencing-values-with-refs))
 
 # Events
 
