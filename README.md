@@ -1028,5 +1028,81 @@ Use cases:
 Definition:
 - "Context lets the parent component make some information available to any component in the tree below it—no matter how deep—without passing it explicitly through props." ([React](https://react.dev/learn/passing-data-deeply-with-context))
 
+Example (slightly modified version of the code from [React](https://react.dev/learn/passing-data-deeply-with-context)):
+
+```jsx
+/* LevelContext.js */
+
+import { createContext } from 'react';
+
+export const LevelContext = createContext(0);
+```
+
+```jsx
+/* Heading.js */
+
+import { useContext } from 'react';
+import { LevelContext } from './LevelContext.js';
+
+export default function Heading({ children }) {
+  const level = useContext(LevelContext);
+
+  switch(level) {
+    case 0:
+      throw Error('Heading must be inside a Section!');
+    case 1:
+      return <h1>{children}</h1>
+    case 2:
+      return <h2>{children}</h2>
+    case 3:
+      return <h3>{children}</h3>
+    default:
+      throw Error('Unknown level');
+  }
+}
+```
+
+```jsx
+/* Section.js */
+
+import { useContext } from 'react';
+import { LevelContext } from './LevelContext.js';
+
+export default function Section({ children }) {
+  const level = useContext(LevelContext);
+
+  return (
+    <section>
+      <LevelContext.Provider value={level + 1}>
+        {children}
+      </LevelContext.Provider>
+    </section>
+  );
+}
+```
+
+```jsx
+/* App.js */
+
+import Heading from './Heading.js';
+import Section from './Section.js';
+
+export default function Page() {
+  return (
+    <Section>
+      <Heading>Heading #1</Heading>
+
+      <Section>
+        <Heading>Heading #2</Heading>
+
+        <Section>
+          <Heading>Heading #3</Heading>
+        </Section>
+      </Section>
+    </Section>
+  );
+}
+```
+
 Use cases:
 - "The nearest common ancestor could be far removed from the components that need data, and lifting state up that high can lead to a situation called “prop drilling”." ([React](https://react.dev/learn/passing-data-deeply-with-context))
