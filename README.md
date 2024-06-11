@@ -720,6 +720,26 @@ Custom components' refs:
   > ```
   >
   > [React](https://react.dev/learn/manipulating-the-dom-with-refs)
+- > Exposing a subset of the API with an imperative handle . . . In uncommon cases, you may want to restrict the exposed functionality. You can do that with `useImperativeHandle`:
+  >
+  > ```jsx
+  > import { forwardRef, useRef, useImperativeHandle } from 'react';
+  >
+  > const MyInput = forwardRef((props, ref) => {
+  >   const restrictedRef = useRef(null);
+  >
+  >   useImperativeHandle(ref, () => ({
+  >     // Only expose focus and nothing else
+  >     focus() { restrictedRef.current.focus(); },
+  >   }))
+  >
+  >   return <input {...props} ref={restrictedRef} />;
+  > })
+  > ```
+  >
+  > . . . `inputRef.current` inside the `Form` component will only have the `focus` method. In this case, the ref “handle” is not the DOM node, but the custom object you create inside `useImperativeHandle` call.
+  >
+  > [React](https://react.dev/learn/manipulating-the-dom-with-refs) (with a slightly modified code)
 
 # Events
 
