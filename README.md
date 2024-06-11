@@ -597,22 +597,28 @@ Rules:
 - "Don’t read or write `ref.current` during rendering. If some information is needed during rendering, use state instead. Since React doesn’t know when `ref.current` changes, even reading it while rendering makes your component’s behavior difficult to predict." ([React](https://react.dev/learn/referencing-values-with-refs))
 
 Usage:
-
-> ```jsx
-> import { useRef } from 'react';
->
-> /* ... */
-> const ref = useRef(0);
-> ```
->
-> `useRef` returns an object like this:
-> ```jsx
-> {
->   current: 0 // The value you passed to useRef
-> }
-> ```
->
-> [React](https://react.dev/learn/referencing-values-with-refs)
+- > ```jsx
+  > import { useRef } from 'react';
+  >
+  > /* ... */
+  > const ref = useRef(0);
+  > ```
+  >
+  > `useRef` returns an object like this:
+  > ```jsx
+  > {
+  >   current: 0 // The value you passed to useRef
+  > }
+  > ```
+  >
+  > [React](https://react.dev/learn/referencing-values-with-refs)
+- > To access a DOM node managed by React . . . pass your ref [(`const myRef = useRef(null);`)] as the `ref` attribute to the JSX tag for which you want to get the DOM node:
+  >
+  > ```html
+  > <div ref={myRef}>
+  > ```
+  >
+  > [React](https://react.dev/learn/manipulating-the-dom-with-refs)
 
 Use cases:
 - "If your component needs to store some value, but it doesn’t impact the rendering logic, choose refs." ([React](https://react.dev/learn/referencing-values-with-refs))
