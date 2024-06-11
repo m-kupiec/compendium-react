@@ -589,6 +589,15 @@ Definition:
 Rules:
 - "Don’t read or write `ref.current` during rendering. This makes your component hard to predict." ([React](https://react.dev/learn/referencing-values-with-refs))
 
+Use cases:
+- "If your component needs to store some value, but it doesn’t impact the rendering logic, choose refs." ([React](https://react.dev/learn/referencing-values-with-refs))
+- > Typically, you will use a ref when your component needs to “step outside” React and communicate with external APIs—often a browser API that won’t impact the appearance of the component. Here are a few of these rare situations:
+  > - Storing timeout IDs
+  > - Storing and manipulating DOM elements, which we cover on the next page
+  > - Storing other objects that aren’t necessary to calculate the JSX.
+  >
+  > [React](https://react.dev/learn/referencing-values-with-refs)
+
 # Events
 
 - "By convention, it is common to name event handlers as `handle` followed by the event name. You’ll often see `onClick={handleClick}`, `onMouseEnter={handleMouseEnter}`, and so on." ([React](https://react.dev/learn/responding-to-events))
