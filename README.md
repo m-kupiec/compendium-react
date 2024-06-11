@@ -71,9 +71,10 @@
 - **Avoiding State Duplications**
 - **Avoiding Deep State Nesting**
 
-### Reducers
+### State Management
 
-### Context
+- **Reducers**
+- **Context**
 
 # Overview
 
@@ -901,7 +902,9 @@ Component design and development phases:
 
 "Sometimes, you can also reduce state nesting by moving some of the nested state into the child components. This works well for ephemeral UI state that doesn’t need to be stored, like whether an item is hovered." ([React](https://react.dev/learn/choosing-the-state-structure))
 
-# Reducers
+# State Management
+
+## Reducers
 
 Definition:
 - "named after the `reduce()` operation that you can perform on arrays. . . . The function you pass to `reduce` is known as a “reducer”. It takes the *result so far* and the *current item*, then it returns the *next result*. React reducers are an example of the same idea: they take the *state so far* and the *action*, and return the *next state*. In this way, they accumulate actions over time into state." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
@@ -1023,7 +1026,7 @@ Use cases:
 - Testing:
   - "A reducer is a pure function that doesn’t depend on your component. This means that you can export and test it separately in isolation. While generally it’s best to test components in a more realistic environment, for complex state update logic it can be useful to assert that your reducer returns a particular state for a particular initial state and action." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
 
-# Context
+## Context
 
 Definition:
 - "Context lets the parent component make some information available to any component in the tree below it—no matter how deep—without passing it explicitly through props." ([React](https://react.dev/learn/passing-data-deeply-with-context))
