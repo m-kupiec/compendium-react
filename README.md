@@ -619,6 +619,43 @@ Usage:
   > ```
   >
   > [React](https://react.dev/learn/manipulating-the-dom-with-refs)
+- > sometimes you might need a ref to each item in the list, and you don’t know how many you will have. . . . You can’t call `useRef` in a loop, in a condition, or inside a `map()` call. . . . solution is to pass a function to the `ref` attribute. This is called a `ref` callback. React will call your `ref` callback with the DOM node when it’s time to set the ref, and with `null` when it’s time to clear it. This lets you maintain your own array or a Map, and access any ref by its index or some kind of ID. . . .
+  >
+  > ```jsx
+  > /* ... */
+  > const itemsRef = useRef(null);
+  > /* ... */
+  >
+  > function getMap() {
+  >   if (!itemsRef.current) {
+  >     // Initialize the Map on first usage.
+  >     itemsRef.current = new Map();
+  >   }
+  >   return itemsRef.current;
+  > }
+  >
+  > /* ... */
+  > <ul>
+  >   {catList.map((cat) => (
+  >     <li
+  >       key={cat}
+  >       ref={(node) => {
+  >         const map = getMap();
+  >         if (node) {
+  >           map.set(cat, node);
+  >         } else {
+  >           map.delete(cat);
+  >         }
+  >       }}
+  >     >
+  >       <img src={cat} />
+  >     </li>
+  >   ))}
+  > </ul>
+  > /* ... */
+  > ```
+  >
+  > [React](https://react.dev/learn/manipulating-the-dom-with-refs)
 
 Example (from [React](https://react.dev/learn/manipulating-the-dom-with-refs)):
 
