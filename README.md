@@ -595,6 +595,9 @@ Definition:
 
 Rules:
 - "Don’t read or write `ref.current` during rendering. If some information is needed during rendering, use state instead. Since React doesn’t know when `ref.current` changes, even reading it while rendering makes your component’s behavior difficult to predict." ([React](https://react.dev/learn/referencing-values-with-refs))
+- Custom components' refs:
+  - "When you put a ref on a built-in component that outputs a browser element like `<input />`, React will set that ref’s `current` property to the corresponding DOM node (such as the actual `<input />` in the browser). However, if you try to put a ref on your own component, like `<MyInput />`, by default you will get `null`. . . . This happens because by default React does not let a component access the DOM nodes of other components. Not even for its own children! This is intentional. Refs are an escape hatch that should be used sparingly. Manually manipulating *another* component’s DOM nodes makes your code even more fragile." ([React](https://react.dev/learn/manipulating-the-dom-with-refs))
+  - "In design systems, it is a common pattern for low-level components like buttons, inputs, and so on, to forward their refs to their DOM nodes. On the other hand, high-level components like forms, lists, or page sections usually won’t expose their DOM nodes to avoid accidental dependencies on the DOM structure." ([React](https://react.dev/learn/manipulating-the-dom-with-refs))
 
 Usage:
 - > ```jsx
