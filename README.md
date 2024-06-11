@@ -75,6 +75,7 @@
 
 - **Reducers**
 - **Context**
+- **Reducers With Context**
 
 # Overview
 
@@ -1131,3 +1132,16 @@ Alternatives:
 > If neither of these approaches works well for you, consider context.
 >
 > [React](https://react.dev/learn/passing-data-deeply-with-context)
+
+## Reducers With Context
+
+"You can combine reducer with context to let any component read and update state above it." ([React](https://react.dev/learn/scaling-up-with-reducer-and-context))
+
+"You can have many context-reducer pairs like this in your app." ([React](https://react.dev/learn/scaling-up-with-reducer-and-context))
+
+> To provide state and the dispatch function to components below:
+> 1. Create two contexts (for state and for dispatch functions).
+> 2. Provide both contexts from the component that uses the reducer.
+> 3. Use either context from components that need to read them.
+>
+> [React](https://react.dev/learn/scaling-up-with-reducer-and-context)
