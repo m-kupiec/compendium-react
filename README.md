@@ -598,6 +598,7 @@ Rules:
 
 Use cases:
 - "If your component needs to store some value, but it doesn’t impact the rendering logic, choose refs." ([React](https://react.dev/learn/referencing-values-with-refs))
+- "sometimes you might need access to the DOM elements managed by React—for example, to focus a node, scroll to it, or measure its size and position. There is no built-in way to do those things in React, so you will need a *ref* to the DOM node." ([React](https://react.dev/learn/manipulating-the-dom-with-refs))
 - > Typically, you will use a ref when your component needs to “step outside” React and communicate with external APIs—often a browser API that won’t impact the appearance of the component. Here are a few of these rare situations:
   > - Storing timeout IDs
   > - Storing and manipulating DOM elements, which we cover on the next page
