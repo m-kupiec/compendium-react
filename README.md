@@ -1027,6 +1027,9 @@ Use cases:
 
 Definition:
 - "Context lets the parent component make some information available to any component in the tree below it—no matter how deep—without passing it explicitly through props." ([React](https://react.dev/learn/passing-data-deeply-with-context))
+- "Context lets you write components that “adapt to their surroundings” and display themselves differently depending on *where* (or, in other words, *in which context*) they are being rendered." ([React](https://react.dev/learn/passing-data-deeply-with-context))
+- "How context works might remind you of CSS property inheritance. In CSS, you can specify `color: blue` for a `<div>`, and any DOM node inside of it, no matter how deep, will inherit that color unless some other DOM node in the middle overrides it with `color: green`. Similarly, in React, the only way to override some context coming from above is to wrap children into a context provider with a different value." ([React](https://react.dev/learn/passing-data-deeply-with-context))
+- "different React contexts don’t override each other. Each context that you make with `createContext()` is completely separate from other ones . . . One component may use or provide many different contexts without a problem." ([React](https://react.dev/learn/passing-data-deeply-with-context))
 
 Example (slightly modified version of the code from [React](https://react.dev/learn/passing-data-deeply-with-context)):
 
