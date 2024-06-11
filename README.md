@@ -571,7 +571,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
 Definition:
 - "Refs are an escape hatch to hold onto values that aren’t used for rendering. . . . Like state, refs let you retain information between re-renders of a component. Unlike state, setting the ref’s `current` value does not trigger a re-render." ([React](https://react.dev/learn/referencing-values-with-refs))
-- "the `ref.current` property . . . value is intentionally mutable, meaning you can both read and write to it." ([React](https://react.dev/learn/referencing-values-with-refs))
+- "the `ref.current` property . . . value is intentionally mutable, meaning you can both read and write to it. . . . As long as the object you’re mutating isn’t used for rendering, React doesn’t care what you do with the ref or its contents." ([React](https://react.dev/learn/referencing-values-with-refs))
 - > when you mutate the current value of a ref, it changes immediately:
   > ```jsx
   > ref.current = 5;
