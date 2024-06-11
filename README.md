@@ -1109,3 +1109,13 @@ export default function Page() {
 
 Use cases:
 - "The nearest common ancestor could be far removed from the components that need data, and lifting state up that high can lead to a situation called “prop drilling”." ([React](https://react.dev/learn/passing-data-deeply-with-context))
+
+Alternatives:
+
+> Just because you need to pass some props several levels deep doesn’t mean you should put that information into context.  Here’s a few alternatives you should consider before using context:
+> 1. **Start by passing props.** If your components are not trivial, it’s not unusual to pass a dozen props down through a dozen components. It may feel like a slog, but it makes it very clear which components use which data! The person maintaining your code will be glad you’ve made the data flow explicit with props.
+> 2. **Extract components and pass JSX as children to them.** If you pass some data through many layers of intermediate components that don’t use that data (and only pass it further down), this often means that you forgot to extract some components along the way. For example, maybe you pass data props like `posts` to visual components that don’t use them directly, like `<Layout posts={posts} />`. Instead, make `Layout` take `children` as a prop, and render `<Layout><Posts posts={posts} /></Layout>`. This reduces the number of layers between the component specifying the data and the one that needs it.
+>
+> If neither of these approaches works well for you, consider context.
+>
+> [React](https://react.dev/learn/passing-data-deeply-with-context)
