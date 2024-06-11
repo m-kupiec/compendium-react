@@ -37,6 +37,8 @@
 
 ### Hooks
 
+- **General**
+
 ### Events
 
 ### State
@@ -556,6 +558,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 - "Your component also can’t return multiple JSX tags. You have to wrap them into a shared parent, like a `<div>...</div>` or an empty `<>...</>` wrapper" ([React](https://react.dev/learn))
 
 # Hooks
+
+## General
 
 - "Functions starting with `use` are called Hooks." ([React](https://react.dev/learn))
 - "*Hooks* are special functions that are only available while React is rendering . . . They let you “hook into” different React features." ([React](https://react.dev/learn/state-a-components-memory))
