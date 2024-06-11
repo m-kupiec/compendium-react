@@ -1135,7 +1135,7 @@ Alternatives:
 
 ## Reducers With Context
 
-"You can combine reducer with context to let any component read and update state above it." ([React](https://react.dev/learn/scaling-up-with-reducer-and-context))
+"You can combine reducer with context to let any component read and update state above it . . . to manage state of a complex screen." ([React](https://react.dev/learn/scaling-up-with-reducer-and-context))
 
 "You can have many context-reducer pairs like this in your app." ([React](https://react.dev/learn/scaling-up-with-reducer-and-context))
 
