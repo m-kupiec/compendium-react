@@ -1113,6 +1113,7 @@ export default function Page() {
 Use cases:
 - General:
   - "The nearest common ancestor could be far removed from the components that need data, and lifting state up that high can lead to a situation called “prop drilling”." ([React](https://react.dev/learn/passing-data-deeply-with-context))
+  - "In general, if some information is needed by distant components in different parts of the tree, it’s a good indication that context will help you." ([React](https://react.dev/learn/passing-data-deeply-with-context))
 - "**Theming:** If your app lets the user change its appearance (e.g. dark mode), you can put a context provider at the top of your app, and use that context in components that need to adjust their visual look." ([React](https://react.dev/learn/passing-data-deeply-with-context))
 - "**Current account:** Many components might need to know the currently logged in user. Putting it in context makes it convenient to read it anywhere in the tree. Some apps also let you operate multiple accounts at the same time (e.g. to leave a comment as a different user). In those cases, it can be convenient to wrap a part of the UI into a nested provider with a different current account value." ([React](https://react.dev/learn/passing-data-deeply-with-context))
 - "**Routing:** Most routing solutions use context internally to hold the current route. This is how every link “knows” whether it’s active or not. If you build your own router, you might want to do it too." ([React](https://react.dev/learn/passing-data-deeply-with-context))
