@@ -742,6 +742,26 @@ Custom components' refs:
   >
   > [React](https://react.dev/learn/manipulating-the-dom-with-refs) (with a slightly modified code)
 
+Forcing the DOM to update synchronously:
+- > Consider code like this, which adds a new todo and scrolls the screen down to the last child of the list. Notice how, for some reason, it always scrolls to the todo that was just before the last added one . . . The issue is with these two lines:
+  > ```jsx
+  > setTodos([ ...todos, newTodo]);
+  > listRef.current.lastChild.scrollIntoView();
+  > ```
+  >
+  > In React, state updates are queued. Usually, this is what you want. However, here it causes a problem because `setTodos` does not immediately update the DOM. So the time you scroll the list to its last element, the todo has not yet been added. This is why scrolling always “lags behind” by one item. To fix this issue, you can force React to update (“flush”) the DOM synchronously. To do this, import `flushSync` from `react-dom` and wrap the state update into a `flushSync` call:
+  >
+  > ```jsx
+  > flushSync(() => {
+  >   setTodos([ ...todos, newTodo]);
+  > });
+  > listRef.current.lastChild.scrollIntoView();
+  > ```
+  >
+  > This will instruct React to update the DOM synchronously right after the code wrapped in `flushSync` executes. As a result, the last todo will already be in the DOM by the time you try to scroll to it
+  >
+  > [React](https://react.dev/learn/manipulating-the-dom-with-refs)
+
 # Events
 
 - "By convention, it is common to name event handlers as `handle` followed by the event name. You’ll often see `onClick={handleClick}`, `onMouseEnter={handleMouseEnter}`, and so on." ([React](https://react.dev/learn/responding-to-events))
