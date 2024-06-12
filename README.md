@@ -1539,6 +1539,19 @@ Usage (based on [React](https://react.dev/learn/synchronizing-with-effects)):
       > ```
       >
       > [React](https://react.dev/learn/synchronizing-with-effects)
+    - > If your Effect subscribes to something, the cleanup function should unsubscribe:
+      >
+      > ```jsx
+      > useEffect(() => {
+      >   function handleScroll(e) {
+      >     console.log(window.scrollX, window.scrollY);
+      >   }
+      >   window.addEventListener('scroll', handleScroll);
+      >   return () => window.removeEventListener('scroll', handleScroll);
+      > }, []);
+      > ```
+      >
+      > [React](https://react.dev/learn/synchronizing-with-effects)
 
 Use cases:
 - "Keep in mind that Effects are typically used to “step out” of your React code and synchronize with some *external* system. This includes browser APIs, third-party widgets, network, and so on. If your Effect only adjusts some state based on other state, you might not need an Effect." ([React](https://react.dev/learn/synchronizing-with-effects))
