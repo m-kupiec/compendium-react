@@ -1482,6 +1482,14 @@ Usage (based on [React](https://react.dev/learn/synchronizing-with-effects)):
     // This runs on mount *and also* if either a or b have changed since the last render
   }, [a, b]);
   ```
+  - "React compares the dependency values using the `Object.is` comparison." ([React](https://react.dev/learn/synchronizing-with-effects))
+  - "Notice that you can’t “choose” your dependencies. You will get a lint error if the dependencies you specified don’t match what React expects based on the code inside your Effect. This helps catch many bugs in your code. If you don’t want some code to re-run, edit the Effect code itself to not “need” that dependency." ([React](https://react.dev/learn/synchronizing-with-effects))
+    - > ```jsx
+      > Lint Error
+      > 14:6 - React Hook useEffect has a missing dependency: 'isPlaying'. Either include it or remove the dependency array.
+      > ```
+      >
+      > [React](https://react.dev/learn/synchronizing-with-effects)
 
 Use cases:
 - "Keep in mind that Effects are typically used to “step out” of your React code and synchronize with some *external* system. This includes browser APIs, third-party widgets, network, and so on. If your Effect only adjusts some state based on other state, you might not need an Effect." ([React](https://react.dev/learn/synchronizing-with-effects))
