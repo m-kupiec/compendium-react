@@ -85,6 +85,7 @@
 ### Data Fetching
 
 - **Using `useEffect`**
+- **Using Frameworks/Libraries**
 
 # Overview
 
@@ -1614,3 +1615,13 @@ Downsides:
 > - It’s not very ergonomic. There’s quite a bit of **boilerplate code** involved when writing `fetch` calls in a way that doesn’t suffer from bugs like race conditions.
 >
 > [React](https://react.dev/learn/synchronizing-with-effects)
+
+## Using Frameworks/Libraries
+
+> data fetching is not trivial to do well, so we recommend the following approaches:
+> - If you use a framework, use its built-in data fetching mechanism. Modern React frameworks have integrated data fetching mechanisms that are efficient and don’t suffer from the above pitfalls.
+> - Otherwise, consider using or building a client-side cache. Popular open source solutions include React Query, useSWR, and React Router 6.4+.
+>
+> [React](https://react.dev/learn/synchronizing-with-effects)
+
+"You can build your own solution too, in which case you would use Effects under the hood, but add logic for deduplicating requests, caching responses, and avoiding network waterfalls (by preloading data or hoisting data requirements to routes)." ([React](https://react.dev/learn/synchronizing-with-effects))
