@@ -1528,6 +1528,17 @@ Usage (based on [React](https://react.dev/learn/synchronizing-with-effects)):
       > Note that there is no cleanup needed in this case.
       >
       > [React](https://react.dev/learn/synchronizing-with-effects)
+    - > Some APIs may not allow you to call them twice in a row. For example, the `showModal` method of the built-in `<dialog>` element throws if you call it twice. Implement the cleanup function and make it close the dialog:
+      >
+      > ```jsx
+      > useEffect(() => {
+      >   const dialog = dialogRef.current;
+      >   dialog.showModal();
+      >   return () => dialog.close();
+      > }, []);
+      > ```
+      >
+      > [React](https://react.dev/learn/synchronizing-with-effects)
 
 Use cases:
 - "Keep in mind that Effects are typically used to “step out” of your React code and synchronize with some *external* system. This includes browser APIs, third-party widgets, network, and so on. If your Effect only adjusts some state based on other state, you might not need an Effect." ([React](https://react.dev/learn/synchronizing-with-effects))
