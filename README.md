@@ -1552,6 +1552,19 @@ Usage (based on [React](https://react.dev/learn/synchronizing-with-effects)):
       > ```
       >
       > [React](https://react.dev/learn/synchronizing-with-effects)
+    - > If your Effect animates something in, the cleanup function should reset the animation to the initial values:
+      >
+      > ```jsx
+      > useEffect(() => {
+      >   const node = ref.current;
+      >   node.style.opacity = 1; // Trigger the animation
+      >   return () => {
+      >     node.style.opacity = 0; // Reset to the initial value
+      >   };
+      > }, []);
+      > ```
+      >
+      > [React](https://react.dev/learn/synchronizing-with-effects)
 
 Use cases:
 - "Keep in mind that Effects are typically used to “step out” of your React code and synchronize with some *external* system. This includes browser APIs, third-party widgets, network, and so on. If your Effect only adjusts some state based on other state, you might not need an Effect." ([React](https://react.dev/learn/synchronizing-with-effects))
