@@ -1457,19 +1457,31 @@ Definition:
 - "Effects let you run some code after rendering so that you can synchronize your component with some system outside of React. . . . Effects run at the end of a commit after the screen updates. This is a good time to synchronize the React components with some external system (like network or a third-party library)." ([React](https://react.dev/learn/synchronizing-with-effects))
 - "Every time your component renders, React will update the screen *and then* run the code inside `useEffect`. In other words, `useEffect` “delays” a piece of code from running until that render is reflected on the screen. . . . By wrapping the DOM update in an Effect, you let React update the screen first. Then your Effect runs." ([React](https://react.dev/learn/synchronizing-with-effects))
 
-Usage:
+Usage (based on [React](https://react.dev/learn/synchronizing-with-effects)):
+- ```jsx
+  import { useEffect } from 'react';
 
-```jsx
-import { useEffect } from 'react';
+  export default function Component() {
+    useEffect(() => {
+      /* ... */
+    });
 
-export default function Component() {
+    return <section>...</section>;
+  }
+  ```
+- ```jsx
   useEffect(() => {
-    /* ... */
+    // This runs after every render
   });
 
-  return <section>...</section>;
-}
-```
+  useEffect(() => {
+    // This runs only on mount (when the component appears)
+  }, []);
+
+  useEffect(() => {
+    // This runs on mount *and also* if either a or b have changed since the last render
+  }, [a, b]);
+  ```
 
 Use cases:
 - "Keep in mind that Effects are typically used to “step out” of your React code and synchronize with some *external* system. This includes browser APIs, third-party widgets, network, and so on. If your Effect only adjusts some state based on other state, you might not need an Effect." ([React](https://react.dev/learn/synchronizing-with-effects))
