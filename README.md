@@ -1663,6 +1663,9 @@ Usage (based on [React](https://react.dev/learn/synchronizing-with-effects)):
       > [React](https://react.dev/learn/synchronizing-with-effects)
     - "Effects from each render are isolated from each other. If you’re curious how this works, you can read about closures." ([React](https://react.dev/learn/synchronizing-with-effects))
 
+Best practices:
+- "In general, whenever you have to resort to writing Effects, keep an eye out for when you can extract a piece of functionality into a custom Hook with a more declarative and purpose-built API . . . The fewer raw `useEffect` calls you have in your components, the easier you will find to maintain your application." ([React](https://react.dev/learn/you-might-not-need-an-effect))
+
 Use cases:
 - "Use Effects only for code that should run *because* the component was displayed to the user." ([React](https://react.dev/learn/you-might-not-need-an-effect))
 - "Keep in mind that Effects are typically used to “step out” of your React code and synchronize with some *external* system. This includes browser APIs, third-party widgets, network, and so on. If your Effect only adjusts some state based on other state, you might not need an Effect." ([React](https://react.dev/learn/synchronizing-with-effects))
