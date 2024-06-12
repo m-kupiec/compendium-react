@@ -39,6 +39,7 @@
 
 - **General**
 - **`useRef`**
+- **`useMemo`**
 
 ### Events
 
@@ -769,6 +770,36 @@ Forcing the DOM to update synchronously:
   > This will instruct React to update the DOM synchronously right after the code wrapped in `flushSync` executes. As a result, the last todo will already be in the DOM by the time you try to scroll to it
   >
   > [React](https://react.dev/learn/manipulating-the-dom-with-refs)
+
+## `useMemo`
+
+> ```jsx
+> function TodoList({ todos, filter }) {
+>   const [newTodo, setNewTodo] = useState('');
+>   // ✅ This is fine if getFilteredTodos() is not slow.
+>   const visibleTodos = getFilteredTodos(todos, filter);
+>   // ...
+> }
+> ```
+>
+> Usually, this code is fine! But maybe `getFilteredTodos()` is slow or you have a lot of todos. In that case you don’t want to recalculate `getFilteredTodos()` if some unrelated state variable like newTodo has changed. You can cache (or “memoize”) an expensive calculation by wrapping it in a `useMemo` Hook . . .
+>
+> ```jsx
+> import { useMemo, useState } from 'react';
+>
+> function TodoList({ todos, filter }) {
+>   const [newTodo, setNewTodo] = useState('');
+>   // ✅ Does not re-run getFilteredTodos() unless todos or filter change
+>   const visibleTodos = useMemo(() => getFilteredTodos(todos, filter), [todos, filter]);
+>   // ...
+> }
+> ```
+>
+> This tells React that you don’t want the inner function to re-run unless either `todos` or `filter` have changed. React will remember the return value of `getFilteredTodos()` during the initial render. During the next renders, it will check if `todos` or `filter` are different. If they’re the same as last time, `useMemo` will return the last result it has stored. But if they are different, React will call the inner function again (and store its result). The function you wrap in `useMemo` runs during rendering, so this only works for pure calculations.
+>
+> [React](https://react.dev/learn/you-might-not-need-an-effect)
+
+"How to tell if a calculation is expensive? In general, unless you’re creating or looping over thousands of objects, it’s probably not expensive. If you want to get more confidence, you can add a console log to measure the time spent in a piece of code . . . If the overall logged time adds up to a significant amount (say, `1ms` or more), it might make sense to memoize that calculation. As an experiment, you can then wrap the calculation in useMemo to verify whether the total logged time has decreased for that interaction or not . . . `useMemo` won’t make the *first* render faster. It only helps you skip unnecessary work on updates.
 
 # Events
 
