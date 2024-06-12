@@ -1517,6 +1517,17 @@ Usage (based on [React](https://react.dev/learn/synchronizing-with-effects)):
       > This is the correct behavior in development. By remounting your component, React verifies that navigating away and back would not break your code. . . . There’s an extra connect/disconnect call pair because React is probing your code for bugs in development. This is normal—don’t try to make it go away! In production, you would only see `"✅ Connecting..."` printed once. Remounting components only happens in development to help you find Effects that need cleanup. You can turn off Strict Mode to opt out of the development behavior, but we recommend keeping it on.
       >
       > [React](https://react.dev/learn/synchronizing-with-effects)
+    - > Sometimes you need to add UI widgets that aren’t written to React. For example, let’s say you’re adding a map component to your page. It has a `setZoomLevel()` method, and you’d like to keep the zoom level in sync with a `zoomLevel` state variable in your React code. Your Effect would look similar to this:
+      > ```jsx
+      > useEffect(() => {
+      >   const map = mapRef.current;
+      >   map.setZoomLevel(zoomLevel);
+      > }, [zoomLevel]);
+      > ```
+      >
+      > Note that there is no cleanup needed in this case.
+      >
+      > [React](https://react.dev/learn/synchronizing-with-effects)
 
 Use cases:
 - "Keep in mind that Effects are typically used to “step out” of your React code and synchronize with some *external* system. This includes browser APIs, third-party widgets, network, and so on. If your Effect only adjusts some state based on other state, you might not need an Effect." ([React](https://react.dev/learn/synchronizing-with-effects))
