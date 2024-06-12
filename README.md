@@ -1698,3 +1698,46 @@ Downsides:
 > - It’s not very ergonomic. There’s quite a bit of **boilerplate code** involved when writing `fetch` calls in a way that doesn’t suffer from bugs like race conditions.
 >
 > [React](https://react.dev/learn/synchronizing-with-effects)
+
+Usage:
+
+> If you don’t use a framework (and don’t want to build your own) but would like to make data fetching from Effects more ergonomic, consider extracting your fetching logic into a custom Hook like in this example:
+>
+> ```jsx
+> function SearchResults({ query }) {
+>   const [page, setPage] = useState(1);
+>   const params = new URLSearchParams({ query, page });
+>   const results = useData(`/api/search?${params}`);
+>
+>   function handleNextPageClick() {
+>     setPage(page + 1);
+>   }
+>   // ...
+> }
+>
+> function useData(url) {
+>   const [data, setData] = useState(null);
+>
+>   useEffect(() => {
+>     let ignore = false;
+>
+>     fetch(url)
+>       .then(response => response.json())
+>       .then(json => {
+>         if (!ignore) {
+>           setData(json);
+>         }
+>       });
+>
+>     return () => ignore = true;
+>   }, [url]);
+>
+>   return data;
+> }
+> ```
+>
+> You’ll likely also want to add some logic for error handling and to track whether the content is loading. . . . Although this alone won’t be as efficient as using a framework’s built-in data fetching mechanism, moving the data fetching logic into a custom Hook will make it easier to adopt an efficient data fetching strategy later.
+>
+> [React](https://react.dev/learn/you-might-not-need-an-effect)
+
+"You can build a Hook like this yourself or use one of the many solutions already available in the React ecosystem." ([React](https://react.dev/learn/you-might-not-need-an-effect))
