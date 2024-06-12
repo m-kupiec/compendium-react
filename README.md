@@ -1527,6 +1527,10 @@ Definition:
 - "Effects let you run some code after rendering so that you can synchronize your component with some system outside of React. . . . Effects run at the end of a commit after the screen updates. This is a good time to synchronize the React components with some external system (like network or a third-party library)." ([React](https://react.dev/learn/synchronizing-with-effects))
 - "Every time your component renders, React will update the screen *and then* run the code inside `useEffect`. In other words, `useEffect` “delays” a piece of code from running until that render is reflected on the screen. . . . By wrapping the DOM update in an Effect, you let React update the screen first. Then your Effect runs." ([React](https://react.dev/learn/synchronizing-with-effects))
 
+Lifecycle:
+- "Effects have a different lifecycle from components. Components may mount, update, or unmount. An Effect can only do two things: to start synchronizing something, and later to stop synchronizing it. . . . An Effect describes how to synchronize an external system to the current props and state. As your code changes, synchronization will need to happen more or less often." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
+- "Your Effect’s body specifies how to **start synchronizing** . . . The cleanup function returned by your Effect specifies how to **stop synchronizing**" ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
+
 Usage (based on [React](https://react.dev/learn/synchronizing-with-effects)):
 - ```jsx
   import { useEffect } from 'react';
