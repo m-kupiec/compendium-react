@@ -1534,141 +1534,146 @@ Lifecycle:
 - "Every time after your component re-renders, React will look at the array of dependencies that you have passed. If any of the values in the array is different from the value at the same spot that you passed during the previous render, React will re-synchronize your Effect." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
 
 Usage (based on [React](https://react.dev/learn/synchronizing-with-effects)):
-- ```jsx
-  import { useEffect } from 'react';
+```jsx
+import { useEffect } from 'react';
 
-  export default function Component() {
-    useEffect(() => {
-      /* ... */
-    });
-
-    return <section>...</section>;
-  }
-  ```
-- ```jsx
+export default function Component() {
   useEffect(() => {
-    // This runs after every render
+    /* ... */
   });
 
-  useEffect(() => {
-    // This runs only on mount (when the component appears)
-  }, []);
+  return <section>...</section>;
+}
+```
 
-  useEffect(() => {
-    // This runs on mount *and also* if either a or b have changed since the last render
-  }, [a, b]);
-  ```
-  - "React compares the dependency values using the `Object.is` comparison." ([React](https://react.dev/learn/synchronizing-with-effects))
-  - "Notice that you can’t “choose” your dependencies. You will get a lint error if the dependencies you specified don’t match what React expects based on the code inside your Effect. This helps catch many bugs in your code. If you don’t want some code to re-run, edit the Effect code itself to not “need” that dependency." ([React](https://react.dev/learn/synchronizing-with-effects))
-    - > ```jsx
-      > Lint Error
-      > 14:6 - React Hook useEffect has a missing dependency: 'isPlaying'. Either include it or remove the dependency array.
-      > ```
-      >
-      > [React](https://react.dev/learn/synchronizing-with-effects)
-  - "the `ref` object has a stable identity: React guarantees you’ll always get the same object from the same `useRef` call on every render. It never changes, so it will never by itself cause the Effect to re-run. Therefore, it does not matter whether you include it or not. Including it is fine too . . . The `set` functions returned by `useState` also have stable identity, so you will often see them omitted from the dependencies too. If the linter lets you omit a dependency without errors, it is safe to do. Omitting always-stable dependencies only works when the linter can “see” that the object is stable. For example, if `ref` was passed from a parent component, you would have to specify it in the dependency array." ([React](https://react.dev/learn/synchronizing-with-effects))
-  - Cleanup function:
-    - "Some Effects don’t return a cleanup function at all. More often than not, you’ll want to return one—but if you don’t, React will behave as if you returned an empty cleanup function." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
-    - "Imagine the `ChatRoom` component is a part of a larger app with many different screens. The user starts their journey on the `ChatRoom` page. The component mounts and calls `connection.connect()`. Then imagine the user navigates to another screen—for example, to the `Settings` page. The `ChatRoom` component unmounts. Finally, the user clicks Back and `ChatRoom` mounts again. This would set up a second connection—but the first connection was never destroyed! As the user navigates across the app, the connections would keep piling up. Bugs like this are easy to miss without extensive manual testing. To help you spot them quickly, in development React remounts every component once immediately after its initial mount. Seeing the `"✅ Connecting..."` log twice helps you notice the real issue: your code doesn’t close the connection when the component unmounts." ([React](https://react.dev/learn/synchronizing-with-effects))
-    - > ```jsx
-      > useEffect(() => {
-      >   const connection = createConnection();
-      >
-      >   connection.connect();
-      >
-      >   return () => {
-      >     connection.disconnect();
-      >   };
-      > }, []);
-      > ```
-      >
-      > [React](https://react.dev/learn/synchronizing-with-effects)
-    - "React will call your cleanup function each time before the Effect runs again, and one final time when the component unmounts" ([React](https://react.dev/learn/synchronizing-with-effects))
-    - > Now you get three console logs in development:
-      > ```
-      > "✅ Connecting..."
-      > "❌ Disconnected."
-      > "✅ Connecting..."
-      > ```
-      >
-      > This is the correct behavior in development. By remounting your component, React verifies that navigating away and back would not break your code. . . . There’s an extra connect/disconnect call pair because React is probing your code for bugs in development. This is normal—don’t try to make it go away! In production, you would only see `"✅ Connecting..."` printed once. Remounting components only happens in development to help you find Effects that need cleanup. You can turn off Strict Mode to opt out of the development behavior, but we recommend keeping it on.
-      >
-      > [React](https://react.dev/learn/synchronizing-with-effects)
-    - > Sometimes you need to add UI widgets that aren’t written to React. For example, let’s say you’re adding a map component to your page. It has a `setZoomLevel()` method, and you’d like to keep the zoom level in sync with a `zoomLevel` state variable in your React code. Your Effect would look similar to this:
-      > ```jsx
-      > useEffect(() => {
-      >   const map = mapRef.current;
-      >   map.setZoomLevel(zoomLevel);
-      > }, [zoomLevel]);
-      > ```
-      >
-      > Note that there is no cleanup needed in this case.
-      >
-      > [React](https://react.dev/learn/synchronizing-with-effects)
-    - > Some APIs may not allow you to call them twice in a row. For example, the `showModal` method of the built-in `<dialog>` element throws if you call it twice. Implement the cleanup function and make it close the dialog:
-      >
-      > ```jsx
-      > useEffect(() => {
-      >   const dialog = dialogRef.current;
-      >   dialog.showModal();
-      >   return () => dialog.close();
-      > }, []);
-      > ```
-      >
-      > [React](https://react.dev/learn/synchronizing-with-effects)
-    - > If your Effect subscribes to something, the cleanup function should unsubscribe:
-      >
-      > ```jsx
-      > useEffect(() => {
-      >   function handleScroll(e) {
-      >     console.log(window.scrollX, window.scrollY);
-      >   }
-      >   window.addEventListener('scroll', handleScroll);
-      >   return () => window.removeEventListener('scroll', handleScroll);
-      > }, []);
-      > ```
-      >
-      > [React](https://react.dev/learn/synchronizing-with-effects)
-    - > If your Effect animates something in, the cleanup function should reset the animation to the initial values:
-      >
-      > ```jsx
-      > useEffect(() => {
-      >   const node = ref.current;
-      >   node.style.opacity = 1; // Trigger the animation
-      >   return () => {
-      >     node.style.opacity = 0; // Reset to the initial value
-      >   };
-      > }, []);
-      > ```
-      >
-      > [React](https://react.dev/learn/synchronizing-with-effects)
-    - > If your Effect fetches something, the cleanup function should either abort the fetch or ignore its result:
-      >
-      > ```jsx
-      > useEffect(() => {
-      >   let ignore = false;
-      >
-      >   async function startFetching() {
-      >     const json = await fetchTodos(userId);
-      >     if (!ignore) {
-      >       setTodos(json);
-      >     }
-      >   }
-      >
-      >   startFetching();
-      >
-      >   return () => {
-      >     ignore = true;
-      >   };
-      > }, [userId]);
-      > ```
-      >
-      > You can’t “undo” a network request that already happened, but your cleanup function should ensure that the fetch that’s not relevant anymore does not keep affecting your application. If the `userId` changes from `'Alice'` to `'Bob'`, cleanup ensures that the `'Alice'` response is ignored even if it arrives after `'Bob'`.
-      >
-      > In development, you will see two fetches in the Network tab. There is nothing wrong with that. With the approach above, the first Effect will immediately get cleaned up so its copy of the `ignore` variable will be set to `true`. So even though there is an extra request, it won’t affect the state thanks to the `if (!ignore)` check. In production, there will only be one request.
-      >
-      > [React](https://react.dev/learn/synchronizing-with-effects)
-    - "Effects from each render are isolated from each other. If you’re curious how this works, you can read about closures." ([React](https://react.dev/learn/synchronizing-with-effects))
+Dependencies:
+- > ```jsx
+  > useEffect(() => {
+  >   // This runs after every render
+  > });
+  >
+  > useEffect(() => {
+  >   // This runs only on mount (when the component appears)
+  > }, []);
+  >
+  > useEffect(() => {
+  >   // This runs on mount *and also* if either a or b have changed since the last render
+  > }, [a, b]);
+  > ```
+  >
+  > [React](https://react.dev/learn/synchronizing-with-effects)
+- "React compares the dependency values using the `Object.is` comparison." ([React](https://react.dev/learn/synchronizing-with-effects))
+- "Notice that you can’t “choose” your dependencies. You will get a lint error if the dependencies you specified don’t match what React expects based on the code inside your Effect. This helps catch many bugs in your code. If you don’t want some code to re-run, edit the Effect code itself to not “need” that dependency." ([React](https://react.dev/learn/synchronizing-with-effects))
+  - > ```jsx
+    > Lint Error
+    > 14:6 - React Hook useEffect has a missing dependency: 'isPlaying'. Either include it or remove the dependency array.
+    > ```
+    >
+    > [React](https://react.dev/learn/synchronizing-with-effects)
+- "the `ref` object has a stable identity: React guarantees you’ll always get the same object from the same `useRef` call on every render. It never changes, so it will never by itself cause the Effect to re-run. Therefore, it does not matter whether you include it or not. Including it is fine too . . . The `set` functions returned by `useState` also have stable identity, so you will often see them omitted from the dependencies too. If the linter lets you omit a dependency without errors, it is safe to do. Omitting always-stable dependencies only works when the linter can “see” that the object is stable. For example, if `ref` was passed from a parent component, you would have to specify it in the dependency array." ([React](https://react.dev/learn/synchronizing-with-effects))
+
+Cleanup function:
+- "Some Effects don’t return a cleanup function at all. More often than not, you’ll want to return one—but if you don’t, React will behave as if you returned an empty cleanup function." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
+- "Imagine the `ChatRoom` component is a part of a larger app with many different screens. The user starts their journey on the `ChatRoom` page. The component mounts and calls `connection.connect()`. Then imagine the user navigates to another screen—for example, to the `Settings` page. The `ChatRoom` component unmounts. Finally, the user clicks Back and `ChatRoom` mounts again. This would set up a second connection—but the first connection was never destroyed! As the user navigates across the app, the connections would keep piling up. Bugs like this are easy to miss without extensive manual testing. To help you spot them quickly, in development React remounts every component once immediately after its initial mount. Seeing the `"✅ Connecting..."` log twice helps you notice the real issue: your code doesn’t close the connection when the component unmounts." ([React](https://react.dev/learn/synchronizing-with-effects))
+- > ```jsx
+  > useEffect(() => {
+  >   const connection = createConnection();
+  >
+  >   connection.connect();
+  >
+  >   return () => {
+  >     connection.disconnect();
+  >   };
+  > }, []);
+  > ```
+  >
+  > [React](https://react.dev/learn/synchronizing-with-effects)
+- "React will call your cleanup function each time before the Effect runs again, and one final time when the component unmounts" ([React](https://react.dev/learn/synchronizing-with-effects))
+- > Now you get three console logs in development:
+  > ```
+  > "✅ Connecting..."
+  > "❌ Disconnected."
+  > "✅ Connecting..."
+  > ```
+  >
+  > This is the correct behavior in development. By remounting your component, React verifies that navigating away and back would not break your code. . . . There’s an extra connect/disconnect call pair because React is probing your code for bugs in development. This is normal—don’t try to make it go away! In production, you would only see `"✅ Connecting..."` printed once. Remounting components only happens in development to help you find Effects that need cleanup. You can turn off Strict Mode to opt out of the development behavior, but we recommend keeping it on.
+  >
+  > [React](https://react.dev/learn/synchronizing-with-effects)
+- > Sometimes you need to add UI widgets that aren’t written to React. For example, let’s say you’re adding a map component to your page. It has a `setZoomLevel()` method, and you’d like to keep the zoom level in sync with a `zoomLevel` state variable in your React code. Your Effect would look similar to this:
+  > ```jsx
+  > useEffect(() => {
+  >   const map = mapRef.current;
+  >   map.setZoomLevel(zoomLevel);
+  > }, [zoomLevel]);
+  > ```
+  >
+  > Note that there is no cleanup needed in this case.
+  >
+  > [React](https://react.dev/learn/synchronizing-with-effects)
+- > Some APIs may not allow you to call them twice in a row. For example, the `showModal` method of the built-in `<dialog>` element throws if you call it twice. Implement the cleanup function and make it close the dialog:
+  >
+  > ```jsx
+  > useEffect(() => {
+  >   const dialog = dialogRef.current;
+  >   dialog.showModal();
+  >   return () => dialog.close();
+  > }, []);
+  > ```
+  >
+  > [React](https://react.dev/learn/synchronizing-with-effects)
+- > If your Effect subscribes to something, the cleanup function should unsubscribe:
+  >
+  > ```jsx
+  > useEffect(() => {
+  >   function handleScroll(e) {
+  >     console.log(window.scrollX, window.scrollY);
+  >   }
+  >   window.addEventListener('scroll', handleScroll);
+  >   return () => window.removeEventListener('scroll', handleScroll);
+  > }, []);
+  > ```
+  >
+  > [React](https://react.dev/learn/synchronizing-with-effects)
+- > If your Effect animates something in, the cleanup function should reset the animation to the initial values:
+  >
+  > ```jsx
+  > useEffect(() => {
+  >   const node = ref.current;
+  >   node.style.opacity = 1; // Trigger the animation
+  >   return () => {
+  >     node.style.opacity = 0; // Reset to the initial value
+  >   };
+  > }, []);
+  > ```
+  >
+  > [React](https://react.dev/learn/synchronizing-with-effects)
+- > If your Effect fetches something, the cleanup function should either abort the fetch or ignore its result:
+  >
+  > ```jsx
+  > useEffect(() => {
+  >   let ignore = false;
+  >
+  >   async function startFetching() {
+  >     const json = await fetchTodos(userId);
+  >     if (!ignore) {
+  >       setTodos(json);
+  >     }
+  >   }
+  >
+  >   startFetching();
+  >
+  >   return () => {
+  >     ignore = true;
+  >   };
+  > }, [userId]);
+  > ```
+  >
+  > You can’t “undo” a network request that already happened, but your cleanup function should ensure that the fetch that’s not relevant anymore does not keep affecting your application. If the `userId` changes from `'Alice'` to `'Bob'`, cleanup ensures that the `'Alice'` response is ignored even if it arrives after `'Bob'`.
+  >
+  > In development, you will see two fetches in the Network tab. There is nothing wrong with that. With the approach above, the first Effect will immediately get cleaned up so its copy of the `ignore` variable will be set to `true`. So even though there is an extra request, it won’t affect the state thanks to the `if (!ignore)` check. In production, there will only be one request.
+  >
+  > [React](https://react.dev/learn/synchronizing-with-effects)
+- "Effects from each render are isolated from each other. If you’re curious how this works, you can read about closures." ([React](https://react.dev/learn/synchronizing-with-effects))
 
 Best practices:
 - "Resist adding unrelated logic to your Effect only because this logic needs to run at the same time as an Effect you already wrote. For example, let’s say you want to send an analytics event when the user visits the room. You already have an Effect that depends on `roomId`, so you might feel tempted to add the analytics call there . . . But imagine you later add another dependency to this Effect that needs to re-establish the connection. If this Effect re-synchronizes, it will also call `logVisit(roomId)` for the same room, which you did not intend. Logging the visit is a separate process from connecting. Write them as two separate Effects . . . Each Effect in your code should represent a separate and independent synchronization process." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
