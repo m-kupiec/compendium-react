@@ -1455,6 +1455,7 @@ Definition:
 - "in this text, capitalized “Effect” refers to the React-specific definition . . . i.e. a side effect caused by rendering. To refer to the broader programming concept, we’ll say “side effect”." ([React](https://react.dev/learn/synchronizing-with-effects))
 - "Effects let you specify side effects that are caused by rendering itself, rather than by a particular event. Sending a message in the chat is an *event* because it is directly caused by the user clicking a specific button. However, setting up a server connection is an *Effect* because it should happen no matter which interaction caused the component to appear." ([React](https://react.dev/learn/synchronizing-with-effects))
 - "Effects let you run some code after rendering so that you can synchronize your component with some system outside of React. . . . Effects run at the end of a commit after the screen updates. This is a good time to synchronize the React components with some external system (like network or a third-party library)." ([React](https://react.dev/learn/synchronizing-with-effects))
+- "Every time your component renders, React will update the screen *and then* run the code inside `useEffect`. In other words, `useEffect` “delays” a piece of code from running until that render is reflected on the screen. . . . By wrapping the DOM update in an Effect, you let React update the screen first. Then your Effect runs." ([React](https://react.dev/learn/synchronizing-with-effects))
 
 Usage:
 
