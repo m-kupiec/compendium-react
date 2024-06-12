@@ -86,8 +86,8 @@
 
 ### Data Fetching
 
-- **Using `useEffect`**
 - **Using Frameworks/Libraries**
+- **Using `useEffect`**
 
 # Overview
 
@@ -1674,6 +1674,18 @@ Use cases:
 
 # Data Fetching
 
+## Using Frameworks/Libraries
+
+"Handling race conditions is not the only difficulty with implementing data fetching. You might also want to think about caching responses (so that the user can click Back and see the previous screen instantly), how to fetch data on the server (so that the initial server-rendered HTML contains the fetched content instead of a spinner), and how to avoid network waterfalls (so that a child can fetch data without waiting for every parent). These issues apply to any UI library, not just React. Solving them is not trivial, which is why modern frameworks provide more efficient built-in data fetching mechanisms than fetching data in Effects." ([React](https://react.dev/learn/you-might-not-need-an-effect))
+
+> data fetching is not trivial to do well, so we recommend the following approaches:
+> - If you use a framework, use its built-in data fetching mechanism. Modern React frameworks have integrated data fetching mechanisms that are efficient and don’t suffer from the above pitfalls.
+> - Otherwise, consider using or building a client-side cache. Popular open source solutions include React Query, useSWR, and React Router 6.4+.
+>
+> [React](https://react.dev/learn/synchronizing-with-effects)
+
+"You can build your own solution too, in which case you would use Effects under the hood, but add logic for deduplicating requests, caching responses, and avoiding network waterfalls (by preloading data or hoisting data requirements to routes)." ([React](https://react.dev/learn/synchronizing-with-effects))
+
 ## Using `useEffect`
 
 "Writing fetch calls inside Effects is a popular way to fetch data, especially in fully client-side apps." ([React](https://react.dev/learn/synchronizing-with-effects))
@@ -1686,15 +1698,3 @@ Downsides:
 > - It’s not very ergonomic. There’s quite a bit of **boilerplate code** involved when writing `fetch` calls in a way that doesn’t suffer from bugs like race conditions.
 >
 > [React](https://react.dev/learn/synchronizing-with-effects)
-
-## Using Frameworks/Libraries
-
-"Handling race conditions is not the only difficulty with implementing data fetching. You might also want to think about caching responses (so that the user can click Back and see the previous screen instantly), how to fetch data on the server (so that the initial server-rendered HTML contains the fetched content instead of a spinner), and how to avoid network waterfalls (so that a child can fetch data without waiting for every parent). These issues apply to any UI library, not just React. Solving them is not trivial, which is why modern frameworks provide more efficient built-in data fetching mechanisms than fetching data in Effects." ([React](https://react.dev/learn/you-might-not-need-an-effect))
-
-> data fetching is not trivial to do well, so we recommend the following approaches:
-> - If you use a framework, use its built-in data fetching mechanism. Modern React frameworks have integrated data fetching mechanisms that are efficient and don’t suffer from the above pitfalls.
-> - Otherwise, consider using or building a client-side cache. Popular open source solutions include React Query, useSWR, and React Router 6.4+.
->
-> [React](https://react.dev/learn/synchronizing-with-effects)
-
-"You can build your own solution too, in which case you would use Effects under the hood, but add logic for deduplicating requests, caching responses, and avoiding network waterfalls (by preloading data or hoisting data requirements to routes)." ([React](https://react.dev/learn/synchronizing-with-effects))
