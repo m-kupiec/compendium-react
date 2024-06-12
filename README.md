@@ -1581,6 +1581,7 @@ Dependencies:
   > ```
   >
   > [React](https://react.dev/learn/lifecycle-of-reactive-effects)
+- "All errors flagged by the linter are legitimate. There’s always a way to fix the code to not break the rules." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
 - "If your linter is configured for React, it will check that every reactive value used by your Effect’s code is declared as its dependency" ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
 - "You can’t “choose” your dependencies. Your dependencies must include every reactive value you read in the Effect. The linter enforces this." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
 - "you could . . . “prove” to the linter that these values aren’t reactive values, i.e. that they can’t change as a result of a re-render. For example, if `serverUrl` and `roomId` don’t depend on rendering and always have the same values, you can move them outside the component. Now they don’t need to be dependencies . . . You can also move them *inside the Effect*. They aren’t calculated during rendering, so they’re not reactive" ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
