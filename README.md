@@ -1565,6 +1565,32 @@ Usage (based on [React](https://react.dev/learn/synchronizing-with-effects)):
       > ```
       >
       > [React](https://react.dev/learn/synchronizing-with-effects)
+    - > If your Effect fetches something, the cleanup function should either abort the fetch or ignore its result:
+      >
+      > ```jsx
+      > useEffect(() => {
+      >   let ignore = false;
+      >
+      >   async function startFetching() {
+      >     const json = await fetchTodos(userId);
+      >     if (!ignore) {
+      >       setTodos(json);
+      >     }
+      >   }
+      >
+      >   startFetching();
+      >
+      >   return () => {
+      >     ignore = true;
+      >   };
+      > }, [userId]);
+      > ```
+      >
+      > You can’t “undo” a network request that already happened, but your cleanup function should ensure that the fetch that’s not relevant anymore does not keep affecting your application. If the `userId` changes from `'Alice'` to `'Bob'`, cleanup ensures that the `'Alice'` response is ignored even if it arrives after `'Bob'`.
+      >
+      > In development, you will see two fetches in the Network tab. There is nothing wrong with that. With the approach above, the first Effect will immediately get cleaned up so its copy of the `ignore` variable will be set to `true`. So even though there is an extra request, it won’t affect the state thanks to the `if (!ignore)` check. In production, there will only be one request.
+      >
+      > [React](https://react.dev/learn/synchronizing-with-effects)
 
 Use cases:
 - "Keep in mind that Effects are typically used to “step out” of your React code and synchronize with some *external* system. This includes browser APIs, third-party widgets, network, and so on. If your Effect only adjusts some state based on other state, you might not need an Effect." ([React](https://react.dev/learn/synchronizing-with-effects))
