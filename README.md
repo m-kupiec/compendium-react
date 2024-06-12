@@ -82,6 +82,10 @@
 
 ### Effects
 
+### Data Fetching
+
+- **Using `useEffect`**
+
 # Overview
 
 ```jsx
@@ -1595,3 +1599,18 @@ Usage (based on [React](https://react.dev/learn/synchronizing-with-effects)):
 Use cases:
 - "Keep in mind that Effects are typically used to “step out” of your React code and synchronize with some *external* system. This includes browser APIs, third-party widgets, network, and so on. If your Effect only adjusts some state based on other state, you might not need an Effect." ([React](https://react.dev/learn/synchronizing-with-effects))
 - "You can use a similar approach to wrap legacy non-React code (like jQuery plugins) into declarative React components." ([React](https://react.dev/learn/synchronizing-with-effects))
+
+# Data Fetching
+
+## Using `useEffect`
+
+"Writing fetch calls inside Effects is a popular way to fetch data, especially in fully client-side apps." ([React](https://react.dev/learn/synchronizing-with-effects))
+
+Downsides:
+
+> - Effects **don’t run on the server**. This means that the initial server-rendered HTML will only include a loading state with no data. The client computer will have to download all JavaScript and render your app only to discover that now it needs to load the data. . . .
+> - Fetching directly in Effects makes it easy to create **“network waterfalls”**. You render the parent component, it fetches some data, renders the child components, and then they start fetching their data. If the network is not very fast, this is significantly slower than fetching all data in parallel.
+> - Fetching directly in Effects usually means you **don’t preload or cache data**. For example, if the component unmounts and then mounts again, it would have to fetch the data again.
+> - It’s not very ergonomic. There’s quite a bit of **boilerplate code** involved when writing `fetch` calls in a way that doesn’t suffer from bugs like race conditions.
+>
+> [React](https://react.dev/learn/synchronizing-with-effects)
