@@ -853,6 +853,8 @@ function ChatIndicator() {
 
 "You should give use prefix to a function (and thus make it a Hook) if it uses at least one Hook inside of it" ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
 
+"Custom Hooks let you share stateful logic but not state itself. Each call to a Hook is completely independent from every other call to the same Hook." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
+
 # Events
 
 - "By convention, it is common to name event handlers as `handle` followed by the event name. You’ll often see `onClick={handleClick}`, `onMouseEnter={handleMouseEnter}`, and so on." ([React](https://react.dev/learn/responding-to-events))
