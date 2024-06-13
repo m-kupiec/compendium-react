@@ -855,6 +855,8 @@ function ChatIndicator() {
 
 "Custom Hooks let you share stateful logic but not state itself. Each call to a Hook is completely independent from every other call to the same Hook." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
 
+"The code inside your custom Hooks will re-run during every re-render of your component. This is why, like components, custom Hooks need to be pure. Think of custom Hooks’ code as part of your component’s body!" ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
+
 # Events
 
 - "By convention, it is common to name event handlers as `handle` followed by the event name. You’ll often see `onClick={handleClick}`, `onMouseEnter={handleMouseEnter}`, and so on." ([React](https://react.dev/learn/responding-to-events))
