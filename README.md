@@ -857,6 +857,9 @@ function ChatIndicator() {
 
 "The code inside your custom Hooks will re-run during every re-render of your component. This is why, like components, custom Hooks need to be pure. Think of custom Hooks’ code as part of your component’s body!" ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
 
+Best practices:
+- "A good custom Hook makes the calling code more declarative by constraining what it does. For example, `useChatRoom(options)` can only connect to the chat room, while `useImpressionLog(eventName, extraData)` can only send an impression log to the analytics. If your custom Hook API doesn’t constrain the use cases and is very abstract, in the long run it’s likely to introduce more problems than it solves." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
+
 Use cases:
 - "whenever you write an Effect, consider whether it would be clearer to also wrap it in a custom Hook. You shouldn’t need Effects very often, so if you’re writing one, it means that you need to “step outside React” to synchronize with some external system or to do something that React doesn’t have a built-in API for. Wrapping it into a custom Hook lets you precisely communicate your intent and how the data flows through it. . . . With time, most of your app’s Effects will be in custom Hooks." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
 
