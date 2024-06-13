@@ -847,6 +847,8 @@ function ChatIndicator() {
 
 "Hooks may return arbitrary values." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
 
+"This convention guarantees that you can always look at a component and know where its state, Effects, and other React features might “hide”. For example, if you see a `getColor()` function call inside your component, you can be sure that it can’t possibly contain React state inside because its name doesn’t start with `use`. However, a function call like `useOnlineStatus()` will most likely contain calls to other Hooks inside! . . . Only Hooks and components can call other Hooks" ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
+
 # Events
 
 - "By convention, it is common to name event handlers as `handle` followed by the event name. You’ll often see `onClick={handleClick}`, `onMouseEnter={handleMouseEnter}`, and so on." ([React](https://react.dev/learn/responding-to-events))
