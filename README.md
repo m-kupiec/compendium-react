@@ -1637,6 +1637,7 @@ Dependencies:
   > Notice how your Effect does not read the `messages` variable at all now. . . . As a result of this fix, receiving a chat message will no longer make the chat re-connect.
   >
   > [React](https://react.dev/learn/removing-effect-dependencies)
+- "In JavaScript, each newly created object and function is considered distinct from all the others. It doesn’t matter that the contents inside of them may be the same! . . . Object and function dependencies can make your Effect re-synchronize more often than you need. This is why, whenever possible, you should try to avoid objects and functions as your Effect’s dependencies. Instead, try moving them outside the component, inside the Effect, or extracting primitive values out of them. . . . Move static objects and functions outside your component . . . Move dynamic objects and functions inside your Effect . . . If your object depends on some reactive value that may change as a result of a re-render . . . you can’t pull it outside your component. You can, however, move its creation inside of your Effect’s code" ([React](https://react.dev/learn/removing-effect-dependencies))
 
 Cleanup function:
 - "Some Effects don’t return a cleanup function at all. More often than not, you’ll want to return one—but if you don’t, React will behave as if you returned an empty cleanup function." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
