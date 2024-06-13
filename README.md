@@ -41,6 +41,7 @@
 - **`useRef`**
 - **`useMemo`**
 - **`useSyncExternalStore`**
+- **Custom**
 
 ### Events
 
@@ -834,6 +835,12 @@ function ChatIndicator() {
   // ...
 }
 ```
+
+## Custom
+
+"the code inside them describes what they want to do (use the online status!) rather than how to do it (by subscribing to the browser events). When you extract logic into custom Hooks, you can hide the gnarly details of how you deal with some external system or a browser API. The code of your components expresses your intent, not the implementation." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
+
+"You’ll likely often use custom Hooks created by others, but occasionally you might write one yourself!" ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
 
 # Events
 
