@@ -1598,6 +1598,45 @@ Dependencies:
 - "Props and state aren’t the only reactive values. Values that you calculate from them are also reactive. If the props or state change, your component will re-render, and the values calculated from them will also change. This is why all variables from the component body used by the Effect should be in the Effect dependency list." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
 - "Mutable values (including global variables) aren’t reactive. A mutable value like `location.pathname` can’t be a dependency. It’s mutable, so it can change at any time completely outside of the React rendering data flow. Changing it wouldn’t trigger a re-render of your component. Therefore, even if you specified it in the dependencies, React wouldn’t know to re-synchronize the Effect when it changes. . . . Instead, you should read and subscribe to an external mutable value with `useSyncExternalStore`." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
 - "A mutable value like `ref.current` or things you read from it also can’t be a dependency. The ref object returned by `useRef` itself can be a dependency, but its `current` property is intentionally mutable. It lets you keep track of something without triggering a re-render. But since changing it doesn’t trigger a re-render, it’s not a reactive value, and React won’t know to re-run your Effect when it changes." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
+- > This Effect updates the `messages` state variable with a newly created array every time a new message arrives . . . since `messages` is a reactive value read by an Effect, it must be a dependency:
+  >
+  > ```jsx
+  > function ChatRoom({ roomId }) {
+  >   const [messages, setMessages] = useState([]);
+  >   useEffect(() => {
+  >     const connection = createConnection();
+  >     connection.connect();
+  >     connection.on('message', (receivedMessage) => {
+  >       setMessages([...messages, receivedMessage]);
+  >     });
+  >     return () => connection.disconnect();
+  >   }, [roomId, messages]); // ✅ All dependencies declared
+  >   // ...
+  > }
+  > ```
+  >
+  > And making `messages` a dependency introduces a problem. Every time you receive a message, `setMessages()` causes the component to re-render with a new `messages` array that includes the received message. However, since this Effect now depends on `messages`, this will *also* re-synchronize the Effect. So every new message will make the chat re-connect. The user would not like that!
+  >
+  > To fix the issue, don’t read `messages` inside the Effect. Instead, pass an updater function to `setMessages`:
+  >
+  > ```jsx
+  > function ChatRoom({ roomId }) {
+  >   const [messages, setMessages] = useState([]);
+  >   useEffect(() => {
+  >     const connection = createConnection();
+  >     connection.connect();
+  >     connection.on('message', (receivedMessage) => {
+  >       setMessages(msgs => [...msgs, receivedMessage]);
+  >     });
+  >     return () => connection.disconnect();
+  >   }, [roomId]); // ✅ All dependencies declared
+  >   // ...
+  > }
+  > ```
+  >
+  > Notice how your Effect does not read the `messages` variable at all now. . . . As a result of this fix, receiving a chat message will no longer make the chat re-connect.
+  >
+  > [React](https://react.dev/learn/removing-effect-dependencies)
 
 Cleanup function:
 - "Some Effects don’t return a cleanup function at all. More often than not, you’ll want to return one—but if you don’t, React will behave as if you returned an empty cleanup function." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
