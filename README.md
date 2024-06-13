@@ -1527,6 +1527,14 @@ Definition:
 - "Effects let you run some code after rendering so that you can synchronize your component with some system outside of React. . . . Effects run at the end of a commit after the screen updates. This is a good time to synchronize the React components with some external system (like network or a third-party library)." ([React](https://react.dev/learn/synchronizing-with-effects))
 - "Every time your component renders, React will update the screen *and then* run the code inside `useEffect`. In other words, `useEffect` “delays” a piece of code from running until that render is reflected on the screen. . . . By wrapping the DOM update in an Effect, you let React update the screen first. Then your Effect runs." ([React](https://react.dev/learn/synchronizing-with-effects))
 
+Reactivity:
+- "Props, state, and variables declared inside your component’s body are called reactive values. . . . They participate in the rendering data flow . . . can change due to a re-render" ([React](https://react.dev/learn/separating-events-from-effects))
+- > Event handlers and Effects respond to changes differently:
+  > - **Logic inside event handlers is not reactive.** It will not run again unless the user performs the same interaction (e.g. a click) again. Event handlers can read reactive values without “reacting” to their changes.
+  > - **Logic inside Effects is reactive.** If your Effect reads a reactive value, you have to specify it as a dependency. Then, if a re-render causes that value to change, React will re-run your Effect’s logic with the new value.
+  >
+  > [React](https://react.dev/learn/separating-events-from-effects)
+
 Lifecycle:
 - "Components can mount, update, and unmount. Each Effect has a separate lifecycle from the surrounding component. Each Effect describes a separate synchronization process that can start and stop. When you write and read Effects, think from each individual Effect’s perspective (how to start and stop synchronization) rather than from the component’s perspective (how it mounts, updates, or unmounts)." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
 - "Effects have a different lifecycle from components. Components may mount, update, or unmount. An Effect can only do two things: to start synchronizing something, and later to stop synchronizing it. . . . An Effect describes how to synchronize an external system to the current props and state. As your code changes, synchronization will need to happen more or less often." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
