@@ -1598,7 +1598,9 @@ Dependencies:
 - "Props and state aren’t the only reactive values. Values that you calculate from them are also reactive. If the props or state change, your component will re-render, and the values calculated from them will also change. This is why all variables from the component body used by the Effect should be in the Effect dependency list." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
 - "Mutable values (including global variables) aren’t reactive. A mutable value like `location.pathname` can’t be a dependency. It’s mutable, so it can change at any time completely outside of the React rendering data flow. Changing it wouldn’t trigger a re-render of your component. Therefore, even if you specified it in the dependencies, React wouldn’t know to re-synchronize the Effect when it changes. . . . Instead, you should read and subscribe to an external mutable value with `useSyncExternalStore`." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
 - "A mutable value like `ref.current` or things you read from it also can’t be a dependency. The ref object returned by `useRef` itself can be a dependency, but its `current` property is intentionally mutable. It lets you keep track of something without triggering a re-render. But since changing it doesn’t trigger a re-render, it’s not a reactive value, and React won’t know to re-run your Effect when it changes." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
-- > This Effect updates the `messages` state variable with a newly created array every time a new message arrives . . . since `messages` is a reactive value read by an Effect, it must be a dependency:
+- > If you want to update some state based on the previous state, pass an updater function. . . .
+  >
+  > This Effect updates the `messages` state variable with a newly created array every time a new message arrives . . . since `messages` is a reactive value read by an Effect, it must be a dependency:
   >
   > ```jsx
   > function ChatRoom({ roomId }) {
