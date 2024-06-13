@@ -843,6 +843,8 @@ function ChatIndicator() {
 
 "You’ll likely often use custom Hooks created by others, but occasionally you might write one yourself!" ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
 
+"Hook names must start with `use` followed by a capital letter . . . If your linter is configured for React, it will enforce this naming convention." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
+
 # Events
 
 - "By convention, it is common to name event handlers as `handle` followed by the event name. You’ll often see `onClick={handleClick}`, `onMouseEnter={handleMouseEnter}`, and so on." ([React](https://react.dev/learn/responding-to-events))
