@@ -106,6 +106,7 @@
   - `useCallback`
 - **Built-In Types**
   - DOM Events
+  - Children
 
 # Overview
 
@@ -2397,3 +2398,31 @@ Alternatively:
 > [React](https://react.dev/learn/typescript)
 
 "There are many types of events provided in the React types - the full list can be found [here](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/b580df54c0819ec9df62b0835a315dd48b8594a9/types/react/index.d.ts#L1247C1-L1373) which is based on the most popular events from the DOM. When determining the type you are looking for you can first look at the hover information for the event handler you are using, which will show the type of the event. If you need to use an event that is not included in this list, you can use the `React.SyntheticEvent` type, which is the base type for all events." ([React](https://react.dev/learn/typescript))
+
+### Children
+
+> There are two common paths to describing the children of a component.
+>
+> The first is to use the `React.ReactNode` type, which is a union of all the possible types that can be passed as children in JSX:
+>
+> ```ts
+> interface ModalRendererProps {
+>   title: string;
+>   children: React.ReactNode;
+> }
+> ```
+>
+> This is a very broad definition of children.
+>
+> The second is to use the `React.ReactElement` type, which is only JSX elements and not JavaScript primitives like strings or numbers:
+>
+> ```ts
+> interface ModalRendererProps {
+>   title: string;
+>   children: React.ReactElement;
+> }
+> ```
+>
+> Note, that you cannot use TypeScript to describe that the children are a certain type of JSX elements, so you cannot use the type-system to describe a component which only accepts `<li>` children.
+>
+> [React](https://react.dev/learn/typescript)
