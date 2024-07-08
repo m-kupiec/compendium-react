@@ -104,6 +104,8 @@
   - `useContext`
   - `useMemo`
   - `useCallback`
+- **Built-In Types**
+  - DOM Events
 
 # Overview
 
@@ -2366,3 +2368,32 @@ Alternatively:
 > ```
 >
 > [React](https://react.dev/learn/typescript)
+
+## Built-In Types
+
+### DOM Events
+
+"When working with DOM events in React, the type of the event can often be inferred from the event handler. However, when you want to extract a function to be passed to an event handler, you will need to explicitly set the type of the event." ([React](https://react.dev/learn/typescript))
+
+> ```ts
+> import { useState } from "react";
+>
+> export default function Form() {
+>   const [value, setValue] = useState("Change me");
+>
+>   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+>     setValue(event.currentTarget.value);
+>   }
+>
+>   return (
+>     <>
+>       <input value={value} onChange={handleChange} />
+>       <p>Value: {value}</p>
+>     </>
+>   );
+> }
+> ```
+>
+> [React](https://react.dev/learn/typescript)
+
+"There are many types of events provided in the React types - the full list can be found [here](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/b580df54c0819ec9df62b0835a315dd48b8594a9/types/react/index.d.ts#L1247C1-L1373) which is based on the most popular events from the DOM. When determining the type you are looking for you can first look at the hover information for the event handler you are using, which will show the type of the event. If you need to use an event that is not included in this list, you can use the `React.SyntheticEvent` type, which is the base type for all events." ([React](https://react.dev/learn/typescript))
