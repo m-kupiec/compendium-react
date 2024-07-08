@@ -90,6 +90,18 @@
 - **Using Frameworks/Libraries**
 - **Using `useEffect`**
 
+### TypeScript Intergration
+
+- Usage
+- Type Assertion
+- Intrinsic vs. Value-Based Elements
+- Result Type
+- React Integration
+  - Installation
+  - Usage
+    - General
+      - `useState`
+
 # Overview
 
 ```jsx
@@ -1941,3 +1953,218 @@ Usage:
 > [React](https://react.dev/learn/you-might-not-need-an-effect)
 
 "You can build a Hook like this yourself or use one of the many solutions already available in the React ecosystem." ([React](https://react.dev/learn/you-might-not-need-an-effect))
+
+# TypeScript Intergration
+
+#### Usage
+
+"JSX is an embeddable XML-like syntax. It is meant to be transformed into valid JavaScript, though the semantics of that transformation are implementation-specific. JSX rose to popularity with the React framework, but has since seen other implementations as well." ([TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html))
+
+"TypeScript supports embedding, type checking, and compiling JSX directly to JavaScript." ([TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html))
+
+> In order to use JSX you must do two things.
+>
+> 1.  Name your files with a `.tsx` extension
+> 2.  Enable the `jsx` option
+>
+> [TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)
+
+> TypeScript ships with three JSX modes: `preserve`, `react`, and `react-native`. These modes only affect the emit stage - type checking is unaffected. The `preserve` mode will keep the JSX as part of the output to be further consumed by another transform step (e.g. Babel). Additionally the output will have a `.jsx` file extension. The `react` mode will emit `React.createElement`, does not need to go through a JSX transformation before use, and the output will have a `.js` file extension. The react-native mode is the equivalent of `preserve` in that it keeps all JSX, but the output will instead have a `.js` file extension.
+>
+> | Mode           | Input     | Output                                            | Output File Extension |
+> | -------------- | --------- | ------------------------------------------------- | --------------------- |
+> | `preserve`     | `<div />` | `<div />`                                         | `.jsx`                |
+> | `react`        | `<div />` | `React.createElement("div")`                      | `.js`                 |
+> | `react-native` | `<div />` | `<div />`                                         | `.js`                 |
+> | `react-jsx`    | `<div />` | `_jsx("div", {}, void 0);`                        | `.js`                 |
+> | `react-jsxdev` | `<div />` | `_jsxDEV("div", {}, void 0, false, {...}, this);` | `.js`                 |
+>
+> [TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)
+
+#### Type Assertion
+
+> Recall how to write a type assertion:
+>
+> ```ts
+> const foo = <foo>bar;
+> ```
+>
+> This asserts the variable `bar` to have the type `foo`. Since TypeScript also uses angle brackets for type assertions, combining it with JSX’s syntax would introduce certain parsing difficulties. As a result, TypeScript disallows angle bracket type assertions in `.tsx` files.
+>
+> Since the above syntax cannot be used in `.tsx` files, an alternate type assertion operator should be used: `as`. The example can easily be rewritten with the `as` operator.
+>
+> ```ts
+> const foo = bar as foo;
+> ```
+>
+> The `as` operator is available in both `.ts` and `.tsx` files, and is identical in behavior to the angle-bracket type assertion style.
+>
+> [TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)
+
+#### Intrinsic vs. Value-Based Elements
+
+> In order to understand type checking with JSX, you must first understand the difference between intrinsic elements and value-based elements. Given a JSX expression `<expr />`, expr may either refer to something intrinsic to the environment (e.g. a `div` or `span` in a DOM environment) or to a custom component that you’ve created. This is important for two reasons:
+>
+> 1.  For React, intrinsic elements are emitted as strings (`React.createElement("div")`), whereas a component you’ve created is not (`React.createElement(MyComponent)`).
+> 2.  The types of the attributes being passed in the JSX element should be looked up differently. Intrinsic element attributes should be known intrinsically whereas components will likely want to specify their own set of attributes.
+>
+> TypeScript uses the same convention that React does for distinguishing between these. An intrinsic element always begins with a lowercase letter, and a value-based element always begins with an uppercase letter.
+>
+> [TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)
+
+> Intrinsic elements are looked up on the special interface `JSX.IntrinsicElements`. By default, if this interface is not specified, then anything goes and intrinsic elements will not be type checked. However, if this interface is present, then the name of the intrinsic element is looked up as a property on the `JSX.IntrinsicElements` interface. For example:
+>
+> ```ts
+> declare namespace JSX {
+>   interface IntrinsicElements {
+>     foo: any;
+>   }
+> }
+> <foo />; // ok
+> <bar />; // error
+> ```
+>
+> [TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)
+
+> Value-based elements are simply looked up by identifiers that are in scope.
+>
+> ```ts
+> import MyComponent from "./myComponent";
+>
+> <MyComponent />; // ok
+> <SomeOtherComponent />; // error
+> ```
+>
+> There are two ways to define a value-based element:
+>
+> 1.  Function Component (FC)
+> 2.  Class Component
+>
+> . . . [Function component] is defined as a JavaScript function where its first argument is a `props` object. TS enforces that its return type must be assignable to `JSX.Element`. . . . Because a Function Component is simply a JavaScript function, function overloads may be used here as well:
+>
+> ```ts
+> interface ClickableProps {
+>   children: JSX.Element[] | JSX.Element;
+> }
+>
+> interface HomeProps extends ClickableProps {
+>   home: JSX.Element;
+> }
+>
+> interface SideProps extends ClickableProps {
+>   side: JSX.Element | string;
+> }
+>
+> function MainButton(prop: HomeProps): JSX.Element;
+> function MainButton(prop: SideProps): JSX.Element;
+> function MainButton(prop: ClickableProps): JSX.Element {
+>   // ...
+> }
+> ```
+>
+> [TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)
+
+#### Result Type
+
+"By default the result of a JSX expression is typed as `any`. You can customize the type by specifying the `JSX.Element` interface. However, it is not possible to retrieve type information about the element, attributes or children of the JSX from this interface. It is a black box." ([TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html))
+
+#### React Integration
+
+##### Installation
+
+"To use JSX with React you should use the [React typings](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react). These typings define the JSX namespace appropriately for use with React." ([TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html))
+
+> Out of the box, TypeScript supports JSX and you can get full React Web support by adding `@types/react` and `@types/react-dom` to your project.
+>
+> ```bash
+> npm install @types/react @types/react-dom
+> ```
+>
+> [React](https://react.dev/learn/typescript)
+
+> The following compiler options need to be set in your `tsconfig.json`:
+>
+> - `dom` must be included in `lib` (Note: If no `lib` option is specified, `dom` is included by default).
+> - `jsx` must be set to one of the valid options. `preserve` should suffice for most applications. If you’re publishing a library, consult the [`jsx` documentation](https://www.typescriptlang.org/tsconfig/#jsx) on what value to choose.
+>
+> [React](https://react.dev/learn/typescript)
+
+> There are multiple compiler flags which can be used to customize your JSX, which work as both a compiler flag and via inline per-file pragmas. To learn more see their tsconfig reference pages:
+>
+> - `jsxFactory`
+> - `jsxFragmentFactory`
+> - `jsxImportSource`
+>
+> [TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)
+
+##### Usage
+
+###### General
+
+"Every file containing JSX must use the `.tsx` file extension. This is a TypeScript-specific extension that tells TypeScript that this file contains JSX." ([React](https://react.dev/learn/typescript))
+
+Usage:
+
+> ```ts
+> function MyButton({ title }: { title: string }) {
+>   return <button>{title}</button>;
+> }
+> ```
+>
+> [React](https://react.dev/learn/typescript)
+
+Alternatively:
+
+> ```ts
+> interface MyButtonProps {
+>   title: string;
+>   disabled: boolean;
+> }
+>
+> function MyButton({ title, disabled }: MyButtonProps) {
+>   return <button disabled={disabled}>{title}</button>;
+> }
+> ```
+>
+> [React](https://react.dev/learn/typescript)
+
+"The type definitions from `@types/react` include types for the built-in Hooks, so you can use them in your components without any additional setup. They are built to take into account the code you write in your component, so you will get inferred types a lot of the time and ideally do not need to handle the minutiae of providing the types." ([React](https://react.dev/learn/typescript))
+
+###### `useState`
+
+> The `useState` Hook will re-use the value passed in as the initial state to determine what the type of the value should be. For example:
+>
+> ```ts
+> // Infer the type as "boolean"
+> const [enabled, setEnabled] = useState(false);
+> ```
+>
+> This will assign the type of `boolean` to `enabled`, and `setEnabled` will be a function accepting either a `boolean` argument, or a function that returns a `boolean`.
+>
+> [React](https://react.dev/learn/typescript)
+
+> If you want to explicitly provide a type for the state, you can do so by providing a type argument to the `useState` call . . .
+>
+> a common case where you may want to provide a type is when you have a union type. For example, status here can be one of a few different strings:
+>
+> ```ts
+> type Status = "idle" | "loading" | "success" | "error";
+>
+> const [status, setStatus] = useState<Status>("idle");
+> ```
+>
+> Or, as recommended . . . you can group related state as an object and describe the different possibilities via object types:
+>
+> ```ts
+> type RequestState =
+>   | { status: "idle" }
+>   | { status: "loading" }
+>   | { status: "success"; data: any }
+>   | { status: "error"; error: Error };
+>
+> const [requestState, setRequestState] = useState<RequestState>({
+>   status: "idle",
+> });
+> ```
+>
+> [React](https://react.dev/learn/typescript)
