@@ -101,6 +101,7 @@
   - General
   - `useState`
   - `useReducer`
+  - `useContext`
 
 # Overview
 
@@ -2236,6 +2237,86 @@ Alternatively:
 >
 > export default function App() {
 >   const [state, dispatch] = useReducer<State>(stateReducer, initialState);
+> }
+> ```
+>
+> [React](https://react.dev/learn/typescript)
+
+### `useContext`
+
+"The type of the value provided by the context is inferred from the value passed to the createContext call" ([React](https://react.dev/learn/typescript))
+
+> ```ts
+> import { createContext, useContext, useState } from "react";
+>
+> type Theme = "light" | "dark" | "system";
+> const ThemeContext = createContext<Theme>("system");
+>
+> const useGetTheme = () => useContext(ThemeContext);
+>
+> export default function MyApp() {
+>   const [theme, setTheme] = useState<Theme>("light");
+>
+>   return (
+>     <ThemeContext.Provider value={theme}>
+>       <MyComponent />
+>     </ThemeContext.Provider>
+>   );
+> }
+>
+> function MyComponent() {
+>   const theme = useGetTheme();
+>
+>   return (
+>     <div>
+>       <p>Current theme: {theme}</p>
+>     </div>
+>   );
+> }
+> ```
+>
+> [React](https://react.dev/learn/typescript)
+
+> This technique works when you have a default value which makes sense - but there are occasionally cases when you do not, and in those cases `null` can feel reasonable as a default value. However, to allow the type-system to understand your code, you need to explicitly set `ContextShape | null` on the `createContext`. This causes the issue that you need to eliminate the `| null` in the type for context consumers. Our recommendation is to have the Hook do a runtime check for it’s existence and throw an error when not present:
+>
+> ```ts
+> import { createContext, useContext, useState, useMemo } from "react";
+>
+> // This is a simpler example, but you can imagine a more complex object here
+> type ComplexObject = {
+>   kind: string;
+> };
+>
+> // The context is created with `| null` in the type, to accurately reflect the default value.
+> const Context = createContext<ComplexObject | null>(null);
+>
+> // The `| null` will be removed via the check in the Hook.
+> const useGetComplexObject = () => {
+>   const object = useContext(Context);
+>   if (!object) {
+>     throw new Error("useGetComplexObject must be used within a Provider");
+>   }
+>   return object;
+> };
+>
+> export default function MyApp() {
+>   const object = useMemo(() => ({ kind: "complex" }), []);
+>
+>   return (
+>     <Context.Provider value={object}>
+>       <MyComponent />
+>     </Context.Provider>
+>   );
+> }
+>
+> function MyComponent() {
+>   const object = useGetComplexObject();
+>
+>   return (
+>     <div>
+>       <p>Current object: {object.kind}</p>
+>     </div>
+>   );
 > }
 > ```
 >
