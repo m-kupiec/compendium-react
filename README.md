@@ -92,15 +92,14 @@
 
 ### TypeScript Intergration
 
-- Usage
-- Type Assertion
-- Intrinsic vs. Value-Based Elements
-- Result Type
-- React Integration
-  - Installation
-  - Usage
-    - General
-      - `useState`
+- **Setup**
+- **Type Checking**
+  - Type Assertion
+  - Intrinsic vs. Value-Based Elements
+  - Result Type
+- **Usage**
+  - General
+  - `useState`
 
 # Overview
 
@@ -1956,7 +1955,7 @@ Usage:
 
 # TypeScript Intergration
 
-#### Usage
+## Setup
 
 "JSX is an embeddable XML-like syntax. It is meant to be transformed into valid JavaScript, though the semantics of that transformation are implementation-specific. JSX rose to popularity with the React framework, but has since seen other implementations as well." ([TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html))
 
@@ -1981,7 +1980,34 @@ Usage:
 >
 > [TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)
 
-#### Type Assertion
+"To use JSX with React you should use the [React typings](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react). These typings define the JSX namespace appropriately for use with React." ([TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html))
+
+> Out of the box, TypeScript supports JSX and you can get full React Web support by adding `@types/react` and `@types/react-dom` to your project.
+>
+> ```bash
+> npm install @types/react @types/react-dom
+> ```
+>
+> [React](https://react.dev/learn/typescript)
+
+> The following compiler options need to be set in your `tsconfig.json`:
+>
+> - `dom` must be included in `lib` (Note: If no `lib` option is specified, `dom` is included by default).
+> - `jsx` must be set to one of the valid options. `preserve` should suffice for most applications. If you’re publishing a library, consult the [`jsx` documentation](https://www.typescriptlang.org/tsconfig/#jsx) on what value to choose.
+>
+> [React](https://react.dev/learn/typescript)
+
+> There are multiple compiler flags which can be used to customize your JSX, which work as both a compiler flag and via inline per-file pragmas. To learn more see their tsconfig reference pages:
+>
+> - `jsxFactory`
+> - `jsxFragmentFactory`
+> - `jsxImportSource`
+>
+> [TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)
+
+## Type Checking
+
+### Type Assertion
 
 > Recall how to write a type assertion:
 >
@@ -2001,7 +2027,7 @@ Usage:
 >
 > [TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)
 
-#### Intrinsic vs. Value-Based Elements
+### Intrinsic vs. Value-Based Elements
 
 > In order to understand type checking with JSX, you must first understand the difference between intrinsic elements and value-based elements. Given a JSX expression `<expr />`, expr may either refer to something intrinsic to the environment (e.g. a `div` or `span` in a DOM environment) or to a custom component that you’ve created. This is important for two reasons:
 >
@@ -2064,42 +2090,13 @@ Usage:
 >
 > [TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)
 
-#### Result Type
+### Result Type
 
 "By default the result of a JSX expression is typed as `any`. You can customize the type by specifying the `JSX.Element` interface. However, it is not possible to retrieve type information about the element, attributes or children of the JSX from this interface. It is a black box." ([TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html))
 
-#### React Integration
+## Usage
 
-##### Installation
-
-"To use JSX with React you should use the [React typings](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react). These typings define the JSX namespace appropriately for use with React." ([TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html))
-
-> Out of the box, TypeScript supports JSX and you can get full React Web support by adding `@types/react` and `@types/react-dom` to your project.
->
-> ```bash
-> npm install @types/react @types/react-dom
-> ```
->
-> [React](https://react.dev/learn/typescript)
-
-> The following compiler options need to be set in your `tsconfig.json`:
->
-> - `dom` must be included in `lib` (Note: If no `lib` option is specified, `dom` is included by default).
-> - `jsx` must be set to one of the valid options. `preserve` should suffice for most applications. If you’re publishing a library, consult the [`jsx` documentation](https://www.typescriptlang.org/tsconfig/#jsx) on what value to choose.
->
-> [React](https://react.dev/learn/typescript)
-
-> There are multiple compiler flags which can be used to customize your JSX, which work as both a compiler flag and via inline per-file pragmas. To learn more see their tsconfig reference pages:
->
-> - `jsxFactory`
-> - `jsxFragmentFactory`
-> - `jsxImportSource`
->
-> [TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)
-
-##### Usage
-
-###### General
+### General
 
 "Every file containing JSX must use the `.tsx` file extension. This is a TypeScript-specific extension that tells TypeScript that this file contains JSX." ([React](https://react.dev/learn/typescript))
 
@@ -2130,7 +2127,7 @@ Alternatively:
 
 "The type definitions from `@types/react` include types for the built-in Hooks, so you can use them in your components without any additional setup. They are built to take into account the code you write in your component, so you will get inferred types a lot of the time and ideally do not need to handle the minutiae of providing the types." ([React](https://react.dev/learn/typescript))
 
-###### `useState`
+### `useState`
 
 > The `useState` Hook will re-use the value passed in as the initial state to determine what the type of the value should be. For example:
 >
