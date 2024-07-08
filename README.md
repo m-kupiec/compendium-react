@@ -102,6 +102,7 @@
   - `useState`
   - `useReducer`
   - `useContext`
+  - `useMemo`
 
 # Overview
 
@@ -2318,6 +2319,17 @@ Alternatively:
 >     </div>
 >   );
 > }
+> ```
+>
+> [React](https://react.dev/learn/typescript)
+
+### `useMemo`
+
+"The result of calling the Hook is inferred from the return value from the function in the first parameter. You can be more explicit by providing a type argument to the Hook." ([React](https://react.dev/learn/typescript))
+
+> ```ts
+> // The type of visibleTodos is inferred from the return value of filterTodos
+> const visibleTodos = useMemo(() => filterTodos(todos, tab), [todos, tab]);
 > ```
 >
 > [React](https://react.dev/learn/typescript)
