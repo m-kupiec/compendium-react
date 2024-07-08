@@ -2426,3 +2426,65 @@ Alternatively:
 > Note, that you cannot use TypeScript to describe that the children are a certain type of JSX elements, so you cannot use the type-system to describe a component which only accepts `<li>` children.
 >
 > [React](https://react.dev/learn/typescript)
+
+> ```ts
+> import React from "react";
+>
+> // React.ReactNode accepts the most inputs
+> interface ReactNodeProps {
+>   children: React.ReactNode;
+> }
+>
+> const RNode = (props: ReactNodeProps) => <div>{props.children}</div>;
+>
+> const ReactNodeApp = () => (
+>   <>
+>     <RNode>
+>       <p>One element</p>
+>     </RNode>
+>     <RNode>
+>       <>
+>         <p>Fragments for</p>
+>         <p>More elements</p>
+>       </>
+>     </RNode>
+>     <RNode>1</RNode>
+>     <RNode>Hello</RNode>
+>     <RNode>{null}</RNode>
+>     <RNode>{true}</RNode>
+>     // Must have children though
+>     <RNode /> // Error
+>   </>
+> );
+>
+> // React.ReactElement accepts only JSX elements
+> interface ReactElementProps {
+>   children: React.ReactElement;
+> }
+>
+> const RElement = (props: ReactElementProps) => <div>{props.children}</div>;
+>
+> const ReactElementApp = () => (
+>   <>
+>     <RElement>
+>       <p>More elements</p>
+>     </RElement>
+>     <RElement>
+>       <>
+>         <p>More elements</p>
+>         <p>More elements</p>
+>       </>
+>     </RElement>
+>     // Must be a JSX element
+>     <RElement>1</RElement> // Error
+>     <RElement>Hello</RElement> // Error
+>     <RElement>{null}</RElement> // Error
+>     <RElement>{true}</RElement> // Error
+>     {/* prettier-ignore */}
+>     // Must have children though
+>     <RElement /> // Error
+>   </>
+> );
+> ```
+>
+> [TypeScript](https://www.typescriptlang.org/play/#code/JYWwDg9gTgLgBAJQKYEMDG8BmUIjgIilQ3wChSB6CxYmAOmXRgDkIATJOdNJMGAZzgwAFpxAR+8YADswAVwGkZMJFEzpOjDKw4AFHGEEBvUnDhphwADZsi0gFw0mDWjqQBuUgF9yaCNMlENzgAXjgACjADfkctFnYkfQhDAEpQgD44AB42YAA3dKMo5P46C2tbJGkvLIpcgt9-QLi3AEEwMFCItJDMrPTTbIQ3dKywdIB5aU4kKyQQKpha8drhhIGzLLWODbNs3b3s8YAxKBQAcwXpAThMaGWDvbH0gFloGbmrgQfBzYpd1YjQZbEYARkB6zMwO2SHSAAlZlYIBCdtCRkZpHIrFYahQYQD8UYYFA5EhcfjyGYqHAXnJAsIUHlOOUbHYhMIIHJzsI0Qk4P9SLUBuRqXEXEwAKKfRZcNA8PiCfxWACecAAUgBlAAacFm80W-CU11U6h4TgwUv11yShjgJjMLMqDnN9Dilq+nh8pD8AXgCHdMrCkWisVoAet0R6fXqhWKhjKllZVVxMcavpd4Zg7U6Qaj+2hmdG4zeRF10uu-Aeq0LBfLMEe-V+T2L7zLVu+FBWLdLeq+lc7DYFf39deFVOotMCACNOCh1dq219a+30uC8YWoZsRyuEdjkevR8uvoVMdjyTWt4WiSSydXD4NqZP4AymeZE072ZzuUeZQKheQgA)
