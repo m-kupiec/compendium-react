@@ -95,9 +95,15 @@
 ```jsx
 /* MyComponent.jsx */
 
-const titleSpan = <span style={{
-    color: 'blue',
-  }}>...</span>;
+const titleSpan = (
+  <span
+    style={{
+      color: "blue",
+    }}
+  >
+    ...
+  </span>
+);
 const arr = [1, 2, 3];
 
 export default function MyComponent({ counter, handler }) {
@@ -107,18 +113,12 @@ export default function MyComponent({ counter, handler }) {
 
       <button onClick={handler}>{counter}</button>
 
-      {Math.random() > 0.5 ? (
-        <h2>...1...</h2>
-      ) : (
-        <h2>...2...</h2>
-      )}
+      {Math.random() > 0.5 ? <h2>...1...</h2> : <h2>...2...</h2>}
 
       <ul>
-        {arr.map(item =>
-          <li key={item}>
-            {item}
-          </li>
-        )}
+        {arr.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
       </ul>
     </>
   );
@@ -155,16 +155,16 @@ export default function App() {
 ```jsx
 /* main.jsx */
 
-import React    from 'react';
-import ReactDOM from 'react-dom/client';
-import App      from './App.jsx';
-import               './styles/index.css';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.jsx";
+import "./styles/index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
-)
+);
 ```
 
 ```html
@@ -195,7 +195,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
 ### HTML Elements
 
-- "`className="square"` is a button property or *prop* . . . The DOM `<button>` element’s `onClick` attribute has a special meaning to React because it is a built-in component. For custom components like `Square`, the naming is up to you. You could give any name to the `Square`’s `onSquareClick` prop or `Board`’s `handleClick` function, and the code would work the same." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
+- "`className="square"` is a button property or _prop_ . . . The DOM `<button>` element’s `onClick` attribute has a special meaning to React because it is a built-in component. For custom components like `Square`, the naming is up to you. You could give any name to the `Square`’s `onSquareClick` prop or `Board`’s `handleClick` function, and the code would work the same." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
 - "`<img />` is written like HTML, but it is actually JavaScript under the hood!" ([React](https://react.dev/learn/your-first-component))
 - "JavaScript has limitations on variable names. For example, their names can’t contain dashes or be reserved words like `class`. Since `class` is a reserved word, in React you write `className` instead, named after the corresponding DOM property" ([React](https://react.dev/learn/writing-markup-with-jsx))
 - "For historical reasons, `aria-*` and `data-*` attributes are written as in HTML with dashes." ([React](https://react.dev/learn/writing-markup-with-jsx))
@@ -203,11 +203,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
 ### `<Fragment>`
 
-- "empty tag is called a *Fragment*. Fragments let you group things without leaving any trace in the browser HTML tree." ([React](https://react.dev/learn/writing-markup-with-jsx))
-- "What do you do when each item needs to render not one, but several DOM nodes? The short `<>...</>` Fragment syntax won’t let you pass a key, so you need to either group them into a single `<div>`, or use the slightly longer and more explicit `<Fragment>` syntax . .  . Fragments disappear from the DOM, so this will produce a flat list" ([React](https://react.dev/learn/rendering-lists))
+- "empty tag is called a _Fragment_. Fragments let you group things without leaving any trace in the browser HTML tree." ([React](https://react.dev/learn/writing-markup-with-jsx))
+- "What do you do when each item needs to render not one, but several DOM nodes? The short `<>...</>` Fragment syntax won’t let you pass a key, so you need to either group them into a single `<div>`, or use the slightly longer and more explicit `<Fragment>` syntax . . . Fragments disappear from the DOM, so this will produce a flat list" ([React](https://react.dev/learn/rendering-lists))
 
 ## Props
-  
+
 - "React component functions accept a single argument, a `props` object . . . Usually you don’t need the whole `props` object itself, so you destructure it into individual props." ([React](https://react.dev/learn/passing-props-to-a-component))
   - > ```jsx
     > function Avatar(props) {
@@ -259,9 +259,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   >
   > [React](https://react.dev/learn/passing-props-to-a-component)
 - "When you nest content inside a JSX tag, the parent component will receive that content in a prop called `children`. . . . You can think of a component with a `children` prop as having a “hole” that can be “filled in” by its parent components with arbitrary JSX. You will often use the `children` prop for visual wrappers: panels, grids, etc." ([React](https://react.dev/learn/passing-props-to-a-component))
+
   - ```jsx
-    import MyComponent from './components/MyComponent.jsx';
-    import NestedComponent from './components/NestedComponent.jsx';
+    import MyComponent from "./components/MyComponent.jsx";
+    import NestedComponent from "./components/NestedComponent.jsx";
 
     export default function App() {
       return (
@@ -270,21 +271,21 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <NestedComponent />
           </MyComponent>
         </>
-      )
+      );
     }
     ```
+
   - ```jsx
     export default function MyComponent({ children }) {
       return (
         <>
           <h1>MyComponent</h1>
-          <section>
-            {children}
-          </section>
+          <section>{children}</section>
         </>
       );
     }
     ```
+
 - "In React, it’s conventional to use `onSomething` names for props which represent events and `handleSomething` for the function definitions which handle those events." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
 - "It is common to call a component with some local state “uncontrolled”. . . . In contrast, you might say a component is “controlled” when the important information in it is driven by props rather than its own local state. This lets the parent component fully specify its behavior. . . . Uncontrolled components are easier to use within their parents because they require less configuration. But they’re less flexible when you want to coordinate them together. Controlled components are maximally flexible, but they require the parent components to fully configure them with props. In practice, “controlled” and “uncontrolled” aren’t strict technical terms—each component usually has some mix of both local state and props. However, this is a useful way to talk about how components are designed and what capabilities they offer." ([React](https://react.dev/learn/sharing-state-between-components))
 
@@ -293,26 +294,31 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 - "Local variables don’t persist between renders." ([React](https://react.dev/learn/state-a-components-memory))
 - "Changes to local variables won’t trigger renders." ([React](https://react.dev/learn/state-a-components-memory))
 - > To update a component with new data, two things need to happen:
+  >
   > 1. **Retain** the data between renders.
   > 2. **Trigger** React to render the component with new data (re-rendering).
   >
   > The useState Hook provides those two things:
+  >
   > 1. A **state variable** to retain the data between renders.
   > 2. A **state setter function** to update the variable and trigger React to render the component again.
   >
   > [React](https://react.dev/learn/state-a-components-memory)
 - > process of requesting and serving UI has three steps:
+  >
   > 1. Triggering a render . . .
   > 2. Rendering the component . . .
   > 3. Committing to the DOM
   >
   > [React](https://react.dev/learn/render-and-commit)
 - > There are two reasons for a component to render:
+  >
   > 1. It’s the component’s **initial render**.
   > 2. The component’s (or one of its ancestors’) **state has been updated**.
   >
   > [React](https://react.dev/learn/render-and-commit)
 - > After you trigger a render, React calls your components to figure out what to display on screen. “Rendering” is React calling your components.
+  >
   > - On initial render, React will call the root component.
   > - For subsequent renders, React will call the function component whose state update triggered the render.
   >
@@ -320,6 +326,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   >
   > [React](https://react.dev/learn/render-and-commit)
 - > After rendering (calling) your components, React will modify the DOM.
+  >
   > - For the initial render, React will use the appendChild() DOM API to put all the DOM nodes it has created on screen.
   > - For re-renders, React will apply the minimal necessary operations (calculated while rendering!) to make the DOM match the latest rendering output.
   >
@@ -328,8 +335,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 - "After rendering is done and React updated the DOM, the browser will repaint the screen. Although this process is known as “browser rendering”, we’ll refer to it as “painting” to avoid confusion throughout the docs." ([React](https://react.dev/learn/render-and-commit))
 - "state behaves more like a snapshot. Setting it does not change the state variable you already have, but instead triggers a re-render." ([React](https://react.dev/learn/state-as-a-snapshot))
 - "Setting state only changes it for the next render. . . . The state stored in React may have changed by the time the `alert` runs, but it was scheduled using a snapshot of the state at the time the user interacted with it! A state variable’s value never changes within a render, even if its event handler’s code is asynchronous. . . . the value of `number` continues to be `0` even after `setNumber(number + 5)` was called . . . React keeps the state values “fixed” within one render’s event handlers. . . . Event handlers created in the past have the state values from the render in which they were created." ([React](https://react.dev/learn/state-as-a-snapshot))
-- "React waits until all code in the event handlers has run before processing your state updates. . . . This behavior, also known as batching, makes your React app run much faster. . . . React does not batch across *multiple* intentional events like clicks—each click is handled separately. Rest assured that React only does batching when it’s generally safe to do." ([React](https://react.dev/learn/queueing-a-series-of-state-updates))
+- "React waits until all code in the event handlers has run before processing your state updates. . . . This behavior, also known as batching, makes your React app run much faster. . . . React does not batch across _multiple_ intentional events like clicks—each click is handled separately. Rest assured that React only does batching when it’s generally safe to do." ([React](https://react.dev/learn/queueing-a-series-of-state-updates))
 - > It is an uncommon use case, but if you would like to update the same state variable multiple times before the next render, instead of passing the next state value like `setNumber(number + 1)`, you can pass a function that calculates the next state based on the previous one in the queue, like `setNumber(n => n + 1)`. . . . `n => n + 1` is called an updater function. When you pass it to a state setter:
+  >
   > 1. React queues this function to be processed after all the other code in the event handler has run.
   > 2. During the next render, React goes through the queue and gives you the final updated state.
   >
@@ -338,31 +346,33 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   > [React](https://react.dev/learn/queueing-a-series-of-state-updates)
 - `setNumber(number + 5); setNumber(n => n + 1);` (for `number === 0` initially) will result in `number === 6` in the next render (see [React](https://react.dev/learn/queueing-a-series-of-state-updates))
 - `setNumber(number + 5); setNumber(n => n + 1); setNumber(number + 4);` (for `number === 0` initially) will result in `number === 4` in the next render (see [React](https://react.dev/learn/queueing-a-series-of-state-updates))
-- "Updater functions run during rendering, so **updater functions must be pure** and only *return* the result. Don’t try to set state from inside of them or run other side effects. In Strict Mode, React will run each updater function twice (but discard the second result) to help you find mistakes." ([React](https://react.dev/learn/queueing-a-series-of-state-updates))
+- "Updater functions run during rendering, so **updater functions must be pure** and only _return_ the result. Don’t try to set state from inside of them or run other side effects. In Strict Mode, React will run each updater function twice (but discard the second result) to help you find mistakes." ([React](https://react.dev/learn/queueing-a-series-of-state-updates))
 - > It’s common to name the updater function argument by the first letters of the corresponding state variable:
   >
   > ```jsx
-  > setEnabled(e => !e);
-  > setLastName(ln => ln.reverse());
-  > setFriendCount(fc => fc * 2);
+  > setEnabled((e) => !e);
+  > setLastName((ln) => ln.reverse());
+  > setFriendCount((fc) => fc * 2);
   > ```
   >
   > If you prefer more verbose code, another common convention is to repeat the full state variable name, like `setEnabled(enabled => !enabled)`, or to use a prefix like `setEnabled(prevEnabled => !prevEnabled)`.
   >
   > [React](https://react.dev/learn/queueing-a-series-of-state-updates)
 - "`setState(5)` actually works like `setState(n => 5)`, but `n` is unused!" ([React](https://react.dev/learn/queueing-a-series-of-state-updates))
+
 ## Purity
 
 ### General
 
 - > a pure function is a function with the following characteristics:
+  >
   > - **It minds its own business.** It does not change any objects or variables that existed before it was called.
   > - **Same inputs, same output.** Given the same inputs, a pure function should always return the same result.
   >
   > [React](https://react.dev/learn/keeping-components-pure)
 - "React assumes that every component you write is a pure function. This means that React components you write must always return the same JSX given the same inputs" ([React](https://react.dev/learn/keeping-components-pure))
-- "Components should only *return* their JSX, and not *change* any objects or variables that existed before rendering—that would make them impure!" ([React](https://react.dev/learn/keeping-components-pure))
-- "Pure functions don’t mutate variables outside of the function’s scope or objects that were created before the call—that makes them impure!  However, it’s completely fine to change variables and objects that you’ve *just* created while rendering. . . . it’s fine because you’ve created them during the same render . . . No code outside of [it] . . . will ever know that this happened. This is called “local mutation”—it’s like your component’s little secret." ([React](https://react.dev/learn/keeping-components-pure))
+- "Components should only _return_ their JSX, and not _change_ any objects or variables that existed before rendering—that would make them impure!" ([React](https://react.dev/learn/keeping-components-pure))
+- "Pure functions don’t mutate variables outside of the function’s scope or objects that were created before the call—that makes them impure! However, it’s completely fine to change variables and objects that you’ve _just_ created while rendering. . . . it’s fine because you’ve created them during the same render . . . No code outside of [it] . . . will ever know that this happened. This is called “local mutation”—it’s like your component’s little secret." ([React](https://react.dev/learn/keeping-components-pure))
 
 ### `StrictMode`
 
@@ -372,17 +382,17 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
 ### Side Effects
 
-- "changes—updating the screen, starting an animation, changing the data—are called **side effects**. They’re things that happen *“on the side”*, not during rendering." ([React](https://react.dev/learn/keeping-components-pure))
-- "In React, side effects usually belong inside event handlers. . . . Even though event handlers are defined *inside* your component, they don’t run *during* rendering! So event handlers don’t need to be pure." ([React](https://react.dev/learn/keeping-components-pure))
+- "changes—updating the screen, starting an animation, changing the data—are called **side effects**. They’re things that happen _“on the side”_, not during rendering." ([React](https://react.dev/learn/keeping-components-pure))
+- "In React, side effects usually belong inside event handlers. . . . Even though event handlers are defined _inside_ your component, they don’t run _during_ rendering! So event handlers don’t need to be pure." ([React](https://react.dev/learn/keeping-components-pure))
 - "If you’ve exhausted all other options and can’t find the right event handler for your side effect, you can still attach it to your returned JSX with a `useEffect` call in your component. This tells React to execute it later, after rendering, when side effects are allowed. However, this approach should be your last resort. When possible, try to express your logic with rendering alone." ([React](https://react.dev/learn/keeping-components-pure))
 
 ## Returned Value
 
-  - "In some situations, you won’t want to render anything at all. . . . A component must return something. In this case, you can return `null` . . . In practice, returning `null` from a component isn’t common . . . More often, you would conditionally include or exclude the component in the parent component’s JSX." ([React](https://react.dev/learn/conditional-rendering))
+- "In some situations, you won’t want to render anything at all. . . . A component must return something. In this case, you can return `null` . . . In practice, returning `null` from a component isn’t common . . . More often, you would conditionally include or exclude the component in the parent component’s JSX." ([React](https://react.dev/learn/conditional-rendering))
 
 ## The Render Tree
 
-- "As we nest components, we have the concept of parent and child components, where each parent component may itself be a child of another component.  When we render a React app, we can model this relationship in a tree, known as the render tree." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
+- "As we nest components, we have the concept of parent and child components, where each parent component may itself be a child of another component. When we render a React app, we can model this relationship in a tree, known as the render tree." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
 - > The root node in a React render tree is the root component of the app. In this case, the root component is `App` and it is the first component React renders. . . .
   >
   > ![Image](/assets/conditional_render_tree.webp)
@@ -419,80 +429,80 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 - > you should not nest component function definitions.
   >
   > ```jsx
-  > import { useState } from 'react';
+  > import { useState } from "react";
   >
   > export default function MyComponent() {
   >   const [counter, setCounter] = useState(0);
   >
   >   function MyTextField() {
-  >     const [text, setText] = useState('');
+  >     const [text, setText] = useState("");
   >
-  >     return (
-  >       <input
-  >         value={text}
-  >         onChange={e => setText(e.target.value)}
-  >       />
-  >     );
+  >     return <input value={text} onChange={(e) => setText(e.target.value)} />;
   >   }
   >
   >   return (
   >     <>
   >       <MyTextField />
-  >       <button onClick={() => {
-  >         setCounter(counter + 1)
-  >       }}>Clicked {counter} times</button>
+  >       <button
+  >         onClick={() => {
+  >           setCounter(counter + 1);
+  >         }}
+  >       >
+  >         Clicked {counter} times
+  >       </button>
   >     </>
   >   );
   > }
   > ```
   >
-  > Every time you click the button, the input state disappears! This is because a *different* `MyTextField` function is created for every render of `MyComponent`. You’re rendering a *different* component in the same position, so React resets all state below. This leads to bugs and performance problems. To avoid this problem, always declare component functions at the top level, and don’t nest their definitions.
+  > Every time you click the button, the input state disappears! This is because a _different_ `MyTextField` function is created for every render of `MyComponent`. You’re rendering a _different_ component in the same position, so React resets all state below. This leads to bugs and performance problems. To avoid this problem, always declare component functions at the top level, and don’t nest their definitions.
   >
   > [React](https://react.dev/learn/preserving-and-resetting-state)
 - > By default, React preserves state of a component while it stays at the same position.
   >
   > ```jsx
   > /* ... */
-  > {isPlayerA ? (
-  >   <Counter person="Taylor" />
-  > ) : (
-  >   <Counter person="Sarah" />
-  > )}
-  > /* ... */
-  > ```
-  >
-  > Currently, when you change the player, the score is preserved. The two `Counter`s appear in the same position, so React sees them as *the same* `Counter` whose `person` prop has changed. . . . If you want these two `Counter`s to be independent, you can render them in two different positions:
-  >
-  > ```jsx
-  > /* ... */
-  > {isPlayerA &&
-  >   <Counter person="Taylor" />
-  > }
-  > {!isPlayerA &&
-  >   <Counter person="Sarah" />
+  > {
+  >   isPlayerA ? <Counter person="Taylor" /> : <Counter person="Sarah" />;
   > }
   > /* ... */
   > ```
   >
-  > Each Counter’s state gets destroyed each time it’s removed from the DOM. . . .  This solution is convenient when you only have a few independent components rendered in the same place.
-  >
-  > [React](https://react.dev/learn/preserving-and-resetting-state)
-- > There is also another, more generic, way to reset a component’s state. . . . You can use keys to make React distinguish between any components. By default, React uses order within the parent (“first counter”, “second counter”) to discern between components. But keys let you tell React that this is not just a *first* counter, or a *second* counter, but a specific counter . . . In this example, the two `<Counter />`s don’t share state even though they appear in the same place in JSX:
+  > Currently, when you change the player, the score is preserved. The two `Counter`s appear in the same position, so React sees them as _the same_ `Counter` whose `person` prop has changed. . . . If you want these two `Counter`s to be independent, you can render them in two different positions:
   >
   > ```jsx
-  > {isPlayerA ? (
-  >   <Counter key="Taylor" person="Taylor" />
-  > ) : (
-  >   <Counter key="Sarah" person="Sarah" />
-  > )}
+  > /* ... */
+  > {
+  >   isPlayerA && <Counter person="Taylor" />;
+  > }
+  > {
+  >   !isPlayerA && <Counter person="Sarah" />;
+  > }
+  > /* ... */
+  > ```
+  >
+  > Each Counter’s state gets destroyed each time it’s removed from the DOM. . . . This solution is convenient when you only have a few independent components rendered in the same place.
+  >
+  > [React](https://react.dev/learn/preserving-and-resetting-state)
+- > There is also another, more generic, way to reset a component’s state. . . . You can use keys to make React distinguish between any components. By default, React uses order within the parent (“first counter”, “second counter”) to discern between components. But keys let you tell React that this is not just a _first_ counter, or a _second_ counter, but a specific counter . . . In this example, the two `<Counter />`s don’t share state even though they appear in the same place in JSX:
+  >
+  > ```jsx
+  > {
+  >   isPlayerA ? (
+  >     <Counter key="Taylor" person="Taylor" />
+  >   ) : (
+  >     <Counter key="Sarah" person="Sarah" />
+  >   );
+  > }
   > ```
   >
   > [React](https://react.dev/learn/preserving-and-resetting-state)
-    - "keys are not globally unique. They only specify the position *within* the parent." ([React](https://react.dev/learn/preserving-and-resetting-state))
+  - "keys are not globally unique. They only specify the position _within_ the parent." ([React](https://react.dev/learn/preserving-and-resetting-state))
 - "Resetting state with a key is particularly useful when dealing with forms." ([React](https://react.dev/learn/preserving-and-resetting-state))
-- "adjusting state based on props or other state makes your data flow more difficult to understand and debug. Always check whether you can reset all state with a key or calculate everything during rendering instead. For example, instead of storing (and resetting) the selected *item*, you can store the selected *item ID*" ([React](https://react.dev/learn/you-might-not-need-an-effect))
+- "adjusting state based on props or other state makes your data flow more difficult to understand and debug. Always check whether you can reset all state with a key or calculate everything during rendering instead. For example, instead of storing (and resetting) the selected _item_, you can store the selected _item ID_" ([React](https://react.dev/learn/you-might-not-need-an-effect))
 - > There are a few ways to keep the state “alive” for a component that’s no longer visible:
-  > - You could render *all* chats instead of just the current one, but hide all the others with CSS. The chats would not get removed from the tree, so their local state would be preserved. This solution works great for simple UIs. But it can get very slow if the hidden trees are large and contain a lot of DOM nodes.
+  >
+  > - You could render _all_ chats instead of just the current one, but hide all the others with CSS. The chats would not get removed from the tree, so their local state would be preserved. This solution works great for simple UIs. But it can get very slow if the hidden trees are large and contain a lot of DOM nodes.
   > - You could lift the state up and hold the pending message for each recipient in the parent component. This way, when the child components get removed, it doesn’t matter, because it’s the parent that keeps the important information. This is the most common solution.
   > - You might also use a different source in addition to React state. For example, you probably want a message draft to persist even if the user accidentally closes the page. To implement this, you could have the `Chat` component initialize its state by reading from the `localStorage`, and save the drafts there too.
   >
@@ -530,7 +540,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
 ## Definition
 
-- "The markup syntax . . . is called *JSX*" ([React](https://react.dev/learn))
+- "The markup syntax . . . is called _JSX_" ([React](https://react.dev/learn))
 
 ## Escaping Into JavaScript
 
@@ -541,7 +551,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
 ### HTML Attributes
 
-- "You can also “escape into JavaScript” from JSX attributes, but you have to use curly braces *instead of quotes*" ([React](https://react.dev/learn))
+- "You can also “escape into JavaScript” from JSX attributes, but you have to use curly braces _instead of quotes_" ([React](https://react.dev/learn))
 - "`style={{}}` is not a special syntax, but a regular `{}` object inside the `style={ }` JSX curly braces. You can use the `style` attribute when your styles depend on JavaScript variables." ([React](https://react.dev/learn))
 
 ### Control Flow
@@ -575,16 +585,18 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
 - "React applications are built from components. Components are built from Hooks, whether built-in or custom." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
 - "Functions starting with `use` are called Hooks." ([React](https://react.dev/learn))
-- "*Hooks* are special functions that are only available while React is rendering . . . They let you “hook into” different React features." ([React](https://react.dev/learn/state-a-components-memory))
+- "_Hooks_ are special functions that are only available while React is rendering . . . They let you “hook into” different React features." ([React](https://react.dev/learn/state-a-components-memory))
 - "Hooks—functions starting with use—can only be called at the top level of your components or your own Hooks. You can’t call Hooks inside conditions, loops, or other nested functions. Hooks are functions, but it’s helpful to think of them as unconditional declarations about your component’s needs. You “use” React features at the top of your component similar to how you “import” modules at the top of your file." ([React](https://react.dev/learn/state-a-components-memory))
 - "If you want to use `useState` in a condition or a loop, extract a new component and put it there." ([React](https://react.dev/learn))
 
 ## `useRef`
 
 Definition:
+
 - "Refs are an escape hatch to hold onto values that aren’t used for rendering. . . . Like state, refs let you retain information between re-renders of a component. Unlike state, setting the ref’s `current` value does not trigger a re-render." ([React](https://react.dev/learn/referencing-values-with-refs))
 - "the `ref.current` property . . . value is intentionally mutable, meaning you can both read and write to it. . . . As long as the object you’re mutating isn’t used for rendering, React doesn’t care what you do with the ref or its contents." ([React](https://react.dev/learn/referencing-values-with-refs))
 - > when you mutate the current value of a ref, it changes immediately:
+  >
   > ```jsx
   > ref.current = 5;
   > console.log(ref.current); // 5
@@ -606,22 +618,25 @@ Definition:
   > [React](https://react.dev/learn/referencing-values-with-refs)
 
 Rules:
+
 - "Don’t read or write `ref.current` during rendering. If some information is needed during rendering, use state instead. Since React doesn’t know when `ref.current` changes, even reading it while rendering makes your component’s behavior difficult to predict." ([React](https://react.dev/learn/referencing-values-with-refs))
-- "During the first render, the DOM nodes have not yet been created, so `ref.current` will be `null`. And during the rendering of updates, the DOM nodes haven’t been updated yet. So it’s too early to read them. React sets `ref.current` during the commit. Before updating the DOM, React sets the affected `ref.current` values to `null`. After updating the DOM, React immediately sets them to the corresponding DOM nodes.  Usually, you will access refs from event handlers. If you want to do something with a ref, but there is no particular event to do it in, you might need an Effect." ([React](https://react.dev/learn/manipulating-the-dom-with-refs))
-- "If you stick to non-destructive actions like focusing and scrolling, you shouldn’t encounter any problems. However, if you try to modify the DOM manually, you can risk conflicting with the changes React is making. . . . Avoid changing DOM nodes managed by React. Modifying, adding children to, or removing children from elements that are managed by React can lead to inconsistent visual results or crashes . . . You can safely modify parts of the DOM that React has *no reason* to update. For example, if some `<div>` is always empty in the JSX, React won’t have a reason to touch its children list. Therefore, it is safe to manually add or remove elements there." ([React](https://react.dev/learn/manipulating-the-dom-with-refs))
+- "During the first render, the DOM nodes have not yet been created, so `ref.current` will be `null`. And during the rendering of updates, the DOM nodes haven’t been updated yet. So it’s too early to read them. React sets `ref.current` during the commit. Before updating the DOM, React sets the affected `ref.current` values to `null`. After updating the DOM, React immediately sets them to the corresponding DOM nodes. Usually, you will access refs from event handlers. If you want to do something with a ref, but there is no particular event to do it in, you might need an Effect." ([React](https://react.dev/learn/manipulating-the-dom-with-refs))
+- "If you stick to non-destructive actions like focusing and scrolling, you shouldn’t encounter any problems. However, if you try to modify the DOM manually, you can risk conflicting with the changes React is making. . . . Avoid changing DOM nodes managed by React. Modifying, adding children to, or removing children from elements that are managed by React can lead to inconsistent visual results or crashes . . . You can safely modify parts of the DOM that React has _no reason_ to update. For example, if some `<div>` is always empty in the JSX, React won’t have a reason to touch its children list. Therefore, it is safe to manually add or remove elements there." ([React](https://react.dev/learn/manipulating-the-dom-with-refs))
 
 Usage:
+
 - > ```jsx
-  > import { useRef } from 'react';
+  > import { useRef } from "react";
   >
   > /* ... */
   > const ref = useRef(0);
   > ```
   >
   > `useRef` returns an object like this:
+  >
   > ```jsx
   > {
-  >   current: 0 // The value you passed to useRef
+  >   current: 0; // The value you passed to useRef
   > }
   > ```
   >
@@ -629,7 +644,7 @@ Usage:
 - > To access a DOM node managed by React . . . pass your ref [(`const myRef = useRef(null);`)] as the `ref` attribute to the JSX tag for which you want to get the DOM node:
   >
   > ```html
-  > <div ref={myRef}>
+  > <div ref="{myRef}"></div>
   > ```
   >
   > [React](https://react.dev/learn/manipulating-the-dom-with-refs)
@@ -665,7 +680,7 @@ Usage:
   >       <img src={cat} />
   >     </li>
   >   ))}
-  > </ul>
+  > </ul>;
   > /* ... */
   > ```
   >
@@ -674,7 +689,7 @@ Usage:
 Example (from [React](https://react.dev/learn/manipulating-the-dom-with-refs)):
 
 ```jsx
-import { useRef } from 'react';
+import { useRef } from "react";
 
 export default function Form() {
   const inputRef = useRef(null);
@@ -686,18 +701,18 @@ export default function Form() {
   return (
     <>
       <input ref={inputRef} />
-      <button onClick={handleClick}>
-        Focus the input
-      </button>
+      <button onClick={handleClick}>Focus the input</button>
     </>
   );
 }
 ```
 
 Use cases:
+
 - "If your component needs to store some value, but it doesn’t impact the rendering logic, choose refs." ([React](https://react.dev/learn/referencing-values-with-refs))
-- "sometimes you might need access to the DOM elements managed by React—for example, to focus a node, scroll to it, or measure its size and position. There is no built-in way to do those things in React, so you will need a *ref* to the DOM node." ([React](https://react.dev/learn/manipulating-the-dom-with-refs))
+- "sometimes you might need access to the DOM elements managed by React—for example, to focus a node, scroll to it, or measure its size and position. There is no built-in way to do those things in React, so you will need a _ref_ to the DOM node." ([React](https://react.dev/learn/manipulating-the-dom-with-refs))
 - > Typically, you will use a ref when your component needs to “step outside” React and communicate with external APIs—often a browser API that won’t impact the appearance of the component. Here are a few of these rare situations:
+  >
   > - Storing timeout IDs
   > - Storing and manipulating DOM elements, which we cover on the next page
   > - Storing other objects that aren’t necessary to calculate the JSX.
@@ -705,11 +720,13 @@ Use cases:
   > [React](https://react.dev/learn/referencing-values-with-refs)
 
 Custom components' refs:
-- "When you put a ref on a built-in component that outputs a browser element like `<input />`, React will set that ref’s `current` property to the corresponding DOM node (such as the actual `<input />` in the browser). However, if you try to put a ref on your own component, like `<MyInput />`, by default you will get `null`. . . . This happens because by default React does not let a component access the DOM nodes of other components. Not even for its own children! This is intentional. Refs are an escape hatch that should be used sparingly. Manually manipulating *another* component’s DOM nodes makes your code even more fragile." ([React](https://react.dev/learn/manipulating-the-dom-with-refs))
+
+- "When you put a ref on a built-in component that outputs a browser element like `<input />`, React will set that ref’s `current` property to the corresponding DOM node (such as the actual `<input />` in the browser). However, if you try to put a ref on your own component, like `<MyInput />`, by default you will get `null`. . . . This happens because by default React does not let a component access the DOM nodes of other components. Not even for its own children! This is intentional. Refs are an escape hatch that should be used sparingly. Manually manipulating _another_ component’s DOM nodes makes your code even more fragile." ([React](https://react.dev/learn/manipulating-the-dom-with-refs))
 - "In design systems, it is a common pattern for low-level components like buttons, inputs, and so on, to forward their refs to their DOM nodes. On the other hand, high-level components like forms, lists, or page sections usually won’t expose their DOM nodes to avoid accidental dependencies on the DOM structure." ([React](https://react.dev/learn/manipulating-the-dom-with-refs))
 - > components that want to expose their DOM nodes have to opt in to that behavior. A component can specify that it “forwards” its ref to one of its children . . . can use the `forwardRef` API . . .
+  >
   > ```jsx
-  > import { forwardRef, useRef } from 'react';
+  > import { forwardRef, useRef } from "react";
   >
   > const MyInput = forwardRef((props, ref) => {
   >   return <input {...props} ref={ref} />;
@@ -725,11 +742,9 @@ Custom components' refs:
   >   return (
   >     <>
   >       <MyInput ref={inputRef} />
-  >       <button onClick={handleClick}>
-  >         Focus the input
-  >       </button>
+  >       <button onClick={handleClick}>Focus the input</button>
   >     </>
-  >   )
+  >   );
   > }
   > ```
   >
@@ -737,18 +752,20 @@ Custom components' refs:
 - > Exposing a subset of the API with an imperative handle . . . In uncommon cases, you may want to restrict the exposed functionality. You can do that with `useImperativeHandle`:
   >
   > ```jsx
-  > import { forwardRef, useRef, useImperativeHandle } from 'react';
+  > import { forwardRef, useRef, useImperativeHandle } from "react";
   >
   > const MyInput = forwardRef((props, ref) => {
   >   const restrictedRef = useRef(null);
   >
   >   useImperativeHandle(ref, () => ({
   >     // Only expose focus and nothing else
-  >     focus() { restrictedRef.current.focus(); },
-  >   }))
+  >     focus() {
+  >       restrictedRef.current.focus();
+  >     },
+  >   }));
   >
   >   return <input {...props} ref={restrictedRef} />;
-  > })
+  > });
   > ```
   >
   > . . . `inputRef.current` inside the `Form` component will only have the `focus` method. In this case, the ref “handle” is not the DOM node, but the custom object you create inside `useImperativeHandle` call.
@@ -756,9 +773,11 @@ Custom components' refs:
   > [React](https://react.dev/learn/manipulating-the-dom-with-refs) (with a slightly modified code)
 
 Forcing the DOM to update synchronously:
+
 - > Consider code like this, which adds a new todo and scrolls the screen down to the last child of the list. Notice how, for some reason, it always scrolls to the todo that was just before the last added one . . . The issue is with these two lines:
+  >
   > ```jsx
-  > setTodos([ ...todos, newTodo]);
+  > setTodos([...todos, newTodo]);
   > listRef.current.lastChild.scrollIntoView();
   > ```
   >
@@ -766,7 +785,7 @@ Forcing the DOM to update synchronously:
   >
   > ```jsx
   > flushSync(() => {
-  >   setTodos([ ...todos, newTodo]);
+  >   setTodos([...todos, newTodo]);
   > });
   > listRef.current.lastChild.scrollIntoView();
   > ```
@@ -779,7 +798,7 @@ Forcing the DOM to update synchronously:
 
 > ```jsx
 > function TodoList({ todos, filter }) {
->   const [newTodo, setNewTodo] = useState('');
+>   const [newTodo, setNewTodo] = useState("");
 >   // ✅ This is fine if getFilteredTodos() is not slow.
 >   const visibleTodos = getFilteredTodos(todos, filter);
 >   // ...
@@ -789,12 +808,15 @@ Forcing the DOM to update synchronously:
 > Usually, this code is fine! But maybe `getFilteredTodos()` is slow or you have a lot of todos. In that case you don’t want to recalculate `getFilteredTodos()` if some unrelated state variable like newTodo has changed. You can cache (or “memoize”) an expensive calculation by wrapping it in a `useMemo` Hook . . .
 >
 > ```jsx
-> import { useMemo, useState } from 'react';
+> import { useMemo, useState } from "react";
 >
 > function TodoList({ todos, filter }) {
->   const [newTodo, setNewTodo] = useState('');
+>   const [newTodo, setNewTodo] = useState("");
 >   // ✅ Does not re-run getFilteredTodos() unless todos or filter change
->   const visibleTodos = useMemo(() => getFilteredTodos(todos, filter), [todos, filter]);
+>   const visibleTodos = useMemo(
+>     () => getFilteredTodos(todos, filter),
+>     [todos, filter]
+>   );
 >   // ...
 > }
 > ```
@@ -803,7 +825,7 @@ Forcing the DOM to update synchronously:
 >
 > [React](https://react.dev/learn/you-might-not-need-an-effect)
 
-"How to tell if a calculation is expensive? In general, unless you’re creating or looping over thousands of objects, it’s probably not expensive. If you want to get more confidence, you can add a console log to measure the time spent in a piece of code . . . If the overall logged time adds up to a significant amount (say, `1ms` or more), it might make sense to memoize that calculation. As an experiment, you can then wrap the calculation in useMemo to verify whether the total logged time has decreased for that interaction or not . . . `useMemo` won’t make the *first* render faster. It only helps you skip unnecessary work on updates.
+"How to tell if a calculation is expensive? In general, unless you’re creating or looping over thousands of objects, it’s probably not expensive. If you want to get more confidence, you can add a console log to measure the time spent in a piece of code . . . If the overall logged time adds up to a significant amount (say, `1ms` or more), it might make sense to memoize that calculation. As an experiment, you can then wrap the calculation in useMemo to verify whether the total logged time has decreased for that interaction or not . . . `useMemo` won’t make the _first_ render faster. It only helps you skip unnecessary work on updates.
 
 ## `useSyncExternalStore`
 
@@ -814,20 +836,24 @@ Forcing the DOM to update synchronously:
 Example (from [React](https://react.dev/learn/you-might-not-need-an-effect); modified):
 
 ```jsx
-import { useSyncExternalStore } from 'react';
+import { useSyncExternalStore } from "react";
 
 function subscribe(callback) {
-  window.addEventListener('online', callback);
-  window.addEventListener('offline', callback);
+  window.addEventListener("online", callback);
+  window.addEventListener("offline", callback);
 
   return () => {
-    window.removeEventListener('online', callback);
-    window.removeEventListener('offline', callback);
+    window.removeEventListener("online", callback);
+    window.removeEventListener("offline", callback);
   };
 }
 
 function useOnlineStatus() {
-  return useSyncExternalStore(subscribe, () => navigator.online, () => true);
+  return useSyncExternalStore(
+    subscribe,
+    () => navigator.online,
+    () => true
+  );
 }
 
 function ChatIndicator() {
@@ -858,11 +884,13 @@ function ChatIndicator() {
 "The code inside your custom Hooks will re-run during every re-render of your component. This is why, like components, custom Hooks need to be pure. Think of custom Hooks’ code as part of your component’s body!" ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
 
 Best practices:
+
 - "Ideally, your custom Hook’s name should be clear enough that even a person who doesn’t write code often could have a good guess about what your custom Hook does, what it takes, and what it returns: ✅ `useData(url)` ✅ `useImpressionLog(eventName, extraData)` ✅ `useChatRoom(options)` When you synchronize with an external system, your custom Hook name may be more technical and use jargon specific to that system. It’s good as long as it would be clear to a person familiar with that system: ✅ `useMediaQuery(query)` ✅ `useSocket(url)` ✅ `useIntersectionObserver(ref, options)`" ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
 - "Keep custom Hooks focused on concrete high-level use cases. Avoid creating and using custom “lifecycle” Hooks that act as alternatives and convenience wrappers for the useEffect API itself: 🔴 `useMount(fn)` 🔴 `useEffectOnce(fn)` 🔴 `useUpdateEffect(fn)`" ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
 - "A good custom Hook makes the calling code more declarative by constraining what it does. For example, `useChatRoom(options)` can only connect to the chat room, while `useImpressionLog(eventName, extraData)` can only send an impression log to the analytics. If your custom Hook API doesn’t constrain the use cases and is very abstract, in the long run it’s likely to introduce more problems than it solves." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
 
 Use cases:
+
 - "whenever you write an Effect, consider whether it would be clearer to also wrap it in a custom Hook. You shouldn’t need Effects very often, so if you’re writing one, it means that you need to “step outside React” to synchronize with some external system or to do something that React doesn’t have a built-in API for. Wrapping it into a custom Hook lets you precisely communicate your intent and how the data flows through it. . . . With time, most of your app’s Effects will be in custom Hooks." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
 - "Effects are an “escape hatch”: you use them when you need to “step outside React” and when there is no better built-in solution for your use case. With time, the React team’s goal is to reduce the number of the Effects in your app to the minimum by providing more specific solutions to more specific problems. Wrapping your Effects in custom Hooks makes it easier to upgrade your code when these solutions become available." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
 
@@ -875,33 +903,39 @@ Use cases:
 - > In rare cases, you might need to catch all events on child elements, even if they stopped propagation. For example, maybe you want to log every click to analytics, regardless of the propagation logic. You can do this by adding `Capture` at the end of the event name:
   >
   > ```jsx
-  > <div onClickCapture={() => { /* this runs first */ }}>
-  >   <button onClick={e => e.stopPropagation()} />
-  >   <button onClick={e => e.stopPropagation()} />
+  > <div
+  >   onClickCapture={() => {
+  >     /* this runs first */
+  >   }}
+  > >
+  >   <button onClick={(e) => e.stopPropagation()} />
+  >   <button onClick={(e) => e.stopPropagation()} />
   > </div>
   > ```
   >
   > . . . Capture events are useful for code like routers or analytics, but you probably won’t use them in app code.
   >
   > [React](https://react.dev/learn/responding-to-events)
-- *Passing handlers as alternative to propagation* pattern:
+- _Passing handlers as alternative to propagation_ pattern:
   - "Explicitly calling an event handler prop from a child handler is a good alternative to propagation." ([React](https://react.dev/learn/responding-to-events))
   - > this click handler runs a line of code and then calls the onClick prop passed by the parent:
     >
     > ```jsx
     > function Button({ onClick, children }) {
     >   return (
-    >     <button onClick={e => {
-    >       e.stopPropagation();
-    >       onClick();
-    >     }}>
+    >     <button
+    >       onClick={(e) => {
+    >         e.stopPropagation();
+    >         onClick();
+    >       }}
+    >     >
     >       {children}
     >     </button>
     >   );
     > }
     > ```
     >
-    > You could add more code to this handler before calling the parent `onClick` event handler, too. This pattern provides an *alternative* to propagation. It lets the child component handle the event, while also letting the parent component specify some additional behavior. Unlike propagation, it’s not automatic. But the benefit of this pattern is that you can clearly follow the whole chain of code that executes as a result of some event.
+    > You could add more code to this handler before calling the parent `onClick` event handler, too. This pattern provides an _alternative_ to propagation. It lets the child component handle the event, while also letting the parent component specify some additional behavior. Unlike propagation, it’s not automatic. But the benefit of this pattern is that you can clearly follow the whole chain of code that executes as a result of some event.
     >
     > If you rely on propagation and it’s difficult to trace which handlers execute and why, try this approach instead.
     >
@@ -928,16 +962,17 @@ Use cases:
 - "By default, all child components re-render automatically when the state of a parent component changes. . . . Immutability makes it very cheap for components to compare whether their data has changed or not. You can learn more about how React chooses when to re-render a component in the `memo` API reference." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
 - "without using the state setting function, React has no idea that object has changed. So React does not do anything in response." ([React](https://react.dev/learn/updating-objects-in-state))
 - "When you store objects in state, mutating them will not trigger renders and will change the state in previous render “snapshots”." ([React](https://react.dev/learn/updating-objects-in-state))
-- "you shouldn’t change objects that you hold in the React state directly. Instead, when you want to update an object, you need to create a new one (or make a copy of an existing one), and then set the state to use that copy. . . . Mutation is only a problem when you change *existing* objects that are already in state. Mutating an object you’ve just created is okay because *no other code references it yet*. Changing it isn’t going to accidentally impact something that depends on it. This is called a “local mutation”. You can even do local mutation while rendering. Very convenient and completely okay!" ([React](https://react.dev/learn/updating-objects-in-state))
+- "you shouldn’t change objects that you hold in the React state directly. Instead, when you want to update an object, you need to create a new one (or make a copy of an existing one), and then set the state to use that copy. . . . Mutation is only a problem when you change _existing_ objects that are already in state. Mutating an object you’ve just created is okay because _no other code references it yet_. Changing it isn’t going to accidentally impact something that depends on it. This is called a “local mutation”. You can even do local mutation while rendering. Very convenient and completely okay!" ([React](https://react.dev/learn/updating-objects-in-state))
   - > Updating a nested object . . .
     >
     > ```jsx
     > setPerson({
     >   ...person, // Copy other fields
-    >   artwork: { // but replace the artwork
+    >   artwork: {
+    >     // but replace the artwork
     >     ...person.artwork, // with the same one
-    >     city: 'New Delhi' // but in New Delhi!
-    >   }
+    >     city: "New Delhi", // but in New Delhi!
+    >   },
     > });
     > ```
     >
@@ -947,15 +982,15 @@ Use cases:
 - "even if you copy an array, you can’t mutate existing items inside of it directly. This is because copying is shallow—the new array will contain the same items as the original one. So if you modify an object inside the copied array, you are mutating the existing state. . . . When updating nested state, you need to create copies from the point where you want to update, and all the way up to the top level." ([React](https://react.dev/learn/updating-arrays-in-state))
 - > you should treat arrays in React state as read-only. This means that you shouldn’t reassign items inside an array like `arr[0] = 'bird'`, and you also shouldn’t use methods that mutate the array, such as `push()` and `pop()`. Instead, every time you want to update an array, you’ll want to pass a new array to your state setting function. . . .
   >
-  > |         |avoid (mutates the array) |prefer (returns a new array)|
-  > |---------|--------------------------|----------------------------|
-  > |adding   |`push`, `unshift`         |`concat`, `[...arr]` . . .  |
-  > |removing |`pop`, `shift`, `splice`  |`filter`, `slice` . . .     |
-  > |replacing|`splice`, `arr[i] =` . . .|`map` . . .                 |
-  > |sorting  |`reverse`, `sort`         |copy the array first . . .  |
+  > |           | avoid (mutates the array)  | prefer (returns a new array) |
+  > | --------- | -------------------------- | ---------------------------- |
+  > | adding    | `push`, `unshift`          | `concat`, `[...arr]` . . .   |
+  > | removing  | `pop`, `shift`, `splice`   | `filter`, `slice` . . .      |
+  > | replacing | `splice`, `arr[i] =` . . . | `map` . . .                  |
+  > | sorting   | `reverse`, `sort`          | copy the array first . . .   |
   >
   > [React](https://react.dev/learn/updating-arrays-in-state)
-  - "to remove an item from an array is to *filter it out*. In other words, you will produce a new array that will not contain that item. To do this, use the `filter` method" ([React](https://react.dev/learn/updating-arrays-in-state))
+  - "to remove an item from an array is to _filter it out_. In other words, you will produce a new array that will not contain that item. To do this, use the `filter` method" ([React](https://react.dev/learn/updating-arrays-in-state))
   - "To replace an item, create a new array with `map`. Inside your `map` call, you will receive the item index as the second argument. Use it to decide whether to return the original item (the first argument) or something else" ([React](https://react.dev/learn/updating-arrays-in-state))
   - > to insert an item at a particular position that’s neither at the beginning nor at the end. To do this, you can use the `...` array spread syntax together with the `slice()` method. . . .
     >
@@ -966,7 +1001,7 @@ Use cases:
     >   // New item:
     >   { id: nextId++, name: name },
     >   // Items after the insertion point:
-    >   ...artists.slice(insertAt)
+    >   ...artists.slice(insertAt),
     > ];
     > ```
     >
@@ -980,12 +1015,32 @@ Use cases:
 >
 > ```json
 > [
->   { category: "Fruits", price: "$1", stocked: true, name: "Apple" },
->   { category: "Fruits", price: "$1", stocked: true, name: "Dragonfruit" },
->   { category: "Fruits", price: "$2", stocked: false, name: "Passionfruit" },
->   { category: "Vegetables", price: "$2", stocked: true, name: "Spinach" },
->   { category: "Vegetables", price: "$4", stocked: false, name: "Pumpkin" },
->   { category: "Vegetables", price: "$1", stocked: true, name: "Peas" }
+>   { "category": "Fruits", "price": "$1", "stocked": true, "name": "Apple" },
+>   {
+>     "category": "Fruits",
+>     "price": "$1",
+>     "stocked": true,
+>     "name": "Dragonfruit"
+>   },
+>   {
+>     "category": "Fruits",
+>     "price": "$2",
+>     "stocked": false,
+>     "name": "Passionfruit"
+>   },
+>   {
+>     "category": "Vegetables",
+>     "price": "$2",
+>     "stocked": true,
+>     "name": "Spinach"
+>   },
+>   {
+>     "category": "Vegetables",
+>     "price": "$4",
+>     "stocked": false,
+>     "name": "Pumpkin"
+>   },
+>   { "category": "Vegetables", "price": "$1", "stocked": true, "name": "Peas" }
 > ]
 > ```
 >
@@ -998,6 +1053,7 @@ Use cases:
 > ![Image](/assets/s_thinking-in-react_ui_outline.png)
 >
 > Now that you’ve identified the components in the mockup, arrange them into a hierarchy. . . .
+>
 > - FilterableProductTable
 >   - SearchBar
 >   - ProductTable
@@ -1016,19 +1072,19 @@ Use cases:
 >
 > . . . You can either build “top down” by starting with building the components higher up in the hierarchy . . . or “bottom up” by working from components lower down . . . In simpler examples, it’s usually easier to go top-down, and on larger projects, it’s easier to go bottom-up.
 >
-> . . . After building your components, you’ll have a library of reusable components that render your data model. . . . The component at the top of the hierarchy . . . will take your data model as a prop. This is called *one-way data flow* because the data flows down from the top-level component to the ones at the bottom of the tree.
+> . . . After building your components, you’ll have a library of reusable components that render your data model. . . . The component at the top of the hierarchy . . . will take your data model as a prop. This is called _one-way data flow_ because the data flows down from the top-level component to the ones at the bottom of the tree.
 >
 > [React](https://react.dev/learn/thinking-in-react)
 
 ## Step 3: Identifying the State
 
-> To make the UI interactive, you need to let users change your underlying data model. You will use *state* for this.
+> To make the UI interactive, you need to let users change your underlying data model. You will use _state_ for this.
 >
 > Think of state as the minimal set of changing data that your app needs to remember. The most important principle for structuring state is to keep it DRY (Don’t Repeat Yourself). Figure out the absolute minimal representation of the state your application needs and compute everything else on-demand. . . .
 >
 > - Does it **remain unchanged** over time? If so, it isn’t state.
 > - Is it **passed in from a parent** via props? If so, it isn’t state.
-> - **Can you compute it** based on existing state or props in your component? If so, it *definitely* isn’t state!
+> - **Can you compute it** based on existing state or props in your component? If so, it _definitely_ isn’t state!
 >
 > [React](https://react.dev/learn/thinking-in-react)
 
@@ -1039,7 +1095,7 @@ Use cases:
 >
 > [React](https://react.dev/learn/thinking-in-react)
 
-> Props and state are different, but they work together. A parent component will often keep some information in state (so that it can change it), and *pass it down* to child components as their props.
+> Props and state are different, but they work together. A parent component will often keep some information in state (so that it can change it), and _pass it down_ to child components as their props.
 >
 > [React](https://react.dev/learn/thinking-in-react)
 
@@ -1048,7 +1104,8 @@ Use cases:
 > you need to identify which component is responsible for changing this state, or owns the state. Remember: React uses one-way data flow, passing data down the component hierarchy from parent to child component. . . .
 >
 > For each piece of state in your application:
-> 1. Identify *every* component that renders something based on that state.
+>
+> 1. Identify _every_ component that renders something based on that state.
 > 2. Find their closest common parent component—a component above them all in the hierarchy.
 > 3. Decide where the state should live:
 >    1. Often, you can put the state directly into their common parent.
@@ -1090,18 +1147,12 @@ Component design and development phases:
 > If a component has a lot of visual states, it can be convenient to show them all on one page:
 >
 > ```jsx
-> let statuses = [
->   'empty',
->   'typing',
->   'submitting',
->   'success',
->   'error',
-> ];
+> let statuses = ["empty", "typing", "submitting", "success", "error"];
 >
 > export default function App() {
 >   return (
 >     <>
->       {statuses.map(status => (
+>       {statuses.map((status) => (
 >         <section key={status}>
 >           <h4>Form ({status}):</h4>
 >           <Form status={status} />
@@ -1119,16 +1170,18 @@ Component design and development phases:
 ## Step 2: Identifying State Triggers
 
 > You can trigger state updates in response to two kinds of inputs:
+>
 > 1. **Human inputs**, like clicking a button, typing in a field, navigating a link.
 > 2. **Computer inputs**, like a network response arriving, a timeout completing, an image loading.
 >
 > [React](https://react.dev/learn/reacting-to-input-with-state)
 
 > For the form you’re developing, you will need to change state in response to a few different inputs:
-> - **Changing the text input** (human) should switch it from the *Empty* state to the *Typing* state or back, depending on whether the text box is empty or not.
-> - **Clicking the Submit button** (human) should switch it to the *Submitting* state.
-> - **Successful network response** (computer) should switch it to the *Success* state.
-> - **Failed network response** (computer) should switch it to the *Error* state with the matching error message.
+>
+> - **Changing the text input** (human) should switch it from the _Empty_ state to the _Typing_ state or back, depending on whether the text box is empty or not.
+> - **Clicking the Submit button** (human) should switch it to the _Submitting_ state.
+> - **Successful network response** (computer) should switch it to the _Success_ state.
+> - **Failed network response** (computer) should switch it to the _Error_ state with the matching error message.
 >
 > [React](https://react.dev/learn/reacting-to-input-with-state)
 
@@ -1142,13 +1195,14 @@ Component design and development phases:
 
 "you’ll need to represent the visual states of your component in memory with `useState`. Simplicity is key" ([React](https://react.dev/learn/reacting-to-input-with-state))
 
-"you’ll need to store the `answer` for the input, and the `error` (if it exists) to store the last error . . . Then, you’ll need a state variable representing which one of the visual states that you want to display. There’s usually more than a single way to represent that in memory, so you’ll need to experiment with it. . . . start by adding enough state that you’re *definitely* sure that all the possible visual states are covered . . . Your first idea likely won’t be the best, but that’s ok—refactoring state is a part of the process!" ([React](https://react.dev/learn/reacting-to-input-with-state))
+"you’ll need to store the `answer` for the input, and the `error` (if it exists) to store the last error . . . Then, you’ll need a state variable representing which one of the visual states that you want to display. There’s usually more than a single way to represent that in memory, so you’ll need to experiment with it. . . . start by adding enough state that you’re _definitely_ sure that all the possible visual states are covered . . . Your first idea likely won’t be the best, but that’s ok—refactoring state is a part of the process!" ([React](https://react.dev/learn/reacting-to-input-with-state))
 
 ## Step 4: Refactoring State
 
 "Spending a little time on refactoring your state structure will make your components easier to understand, reduce duplication, and avoid unintended meanings." ([React](https://react.dev/learn/reacting-to-input-with-state))
 
 > Here are some questions you can ask about your state variables:
+>
 > - **Does this state cause a paradox?** For example, `isTyping` and `isSubmitting` can’t both be `true`. A paradox usually means that the state is not constrained enough. There are four possible combinations of two booleans, but only three correspond to valid states. To remove the “impossible” state, you can combine these into a `status` that must be one of three values: `'typing'`, `'submitting'`, or `'success'`.
 > - **Is the same information available in another state variable already?** . . .
 > - **Can you get the same information from the inverse of another state variable?**
@@ -1170,13 +1224,14 @@ Component design and development phases:
 ## Overview
 
 > When you write a component that holds some state, you’ll have to make choices about how many state variables to use and what the shape of their data should be. . . . there are a few principles that can guide you to make better choices:
+>
 > 1. **Group related state.** If you always update two or more state variables at the same time, consider merging them into a single state variable.
 > 2. **Avoid contradictions in state.** When the state is structured in a way that several pieces of state may contradict and “disagree” with each other, you leave room for mistakes. Try to avoid this.
 > 3. **Avoid redundant state.** If you can calculate some information from the component’s props or its existing state variables during rendering, you should not put that information into that component’s state.
 > 4. **Avoid duplication in state.** When the same data is duplicated between multiple state variables, or within nested objects, it is difficult to keep them in sync. Reduce duplication when you can.
 > 5. **Avoid deeply nested state.** Deeply hierarchical state is not very convenient to update. When possible, prefer to structure state in a flat way.
 >
-> The goal behind these principles is *to make state easy to update without introducing mistakes*.
+> The goal behind these principles is _to make state easy to update without introducing mistakes_.
 >
 > [React](https://react.dev/learn/choosing-the-state-structure)
 
@@ -1197,7 +1252,7 @@ Component design and development phases:
 
 ## Avoiding State Duplications
 
-"instead of a `selectedItem` object (which creates a duplication with objects inside `items`), you hold the `selectedId` in state, and then get the `selectedItem` by searching the `items` array for an item with that ID . . . You didn’t need to hold *the selected item* in state, because only the *selected ID* is essential. The rest could be calculated during render." ([React](https://react.dev/learn/choosing-the-state-structure))
+"instead of a `selectedItem` object (which creates a duplication with objects inside `items`), you hold the `selectedId` in state, and then get the `selectedItem` by searching the `items` array for an item with that ID . . . You didn’t need to hold _the selected item_ in state, because only the _selected ID_ is essential. The rest could be calculated during render." ([React](https://react.dev/learn/choosing-the-state-structure))
 
 ## Avoiding Deep State Nesting
 
@@ -1212,12 +1267,14 @@ Component design and development phases:
 ## Reducers
 
 Definition:
-- "named after the `reduce()` operation that you can perform on arrays. . . . The function you pass to `reduce` is known as a “reducer”. It takes the *result so far* and the *current item*, then it returns the *next result*. React reducers are an example of the same idea: they take the *state so far* and the *action*, and return the *next state*. In this way, they accumulate actions over time into state." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+
+- "named after the `reduce()` operation that you can perform on arrays. . . . The function you pass to `reduce` is known as a “reducer”. It takes the _result so far_ and the _current item_, then it returns the _next result_. React reducers are an example of the same idea: they take the _state so far_ and the _action_, and return the _next state_. In this way, they accumulate actions over time into state." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
 - "Managing state with reducers is slightly different from directly setting state. Instead of telling React “what to do” by setting state, you specify “what the user just did” by dispatching “actions” from your event handlers. (The state update logic will live elsewhere!)" ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
 
 Usage:
 
 > To convert from `useState` to `useReducer`:
+>
 > 1. Dispatch actions from event handlers.
 > 2. Write a reducer function that returns the next state for a given state and action.
 > 3. Replace `useState` with `useReducer`.
@@ -1225,8 +1282,9 @@ Usage:
 > [React](https://react.dev/learn/extracting-state-logic-into-a-reducer)
 
 Rules:
+
 - Actions:
-  - "it should contain the minimal information about *what happened*." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+  - "it should contain the minimal information about _what happened_." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
   - "An action object can have any shape. By convention, it is common to give it a string `type` that describes what happened, and pass any additional information in other fields. The `type` is specific to a component, so in this example either `'added'` or `'added_task'` would be fine. Choose a name that says what happened!" ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
   - "**Each action describes a single user interaction, even if that leads to multiple changes in the data.** For example, if a user presses “Reset” on a form with five fields managed by a reducer, it makes more sense to dispatch one reset_form action rather than five separate set_field actions." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
 - Reducer:
@@ -1237,16 +1295,16 @@ Rules:
 Example (taken from [React](https://react.dev/learn/extracting-state-logic-into-a-reducer)):
 
 ```jsx
-import { useReducer } from 'react';
-import AddTask from './AddTask.js';
-import TaskList from './TaskList.js';
+import { useReducer } from "react";
+import AddTask from "./AddTask.js";
+import TaskList from "./TaskList.js";
 
 export default function TaskApp() {
   const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);
 
   function handleAddTask(text) {
     dispatch({
-      type: 'added',
+      type: "added",
       id: nextId++,
       text: text,
     });
@@ -1254,14 +1312,14 @@ export default function TaskApp() {
 
   function handleChangeTask(task) {
     dispatch({
-      type: 'changed',
+      type: "changed",
       task: task,
     });
   }
 
   function handleDeleteTask(taskId) {
     dispatch({
-      type: 'deleted',
+      type: "deleted",
       id: taskId,
     });
   }
@@ -1281,7 +1339,7 @@ export default function TaskApp() {
 
 function tasksReducer(tasks, action) {
   switch (action.type) {
-    case 'added': {
+    case "added": {
       return [
         ...tasks,
         {
@@ -1291,7 +1349,7 @@ function tasksReducer(tasks, action) {
         },
       ];
     }
-    case 'changed': {
+    case "changed": {
       return tasks.map((t) => {
         if (t.id === action.task.id) {
           return action.task;
@@ -1300,24 +1358,25 @@ function tasksReducer(tasks, action) {
         }
       });
     }
-    case 'deleted': {
+    case "deleted": {
       return tasks.filter((t) => t.id !== action.id);
     }
     default: {
-      throw Error('Unknown action: ' + action.type);
+      throw Error("Unknown action: " + action.type);
     }
   }
 }
 
 let nextId = 3;
 const initialTasks = [
-  {id: 0, text: 'Visit Kafka Museum', done: true},
-  {id: 1, text: 'Watch a puppet show', done: false},
-  {id: 2, text: 'Lennon Wall pic', done: false},
+  { id: 0, text: "Visit Kafka Museum", done: true },
+  { id: 1, text: "Watch a puppet show", done: false },
+  { id: 2, text: "Lennon Wall pic", done: false },
 ];
 ```
 
 Use cases:
+
 - General:
   - "It’s a matter of preference. You can always convert between `useState` and `useReducer` back and forth: they are equivalent!" ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
   - "We recommend using a reducer if you often encounter bugs due to incorrect state updates in some component, and want to introduce more structure to its code." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
@@ -1325,17 +1384,18 @@ Use cases:
 - Code maintainability:
   - "`useReducer` can help cut down on the code if many event handlers modify state in a similar way." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
   - "when the state updates . . . get more complex, they can bloat your component’s code and make it difficult to scan. In this case, `useReducer` lets you cleanly separate the `how` of update logic from the `what happened` of event handlers." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
-  - "Component logic can be easier to read when you separate concerns like this. Now the event handlers only specify *what happened* by dispatching actions, and the reducer function determines *how the state updates* in response to them." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+  - "Component logic can be easier to read when you separate concerns like this. Now the event handlers only specify _what happened_ by dispatching actions, and the reducer function determines _how the state updates_ in response to them." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
 - Debugging:
-  - "When you have a bug with `useState`, it can be difficult to tell *where* the state was set incorrectly, and *why*. With `useReducer`, you can add a console log into your reducer to see every state update, and *why* it happened (due to which `action`). If each `action` is correct, you’ll know that the mistake is in the reducer logic itself." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+  - "When you have a bug with `useState`, it can be difficult to tell _where_ the state was set incorrectly, and _why_. With `useReducer`, you can add a console log into your reducer to see every state update, and _why_ it happened (due to which `action`). If each `action` is correct, you’ll know that the mistake is in the reducer logic itself." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
 - Testing:
   - "A reducer is a pure function that doesn’t depend on your component. This means that you can export and test it separately in isolation. While generally it’s best to test components in a more realistic environment, for complex state update logic it can be useful to assert that your reducer returns a particular state for a particular initial state and action." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
 
 ## Context
 
 Definition:
+
 - "Context lets the parent component make some information available to any component in the tree below it—no matter how deep—without passing it explicitly through props." ([React](https://react.dev/learn/passing-data-deeply-with-context))
-- "Context lets you write components that “adapt to their surroundings” and display themselves differently depending on *where* (or, in other words, *in which context*) they are being rendered." ([React](https://react.dev/learn/passing-data-deeply-with-context))
+- "Context lets you write components that “adapt to their surroundings” and display themselves differently depending on _where_ (or, in other words, _in which context_) they are being rendered." ([React](https://react.dev/learn/passing-data-deeply-with-context))
 
 - Operation:
   - "How context works might remind you of CSS property inheritance. In CSS, you can specify `color: blue` for a `<div>`, and any DOM node inside of it, no matter how deep, will inherit that color unless some other DOM node in the middle overrides it with `color: green`. Similarly, in React, the only way to override some context coming from above is to wrap children into a context provider with a different value." ([React](https://react.dev/learn/passing-data-deeply-with-context))
@@ -1347,7 +1407,7 @@ Example (slightly modified version of the code from [React](https://react.dev/le
 ```jsx
 /* LevelContext.js */
 
-import { createContext } from 'react';
+import { createContext } from "react";
 
 export const LevelContext = createContext(0);
 ```
@@ -1355,23 +1415,23 @@ export const LevelContext = createContext(0);
 ```jsx
 /* Heading.js */
 
-import { useContext } from 'react';
-import { LevelContext } from './LevelContext.js';
+import { useContext } from "react";
+import { LevelContext } from "./LevelContext.js";
 
 export default function Heading({ children }) {
   const level = useContext(LevelContext);
 
-  switch(level) {
+  switch (level) {
     case 0:
-      throw Error('Heading must be inside a Section!');
+      throw Error("Heading must be inside a Section!");
     case 1:
-      return <h1>{children}</h1>
+      return <h1>{children}</h1>;
     case 2:
-      return <h2>{children}</h2>
+      return <h2>{children}</h2>;
     case 3:
-      return <h3>{children}</h3>
+      return <h3>{children}</h3>;
     default:
-      throw Error('Unknown level');
+      throw Error("Unknown level");
   }
 }
 ```
@@ -1379,8 +1439,8 @@ export default function Heading({ children }) {
 ```jsx
 /* Section.js */
 
-import { useContext } from 'react';
-import { LevelContext } from './LevelContext.js';
+import { useContext } from "react";
+import { LevelContext } from "./LevelContext.js";
 
 export default function Section({ children }) {
   const level = useContext(LevelContext);
@@ -1398,8 +1458,8 @@ export default function Section({ children }) {
 ```jsx
 /* App.js */
 
-import Heading from './Heading.js';
-import Section from './Section.js';
+import Heading from "./Heading.js";
+import Section from "./Section.js";
 
 export default function Page() {
   return (
@@ -1419,6 +1479,7 @@ export default function Page() {
 ```
 
 Use cases:
+
 - General:
   - "The nearest common ancestor could be far removed from the components that need data, and lifting state up that high can lead to a situation called “prop drilling”." ([React](https://react.dev/learn/passing-data-deeply-with-context))
   - "In general, if some information is needed by distant components in different parts of the tree, it’s a good indication that context will help you." ([React](https://react.dev/learn/passing-data-deeply-with-context))
@@ -1429,7 +1490,8 @@ Use cases:
 
 Alternatives:
 
-> Just because you need to pass some props several levels deep doesn’t mean you should put that information into context.  Here’s a few alternatives you should consider before using context:
+> Just because you need to pass some props several levels deep doesn’t mean you should put that information into context. Here’s a few alternatives you should consider before using context:
+>
 > 1. **Start by passing props.** If your components are not trivial, it’s not unusual to pass a dozen props down through a dozen components. It may feel like a slog, but it makes it very clear which components use which data! The person maintaining your code will be glad you’ve made the data flow explicit with props.
 > 2. **Extract components and pass JSX as children to them.** If you pass some data through many layers of intermediate components that don’t use that data (and only pass it further down), this often means that you forgot to extract some components along the way. For example, maybe you pass data props like `posts` to visual components that don’t use them directly, like `<Layout posts={posts} />`. Instead, make `Layout` take `children` as a prop, and render `<Layout><Posts posts={posts} /></Layout>`. This reduces the number of layers between the component specifying the data and the one that needs it.
 >
@@ -1444,6 +1506,7 @@ Alternatives:
 "You can have many context-reducer pairs like this in your app." ([React](https://react.dev/learn/scaling-up-with-reducer-and-context))
 
 > To provide state and the dispatch function to components below:
+>
 > 1. Create two contexts (for state and for dispatch functions).
 > 2. Provide both contexts from the component that uses the reducer.
 > 3. Use either context from components that need to read them.
@@ -1451,6 +1514,7 @@ Alternatives:
 > [React](https://react.dev/learn/scaling-up-with-reducer-and-context)
 
 > You can further declutter the components by moving all wiring into one file.
+>
 > - You can export a component like `TasksProvider` that provides context.
 > - You can also export custom Hooks like `useTasks` and `useTasksDispatch` to read it.
 >
@@ -1461,7 +1525,7 @@ Example (slightly modified version of the code from [React](https://react.dev/le
 ```jsx
 /* TasksContext.js */
 
-import { createContext, useContext, useReducer } from 'react';
+import { createContext, useContext, useReducer } from "react";
 
 const TasksContext = createContext(null);
 const TasksDispatchContext = createContext(null);
@@ -1487,16 +1551,19 @@ export function useTasksDispatch() {
 }
 
 function tasksReducer(tasks, action) {
-  switch(action.type) {
-    case 'added': {
-      return [...tasks, {
-        id: action.id,
-        text: action.text,
-        done: false
-      }];
+  switch (action.type) {
+    case "added": {
+      return [
+        ...tasks,
+        {
+          id: action.id,
+          text: action.text,
+          done: false,
+        },
+      ];
     }
-    case 'changed': {
-      return tasks.map(t => {
+    case "changed": {
+      return tasks.map((t) => {
         if (t.id === action.task.id) {
           return action.task;
         } else {
@@ -1504,19 +1571,19 @@ function tasksReducer(tasks, action) {
         }
       });
     }
-    case 'deleted': {
-      return tasks.filter(t => t.id !== action.id);
+    case "deleted": {
+      return tasks.filter((t) => t.id !== action.id);
     }
     default: {
-      throw Error('Unknown action: ' + action.type);
+      throw Error("Unknown action: " + action.type);
     }
   }
 }
 
 const initialTasks = [
-  { id: 0, text: 'Philosopher’s Path', done: true },
-  { id: 1, text: 'Visit the temple', done: false },
-  { id: 2, text: 'Drink matcha', done: false }
+  { id: 0, text: "Philosopher’s Path", done: true },
+  { id: 1, text: "Visit the temple", done: false },
+  { id: 2, text: "Drink matcha", done: false },
 ];
 ```
 
@@ -1524,7 +1591,7 @@ const initialTasks = [
 /* AddTask.js */
 
 /* ... */
-import { useTasksDispatch } from './TasksContext.js';
+import { useTasksDispatch } from "./TasksContext.js";
 
 export default function AddTask() {
   /* ... */
@@ -1536,9 +1603,9 @@ export default function AddTask() {
 ```jsx
 /* App.js */
 
-import AddTask from './AddTask.js';
-import TaskList from './TaskList.js';
-import { TasksProvider } from './TasksContext.js';
+import AddTask from "./AddTask.js";
+import TaskList from "./TaskList.js";
+import { TasksProvider } from "./TasksContext.js";
 
 export default function TaskApp() {
   return (
@@ -1553,20 +1620,24 @@ export default function TaskApp() {
 # Effects
 
 Definition:
+
 - "in this text, capitalized “Effect” refers to the React-specific definition . . . i.e. a side effect caused by rendering. To refer to the broader programming concept, we’ll say “side effect”." ([React](https://react.dev/learn/synchronizing-with-effects))
-- "Effects let you specify side effects that are caused by rendering itself, rather than by a particular event. Sending a message in the chat is an *event* because it is directly caused by the user clicking a specific button. However, setting up a server connection is an *Effect* because it should happen no matter which interaction caused the component to appear." ([React](https://react.dev/learn/synchronizing-with-effects))
+- "Effects let you specify side effects that are caused by rendering itself, rather than by a particular event. Sending a message in the chat is an _event_ because it is directly caused by the user clicking a specific button. However, setting up a server connection is an _Effect_ because it should happen no matter which interaction caused the component to appear." ([React](https://react.dev/learn/synchronizing-with-effects))
 - "Effects let you run some code after rendering so that you can synchronize your component with some system outside of React. . . . Effects run at the end of a commit after the screen updates. This is a good time to synchronize the React components with some external system (like network or a third-party library)." ([React](https://react.dev/learn/synchronizing-with-effects))
-- "Every time your component renders, React will update the screen *and then* run the code inside `useEffect`. In other words, `useEffect` “delays” a piece of code from running until that render is reflected on the screen. . . . By wrapping the DOM update in an Effect, you let React update the screen first. Then your Effect runs." ([React](https://react.dev/learn/synchronizing-with-effects))
+- "Every time your component renders, React will update the screen _and then_ run the code inside `useEffect`. In other words, `useEffect` “delays” a piece of code from running until that render is reflected on the screen. . . . By wrapping the DOM update in an Effect, you let React update the screen first. Then your Effect runs." ([React](https://react.dev/learn/synchronizing-with-effects))
 
 Reactivity:
+
 - "Props, state, and variables declared inside your component’s body are called reactive values. . . . They participate in the rendering data flow . . . can change due to a re-render" ([React](https://react.dev/learn/separating-events-from-effects))
 - > Event handlers and Effects respond to changes differently:
+  >
   > - **Logic inside event handlers is not reactive.** It will not run again unless the user performs the same interaction (e.g. a click) again. Event handlers can read reactive values without “reacting” to their changes.
   > - **Logic inside Effects is reactive.** If your Effect reads a reactive value, you have to specify it as a dependency. Then, if a re-render causes that value to change, React will re-run your Effect’s logic with the new value.
   >
   > [React](https://react.dev/learn/separating-events-from-effects)
 
 Lifecycle:
+
 - "Components can mount, update, and unmount. Each Effect has a separate lifecycle from the surrounding component. Each Effect describes a separate synchronization process that can start and stop. When you write and read Effects, think from each individual Effect’s perspective (how to start and stop synchronization) rather than from the component’s perspective (how it mounts, updates, or unmounts)." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
 - "Effects have a different lifecycle from components. Components may mount, update, or unmount. An Effect can only do two things: to start synchronizing something, and later to stop synchronizing it. . . . An Effect describes how to synchronize an external system to the current props and state. As your code changes, synchronization will need to happen more or less often." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
 - "Your Effect’s body specifies how to **start synchronizing** . . . The cleanup function returned by your Effect specifies how to **stop synchronizing**" ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
@@ -1574,8 +1645,9 @@ Lifecycle:
 - "Every time after your component re-renders, React will look at the array of dependencies that you have passed. If any of the values in the array is different from the value at the same spot that you passed during the previous render, React will re-synchronize your Effect." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
 
 Usage (based on [React](https://react.dev/learn/synchronizing-with-effects)):
+
 ```jsx
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 export default function Component() {
   useEffect(() => {
@@ -1587,6 +1659,7 @@ export default function Component() {
 ```
 
 Dependencies:
+
 - > ```jsx
   > useEffect(() => {
   >   // This runs after every render
@@ -1611,6 +1684,7 @@ Dependencies:
     >
     > [React](https://react.dev/learn/synchronizing-with-effects)
 - > If you have an existing codebase, you might have some Effects that suppress the linter like this:
+  >
   > ```jsx
   > useEffect(() => {
   >   // ...
@@ -1623,7 +1697,7 @@ Dependencies:
 - "All errors flagged by the linter are legitimate. There’s always a way to fix the code to not break the rules." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
 - "If your linter is configured for React, it will check that every reactive value used by your Effect’s code is declared as its dependency" ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
 - "You can’t “choose” your dependencies. Your dependencies must include every reactive value you read in the Effect. The linter enforces this." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
-- "you could . . . “prove” to the linter that these values aren’t reactive values, i.e. that they can’t change as a result of a re-render. For example, if `serverUrl` and `roomId` don’t depend on rendering and always have the same values, you can move them outside the component. Now they don’t need to be dependencies . . . You can also move them *inside the Effect*. They aren’t calculated during rendering, so they’re not reactive" ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
+- "you could . . . “prove” to the linter that these values aren’t reactive values, i.e. that they can’t change as a result of a re-render. For example, if `serverUrl` and `roomId` don’t depend on rendering and always have the same values, you can move them outside the component. Now they don’t need to be dependencies . . . You can also move them _inside the Effect_. They aren’t calculated during rendering, so they’re not reactive" ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
 - "the `ref` object has a stable identity: React guarantees you’ll always get the same object from the same `useRef` call on every render. It never changes, so it will never by itself cause the Effect to re-run. Therefore, it does not matter whether you include it or not. Including it is fine too . . . The `set` functions returned by `useState` also have stable identity, so you will often see them omitted from the dependencies too. If the linter lets you omit a dependency without errors, it is safe to do. Omitting always-stable dependencies only works when the linter can “see” that the object is stable. For example, if `ref` was passed from a parent component, you would have to specify it in the dependency array." ([React](https://react.dev/learn/synchronizing-with-effects))
 - "Why doesn’t `serverUrl` need to be a dependency? This is because the `serverUrl` never changes due to a re-render. It’s always the same no matter how many times the component re-renders and why. Since `serverUrl` never changes, it wouldn’t make sense to specify it as a dependency. After all, dependencies only do something when they change over time! On the other hand, `roomId` may be different on a re-render. Props, state, and other values declared inside the component are reactive because they’re calculated during rendering and participate in the React data flow. If `serverUrl` was a state variable, it would be reactive. Reactive values must be included in dependencies" ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
 - "Props and state aren’t the only reactive values. Values that you calculate from them are also reactive. If the props or state change, your component will re-render, and the values calculated from them will also change. This is why all variables from the component body used by the Effect should be in the Effect dependency list." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
@@ -1639,7 +1713,7 @@ Dependencies:
   >   useEffect(() => {
   >     const connection = createConnection();
   >     connection.connect();
-  >     connection.on('message', (receivedMessage) => {
+  >     connection.on("message", (receivedMessage) => {
   >       setMessages([...messages, receivedMessage]);
   >     });
   >     return () => connection.disconnect();
@@ -1648,7 +1722,7 @@ Dependencies:
   > }
   > ```
   >
-  > And making `messages` a dependency introduces a problem. Every time you receive a message, `setMessages()` causes the component to re-render with a new `messages` array that includes the received message. However, since this Effect now depends on `messages`, this will *also* re-synchronize the Effect. So every new message will make the chat re-connect. The user would not like that!
+  > And making `messages` a dependency introduces a problem. Every time you receive a message, `setMessages()` causes the component to re-render with a new `messages` array that includes the received message. However, since this Effect now depends on `messages`, this will _also_ re-synchronize the Effect. So every new message will make the chat re-connect. The user would not like that!
   >
   > To fix the issue, don’t read `messages` inside the Effect. Instead, pass an updater function to `setMessages`:
   >
@@ -1658,8 +1732,8 @@ Dependencies:
   >   useEffect(() => {
   >     const connection = createConnection();
   >     connection.connect();
-  >     connection.on('message', (receivedMessage) => {
-  >       setMessages(msgs => [...msgs, receivedMessage]);
+  >     connection.on("message", (receivedMessage) => {
+  >       setMessages((msgs) => [...msgs, receivedMessage]);
   >     });
   >     return () => connection.disconnect();
   >   }, [roomId]); // ✅ All dependencies declared
@@ -1671,11 +1745,12 @@ Dependencies:
   >
   > [React](https://react.dev/learn/removing-effect-dependencies)
 - "In JavaScript, each newly created object and function is considered distinct from all the others. It doesn’t matter that the contents inside of them may be the same! . . . Object and function dependencies can make your Effect re-synchronize more often than you need. This is why, whenever possible, you should try to avoid objects and functions as your Effect’s dependencies. Instead, try moving them outside the component, inside the Effect, or extracting primitive values out of them. . . . Move static objects and functions outside your component . . . Move dynamic objects and functions inside your Effect . . . If your object depends on some reactive value that may change as a result of a re-render . . . you can’t pull it outside your component. You can, however, move its creation inside of your Effect’s code" ([React](https://react.dev/learn/removing-effect-dependencies))
-- "You can write your own functions to group pieces of logic inside your Effect. As long as you also declare them *inside* your Effect, they’re not reactive values, and so they don’t need to be dependencies of your Effect." ([React](https://react.dev/learn/removing-effect-dependencies))
-- "Read primitive values from objects . . . Sometimes, you may receive an object from props . . . The risk here is that the parent component will create the object during rendering . . . This would cause your Effect to re-connect every time the parent component re-renders. To fix this, read information from the object *outside* the Effect, and avoid having object and function dependencies" ([React](https://react.dev/learn/removing-effect-dependencies))
+- "You can write your own functions to group pieces of logic inside your Effect. As long as you also declare them _inside_ your Effect, they’re not reactive values, and so they don’t need to be dependencies of your Effect." ([React](https://react.dev/learn/removing-effect-dependencies))
+- "Read primitive values from objects . . . Sometimes, you may receive an object from props . . . The risk here is that the parent component will create the object during rendering . . . This would cause your Effect to re-connect every time the parent component re-renders. To fix this, read information from the object _outside_ the Effect, and avoid having object and function dependencies" ([React](https://react.dev/learn/removing-effect-dependencies))
 - "Calculate primitive values from functions . . . For example, suppose the parent component passes a function . . . To avoid making it a dependency (and causing it to re-connect on re-renders), call it outside the Effect. . . . This only works for pure functions because they are safe to call during rendering." ([React](https://react.dev/learn/removing-effect-dependencies))
 
 Cleanup function:
+
 - "Some Effects don’t return a cleanup function at all. More often than not, you’ll want to return one—but if you don’t, React will behave as if you returned an empty cleanup function." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
 - "Imagine the `ChatRoom` component is a part of a larger app with many different screens. The user starts their journey on the `ChatRoom` page. The component mounts and calls `connection.connect()`. Then imagine the user navigates to another screen—for example, to the `Settings` page. The `ChatRoom` component unmounts. Finally, the user clicks Back and `ChatRoom` mounts again. This would set up a second connection—but the first connection was never destroyed! As the user navigates across the app, the connections would keep piling up. Bugs like this are easy to miss without extensive manual testing. To help you spot them quickly, in development React remounts every component once immediately after its initial mount. Seeing the `"✅ Connecting..."` log twice helps you notice the real issue: your code doesn’t close the connection when the component unmounts." ([React](https://react.dev/learn/synchronizing-with-effects))
 - > ```jsx
@@ -1693,6 +1768,7 @@ Cleanup function:
   > [React](https://react.dev/learn/synchronizing-with-effects)
 - "React will call your cleanup function each time before the Effect runs again, and one final time when the component unmounts" ([React](https://react.dev/learn/synchronizing-with-effects))
 - > Now you get three console logs in development:
+  >
   > ```
   > "✅ Connecting..."
   > "❌ Disconnected."
@@ -1703,6 +1779,7 @@ Cleanup function:
   >
   > [React](https://react.dev/learn/synchronizing-with-effects)
 - > Sometimes you need to add UI widgets that aren’t written to React. For example, let’s say you’re adding a map component to your page. It has a `setZoomLevel()` method, and you’d like to keep the zoom level in sync with a `zoomLevel` state variable in your React code. Your Effect would look similar to this:
+  >
   > ```jsx
   > useEffect(() => {
   >   const map = mapRef.current;
@@ -1731,8 +1808,8 @@ Cleanup function:
   >   function handleScroll(e) {
   >     console.log(window.scrollX, window.scrollY);
   >   }
-  >   window.addEventListener('scroll', handleScroll);
-  >   return () => window.removeEventListener('scroll', handleScroll);
+  >   window.addEventListener("scroll", handleScroll);
+  >   return () => window.removeEventListener("scroll", handleScroll);
   > }, []);
   > ```
   >
@@ -1779,16 +1856,18 @@ Cleanup function:
 - "Effects from each render are isolated from each other. If you’re curious how this works, you can read about closures." ([React](https://react.dev/learn/synchronizing-with-effects))
 
 Best practices:
+
 - "Resist adding unrelated logic to your Effect only because this logic needs to run at the same time as an Effect you already wrote. For example, let’s say you want to send an analytics event when the user visits the room. You already have an Effect that depends on `roomId`, so you might feel tempted to add the analytics call there . . . But imagine you later add another dependency to this Effect that needs to re-establish the connection. If this Effect re-synchronizes, it will also call `logVisit(roomId)` for the same room, which you did not intend. Logging the visit is a separate process from connecting. Write them as two separate Effects . . . Each Effect in your code should represent a separate and independent synchronization process." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
 - "deleting one Effect wouldn’t break the other Effect’s logic. This is a good indication that they synchronize different things, and so it made sense to split them up. On the other hand, if you split up a cohesive piece of logic into separate Effects, the code may look “cleaner” but will be more difficult to maintain. This is why you should think whether the processes are same or separate, not whether the code looks cleaner." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
 - "Check that your Effect represents an independent synchronization process. If your Effect doesn’t synchronize anything, it might be unnecessary. If it synchronizes several independent things, split it up." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
-- "If you want to read the latest value of props or state without “reacting” to it and re-synchronizing the Effect, you can split your Effect into a reactive part (which you’ll keep in the Effect) and a non-reactive part (which you’ll extract into something called an *Effect Event*)." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
+- "If you want to read the latest value of props or state without “reacting” to it and re-synchronizing the Effect, you can split your Effect into a reactive part (which you’ll keep in the Effect) and a non-reactive part (which you’ll extract into something called an _Effect Event_)." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
 - "Avoid relying on objects and functions as dependencies. If you create objects and functions during rendering and then read them from an Effect, they will be different on every render. This will cause your Effect to re-synchronize every time." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
 - "In general, whenever you have to resort to writing Effects, keep an eye out for when you can extract a piece of functionality into a custom Hook with a more declarative and purpose-built API . . . The fewer raw `useEffect` calls you have in your components, the easier you will find to maintain your application." ([React](https://react.dev/learn/you-might-not-need-an-effect))
 
 Use cases:
-- "Use Effects only for code that should run *because* the component was displayed to the user." ([React](https://react.dev/learn/you-might-not-need-an-effect))
-- "Keep in mind that Effects are typically used to “step out” of your React code and synchronize with some *external* system. This includes browser APIs, third-party widgets, network, and so on. If your Effect only adjusts some state based on other state, you might not need an Effect." ([React](https://react.dev/learn/synchronizing-with-effects))
+
+- "Use Effects only for code that should run _because_ the component was displayed to the user." ([React](https://react.dev/learn/you-might-not-need-an-effect))
+- "Keep in mind that Effects are typically used to “step out” of your React code and synchronize with some _external_ system. This includes browser APIs, third-party widgets, network, and so on. If your Effect only adjusts some state based on other state, you might not need an Effect." ([React](https://react.dev/learn/synchronizing-with-effects))
 - "You can use a similar approach to wrap legacy non-React code (like jQuery plugins) into declarative React components." ([React](https://react.dev/learn/synchronizing-with-effects))
 - "You can also fetch data with Effects: for example, you can synchronize the search results with the current search query. Keep in mind that modern frameworks provide more efficient built-in data fetching mechanisms than writing Effects directly in your components." ([React](https://react.dev/learn/you-might-not-need-an-effect))
 
@@ -1799,6 +1878,7 @@ Use cases:
 "Handling race conditions is not the only difficulty with implementing data fetching. You might also want to think about caching responses (so that the user can click Back and see the previous screen instantly), how to fetch data on the server (so that the initial server-rendered HTML contains the fetched content instead of a spinner), and how to avoid network waterfalls (so that a child can fetch data without waiting for every parent). These issues apply to any UI library, not just React. Solving them is not trivial, which is why modern frameworks provide more efficient built-in data fetching mechanisms than fetching data in Effects." ([React](https://react.dev/learn/you-might-not-need-an-effect))
 
 > data fetching is not trivial to do well, so we recommend the following approaches:
+>
 > - If you use a framework, use its built-in data fetching mechanism. Modern React frameworks have integrated data fetching mechanisms that are efficient and don’t suffer from the above pitfalls.
 > - Otherwise, consider using or building a client-side cache. Popular open source solutions include React Query, useSWR, and React Router 6.4+.
 >
@@ -1842,14 +1922,14 @@ Usage:
 >     let ignore = false;
 >
 >     fetch(url)
->       .then(response => response.json())
->       .then(json => {
+>       .then((response) => response.json())
+>       .then((json) => {
 >         if (!ignore) {
 >           setData(json);
 >         }
 >       });
 >
->     return () => ignore = true;
+>     return () => (ignore = true);
 >   }, [url]);
 >
 >   return data;
