@@ -1066,6 +1066,36 @@ General:
 Slightly modified version of the code from [React](https://react.dev/learn/scaling-up-with-reducer-and-context):
 
 ```jsx
+/* App.js */
+
+import AddTask from "./AddTask.js";
+import TaskList from "./TaskList.js";
+import { TasksProvider } from "./TasksContext.js";
+
+export default function TaskApp() {
+  return (
+    <TasksProvider>
+      <AddTask />
+      <TaskList />
+    </TasksProvider>
+  );
+}
+```
+
+```jsx
+/* AddTask.js */
+
+/* ... */
+import { useTasksDispatch } from "./TasksContext.js";
+
+export default function AddTask() {
+  /* ... */
+  const dispatch = useTasksDispatch();
+  /* ... */
+}
+```
+
+```jsx
 /* TasksContext.js */
 
 import { createContext, useContext, useReducer } from "react";
@@ -1128,36 +1158,6 @@ const initialTasks = [
   { id: 1, text: "Visit the temple", done: false },
   { id: 2, text: "Drink matcha", done: false },
 ];
-```
-
-```jsx
-/* AddTask.js */
-
-/* ... */
-import { useTasksDispatch } from "./TasksContext.js";
-
-export default function AddTask() {
-  /* ... */
-  const dispatch = useTasksDispatch();
-  /* ... */
-}
-```
-
-```jsx
-/* App.js */
-
-import AddTask from "./AddTask.js";
-import TaskList from "./TaskList.js";
-import { TasksProvider } from "./TasksContext.js";
-
-export default function TaskApp() {
-  return (
-    <TasksProvider>
-      <AddTask />
-      <TaskList />
-    </TasksProvider>
-  );
-}
 ```
 
 # UI Updates
