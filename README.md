@@ -23,11 +23,25 @@
   - General
   - `StrictMode`
   - Side Effects
+- **Rendering**
+  - General
+  - Local Variables
+  - State
 - **Built-In Components**
   - HTML Elements
   - `<Fragment>`
-- **Rendering**
+
+### UI Updates
+
+- **Overview**
 - **The Render Tree**
+
+### State Updates
+
+- **General**
+- **State Setter Function**
+  - Operation
+  - Best Practices
 
 ### JSX
 
@@ -378,6 +392,37 @@ export default function MyComponent({ counter, handler }) {
 
 "If you’ve exhausted all other options and can’t find the right event handler for your side effect, you can still attach it to your returned JSX with a `useEffect` call in your component. This tells React to execute it later, after rendering, when side effects are allowed. However, this approach should be your last resort. When possible, try to express your logic with rendering alone." ([React](https://react.dev/learn/keeping-components-pure))
 
+## Rendering
+
+### General
+
+> There are two reasons for a component to render:
+>
+> 1. It’s the component’s **initial render**.
+> 2. The component’s (or one of its ancestors’) **state has been updated**.
+>
+> [React](https://react.dev/learn/render-and-commit)
+
+### Local Variables
+
+"Local variables don’t persist between renders." ([React](https://react.dev/learn/state-a-components-memory))
+
+"Changes to local variables won’t trigger renders." ([React](https://react.dev/learn/state-a-components-memory))
+
+### State
+
+> To update a component with new data, two things need to happen:
+>
+> 1. **Retain** the data between renders.
+> 2. **Trigger** React to render the component with new data (re-rendering).
+>
+> The `useState` Hook provides those two things:
+>
+> 1. A **state variable** to retain the data between renders.
+> 2. A **state setter function** to update the variable and trigger React to render the component again.
+>
+> [React](https://react.dev/learn/state-a-components-memory)
+
 ## Built-In Components
 
 ### HTML Elements
@@ -394,76 +439,37 @@ export default function MyComponent({ counter, handler }) {
 
 "What do you do when each item needs to render not one, but several DOM nodes? The short `<>...</>` Fragment syntax won’t let you pass a key, so you need to either group them into a single `<div>`, or use the slightly longer and more explicit `<Fragment>` syntax . . . Fragments disappear from the DOM, so this will produce a flat list" ([React](https://react.dev/learn/rendering-lists))
 
-## Rendering
+# UI Updates
 
-- "Local variables don’t persist between renders." ([React](https://react.dev/learn/state-a-components-memory))
-- "Changes to local variables won’t trigger renders." ([React](https://react.dev/learn/state-a-components-memory))
-- > To update a component with new data, two things need to happen:
-  >
-  > 1. **Retain** the data between renders.
-  > 2. **Trigger** React to render the component with new data (re-rendering).
-  >
-  > The useState Hook provides those two things:
-  >
-  > 1. A **state variable** to retain the data between renders.
-  > 2. A **state setter function** to update the variable and trigger React to render the component again.
-  >
-  > [React](https://react.dev/learn/state-a-components-memory)
-- > process of requesting and serving UI has three steps:
-  >
-  > 1. Triggering a render . . .
-  > 2. Rendering the component . . .
-  > 3. Committing to the DOM
-  >
-  > [React](https://react.dev/learn/render-and-commit)
-- > There are two reasons for a component to render:
-  >
-  > 1. It’s the component’s **initial render**.
-  > 2. The component’s (or one of its ancestors’) **state has been updated**.
-  >
-  > [React](https://react.dev/learn/render-and-commit)
-- > After you trigger a render, React calls your components to figure out what to display on screen. “Rendering” is React calling your components.
-  >
-  > - On initial render, React will call the root component.
-  > - For subsequent renders, React will call the function component whose state update triggered the render.
-  >
-  > This process is recursive: if the updated component returns some other component, React will render that component next, and if that component also returns something, it will render that component next, and so on. The process will continue until there are no more nested components and React knows exactly what should be displayed on screen.
-  >
-  > [React](https://react.dev/learn/render-and-commit)
-- > After rendering (calling) your components, React will modify the DOM.
-  >
-  > - For the initial render, React will use the appendChild() DOM API to put all the DOM nodes it has created on screen.
-  > - For re-renders, React will apply the minimal necessary operations (calculated while rendering!) to make the DOM match the latest rendering output.
-  >
-  > [React](https://react.dev/learn/render-and-commit)
-- "React only changes the DOM nodes if there’s a difference between renders. . . . you can add some text into the `<input>`, updating its `value`, but the text doesn’t disappear when the component re-renders" ([React](https://react.dev/learn/render-and-commit))
-- "After rendering is done and React updated the DOM, the browser will repaint the screen. Although this process is known as “browser rendering”, we’ll refer to it as “painting” to avoid confusion throughout the docs." ([React](https://react.dev/learn/render-and-commit))
-- "state behaves more like a snapshot. Setting it does not change the state variable you already have, but instead triggers a re-render." ([React](https://react.dev/learn/state-as-a-snapshot))
-- "Setting state only changes it for the next render. . . . The state stored in React may have changed by the time the `alert` runs, but it was scheduled using a snapshot of the state at the time the user interacted with it! A state variable’s value never changes within a render, even if its event handler’s code is asynchronous. . . . the value of `number` continues to be `0` even after `setNumber(number + 5)` was called . . . React keeps the state values “fixed” within one render’s event handlers. . . . Event handlers created in the past have the state values from the render in which they were created." ([React](https://react.dev/learn/state-as-a-snapshot))
-- "React waits until all code in the event handlers has run before processing your state updates. . . . This behavior, also known as batching, makes your React app run much faster. . . . React does not batch across _multiple_ intentional events like clicks—each click is handled separately. Rest assured that React only does batching when it’s generally safe to do." ([React](https://react.dev/learn/queueing-a-series-of-state-updates))
-- > It is an uncommon use case, but if you would like to update the same state variable multiple times before the next render, instead of passing the next state value like `setNumber(number + 1)`, you can pass a function that calculates the next state based on the previous one in the queue, like `setNumber(n => n + 1)`. . . . `n => n + 1` is called an updater function. When you pass it to a state setter:
-  >
-  > 1. React queues this function to be processed after all the other code in the event handler has run.
-  > 2. During the next render, React goes through the queue and gives you the final updated state.
-  >
-  > . . . React takes the return value of your previous updater function and passes it to the next updater
-  >
-  > [React](https://react.dev/learn/queueing-a-series-of-state-updates)
-- `setNumber(number + 5); setNumber(n => n + 1);` (for `number === 0` initially) will result in `number === 6` in the next render (see [React](https://react.dev/learn/queueing-a-series-of-state-updates))
-- `setNumber(number + 5); setNumber(n => n + 1); setNumber(number + 4);` (for `number === 0` initially) will result in `number === 4` in the next render (see [React](https://react.dev/learn/queueing-a-series-of-state-updates))
-- "Updater functions run during rendering, so **updater functions must be pure** and only _return_ the result. Don’t try to set state from inside of them or run other side effects. In Strict Mode, React will run each updater function twice (but discard the second result) to help you find mistakes." ([React](https://react.dev/learn/queueing-a-series-of-state-updates))
-- > It’s common to name the updater function argument by the first letters of the corresponding state variable:
-  >
-  > ```jsx
-  > setEnabled((e) => !e);
-  > setLastName((ln) => ln.reverse());
-  > setFriendCount((fc) => fc * 2);
-  > ```
-  >
-  > If you prefer more verbose code, another common convention is to repeat the full state variable name, like `setEnabled(enabled => !enabled)`, or to use a prefix like `setEnabled(prevEnabled => !prevEnabled)`.
-  >
-  > [React](https://react.dev/learn/queueing-a-series-of-state-updates)
-- "`setState(5)` actually works like `setState(n => 5)`, but `n` is unused!" ([React](https://react.dev/learn/queueing-a-series-of-state-updates))
+## Overview
+
+> process of requesting and serving UI has three steps:
+>
+> 1. Triggering a render . . .
+> 2. Rendering the component . . .
+> 3. Committing to the DOM
+>
+> [React](https://react.dev/learn/render-and-commit)
+
+> After you trigger a render, React calls your components to figure out what to display on screen. “Rendering” is React calling your components.
+>
+> - On initial render, React will call the root component.
+> - For subsequent renders, React will call the function component whose state update triggered the render.
+>
+> This process is recursive: if the updated component returns some other component, React will render that component next, and if that component also returns something, it will render that component next, and so on. The process will continue until there are no more nested components and React knows exactly what should be displayed on screen.
+>
+> [React](https://react.dev/learn/render-and-commit)
+
+> After rendering (calling) your components, React will modify the DOM.
+>
+> - For the initial render, React will use the `appendChild()` DOM API to put all the DOM nodes it has created on screen.
+> - For re-renders, React will apply the minimal necessary operations (calculated while rendering!) to make the DOM match the latest rendering output.
+>
+> [React](https://react.dev/learn/render-and-commit)
+
+"React only changes the DOM nodes if there’s a difference between renders. . . . you can add some text into the `<input>`, updating its `value`, but the text doesn’t disappear when the component re-renders" ([React](https://react.dev/learn/render-and-commit))
+
+"After rendering is done and React updated the DOM, the browser will repaint the screen. Although this process is known as “browser rendering”, we’ll refer to it as “painting” to avoid confusion throughout the docs." ([React](https://react.dev/learn/render-and-commit))
 
 ## The Render Tree
 
@@ -582,6 +588,51 @@ export default function MyComponent({ counter, handler }) {
   > - You might also use a different source in addition to React state. For example, you probably want a message draft to persist even if the user accidentally closes the page. To implement this, you could have the `Chat` component initialize its state by reading from the `localStorage`, and save the drafts there too.
   >
   > [React](https://react.dev/learn/preserving-and-resetting-state)
+
+# State Updates
+
+## General
+
+"state behaves more like a snapshot. Setting it does not change the state variable you already have, but instead triggers a re-render." ([React](https://react.dev/learn/state-as-a-snapshot))
+
+"Setting state only changes it for the next render. . . . The state stored in React may have changed by the time the `alert` runs, but it was scheduled using a snapshot of the state at the time the user interacted with it! A state variable’s value never changes within a render, even if its event handler’s code is asynchronous. . . . the value of `number` continues to be `0` even after `setNumber(number + 5)` was called . . . React keeps the state values “fixed” within one render’s event handlers. . . . Event handlers created in the past have the state values from the render in which they were created." ([React](https://react.dev/learn/state-as-a-snapshot))
+
+"React waits until all code in the event handlers has run before processing your state updates. . . . This behavior, also known as batching, makes your React app run much faster. . . . React does not batch across _multiple_ intentional events like clicks—each click is handled separately. Rest assured that React only does batching when it’s generally safe to do." ([React](https://react.dev/learn/queueing-a-series-of-state-updates))
+
+## State Setter Function
+
+### Operation
+
+> It is an uncommon use case, but if you would like to update the same state variable multiple times before the next render, instead of passing the next state value like `setNumber(number + 1)`, you can pass a function that calculates the next state based on the previous one in the queue, like `setNumber(n => n + 1)`. . . . `n => n + 1` is called an updater function. When you pass it to a state setter:
+>
+> 1. React queues this function to be processed after all the other code in the event handler has run.
+> 2. During the next render, React goes through the queue and gives you the final updated state.
+>
+> . . . React takes the return value of your previous updater function and passes it to the next updater
+>
+> [React](https://react.dev/learn/queueing-a-series-of-state-updates)
+
+`setNumber(number + 5); setNumber(n => n + 1);` (for `number === 0` initially) will result in `number === 6` in the next render (see [React](https://react.dev/learn/queueing-a-series-of-state-updates))
+
+`setNumber(number + 5); setNumber(n => n + 1); setNumber(number + 4);` (for `number === 0` initially) will result in `number === 4` in the next render (see [React](https://react.dev/learn/queueing-a-series-of-state-updates))
+
+"`setState(5)` actually works like `setState(n => 5)`, but `n` is unused!" ([React](https://react.dev/learn/queueing-a-series-of-state-updates))
+
+### Best Practices
+
+"Updater functions run during rendering, so **updater functions must be pure** and only _return_ the result. Don’t try to set state from inside of them or run other side effects. In Strict Mode, React will run each updater function twice (but discard the second result) to help you find mistakes." ([React](https://react.dev/learn/queueing-a-series-of-state-updates))
+
+> It’s common to name the updater function argument by the first letters of the corresponding state variable:
+>
+> ```jsx
+> setEnabled((e) => !e);
+> setLastName((ln) => ln.reverse());
+> setFriendCount((fc) => fc * 2);
+> ```
+>
+> If you prefer more verbose code, another common convention is to repeat the full state variable name, like `setEnabled(enabled => !enabled)`, or to use a prefix like `setEnabled(prevEnabled => !prevEnabled)`.
+>
+> [React](https://react.dev/learn/queueing-a-series-of-state-updates)
 
 # JSX
 
