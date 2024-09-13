@@ -5,6 +5,10 @@
 ### Introduction
 
 - **Example**
+- **Project Structure**
+  - Component Organization
+  - The Module Dependency Tree
+  - Styling
 
 ### Components
 
@@ -24,10 +28,6 @@
   - `<Fragment>`
 - **Rendering**
 - **The Render Tree**
-- **The Module Dependency Tree**
-- **Organization**
-
-### Styling
 
 ### JSX
 
@@ -205,6 +205,38 @@ export default function MyComponent({ counter, handler }) {
   );
 }
 ```
+
+## Project Structure
+
+### Component Organization
+
+"many websites only use React to add interactivity to existing HTML pages. They have many root components instead of a single one for the entire page." ([React](https://react.dev/learn/your-first-component))
+
+"a root component file, named `App.js` . . . Depending on your setup, your root component could be in another file, though. If you use a framework with file-based routing, such as Next.js, your root component will be different for every page." ([React](https://react.dev/learn/importing-and-exporting-components))
+
+"Components are regular JavaScript functions, so you can keep multiple components in the same file. This is convenient when components are relatively small or tightly related to each other. If this file gets crowded, you can always move . . . to a separate file." ([React](https://react.dev/learn/your-first-component))
+
+### The Module Dependency Tree
+
+> As we break up our components and logic into separate files, we create JS modules where we may export components, functions, or constants. . . .
+>
+> ![Image](/assets/module_dependency_tree.webp)
+>
+> . . . The root node of the tree is the root module, also known as the entrypoint file. It often is the module that contains the root component.
+>
+> . . . Non-component modules, like `inspirations.js`, are also represented in this tree.
+>
+> . . . `Copyright.js` appears under `App.js` but in the render tree, `Copyright`, the component, appears as a child of `InspirationGenerator`. This is because `InspirationGenerator` accepts JSX as children props, so it renders `Copyright` as a child component but does not import the module.
+>
+> [React](https://react.dev/learn/understanding-your-ui-as-a-tree)
+
+"bundlers will use the dependency tree to determine what modules should be included." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
+
+"Large bundle sizes can delay the time for your UI to get drawn. Getting a sense of your app’s dependency tree may help with debugging these issues. . . . Dependency trees are useful for debugging large bundle sizes that slow time to paint" ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
+
+### Styling
+
+"React does not prescribe how you add CSS files. In the simplest case, you’ll add a `<link>` tag to your HTML." ([React](https://react.dev/learn))
 
 # Components
 
@@ -550,34 +582,6 @@ export default function MyComponent({ counter, handler }) {
   > - You might also use a different source in addition to React state. For example, you probably want a message draft to persist even if the user accidentally closes the page. To implement this, you could have the `Chat` component initialize its state by reading from the `localStorage`, and save the drafts there too.
   >
   > [React](https://react.dev/learn/preserving-and-resetting-state)
-
-## The Module Dependency Tree
-
-- > As we break up our components and logic into separate files, we create JS modules where we may export components, functions, or constants. . . .
-  >
-  > ![Image](/assets/module_dependency_tree.webp)
-  >
-  > . . . The root node of the tree is the root module, also known as the entrypoint file. It often is the module that contains the root component.
-  >
-  > . . . Non-component modules, like `inspirations.js`, are also represented in this tree.
-  >
-  > . . . `Copyright.js` appears under `App.js` but in the render tree, `Copyright`, the component, appears as a child of `InspirationGenerator`. This is because `InspirationGenerator` accepts JSX as children props, so it renders `Copyright` as a child component but does not import the module.
-  >
-  > [React](https://react.dev/learn/understanding-your-ui-as-a-tree)
-- "bundlers will use the dependency tree to determine what modules should be included." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
-- "Large bundle sizes can delay the time for your UI to get drawn. Getting a sense of your app’s dependency tree may help with debugging these issues. . . . Dependency trees are useful for debugging large bundle sizes that slow time to paint" ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
-
-## Organization
-
-- "many websites only use React to add interactivity to existing HTML pages. They have many root components instead of a single one for the entire page." ([React](https://react.dev/learn/your-first-component))
-- "a root component file, named `App.js` . . . Depending on your setup, your root component could be in another file, though. If you use a framework with file-based routing, such as Next.js, your root component will be different for every page." ([React](https://react.dev/learn/importing-and-exporting-components))
-- "Components are regular JavaScript functions, so you can keep multiple components in the same file. This is convenient when components are relatively small or tightly related to each other. If this file gets crowded, you can always move . . . to a separate file." ([React](https://react.dev/learn/your-first-component))
-
-# Styling
-
-> React does not prescribe how you add CSS files. In the simplest case, you’ll add a `<link>` tag to your HTML.
->
-> [React](https://react.dev/learn)
 
 # JSX
 
