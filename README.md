@@ -49,11 +49,11 @@
   - Update
     - Scheduling
     - Immutability
+      - Role
       - Operation
-      - Rules
+      - Best Practices
         - Objects
         - Arrays
-      - Effects
     - Setter Function
       - Role
       - Operation
@@ -601,11 +601,19 @@ export default function MyComponent({ counter, handler }) {
 
 #### Immutability
 
+##### Role
+
+"Avoiding direct data mutation lets you keep previous versions of the data intact, and reuse them later." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
+
+"By default, all child components re-render automatically when the state of a parent component changes. . . . Immutability makes it very cheap for components to compare whether their data has changed or not. You can learn more about how React chooses when to re-render a component in the `memo` API reference." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
+
+"When you store objects in state, mutating them will not trigger renders and will change the state in previous render “snapshots”." ([React](https://react.dev/learn/updating-objects-in-state))
+
 ##### Operation
 
 "state behaves more like a snapshot. Setting it does not change the state variable you already have, but instead triggers a re-render." ([React](https://react.dev/learn/state-as-a-snapshot))
 
-##### Rules
+##### Best Practices
 
 ###### Objects
 
@@ -663,14 +671,6 @@ export default function MyComponent({ counter, handler }) {
 > ```
 >
 > [React](https://react.dev/learn/updating-arrays-in-state)
-
-##### Effects
-
-"Avoiding direct data mutation lets you keep previous versions of the data intact, and reuse them later." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
-
-"By default, all child components re-render automatically when the state of a parent component changes. . . . Immutability makes it very cheap for components to compare whether their data has changed or not. You can learn more about how React chooses when to re-render a component in the `memo` API reference." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
-
-"When you store objects in state, mutating them will not trigger renders and will change the state in previous render “snapshots”." ([React](https://react.dev/learn/updating-objects-in-state))
 
 #### Setter Function
 
