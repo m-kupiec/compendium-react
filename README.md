@@ -18,15 +18,14 @@
   - Immutability
   - Forwarding
   - The `children` Prop
+- **Data**
+  - Local Variables
+  - State
 - **Returned Value**
 - **Purity**
   - General
   - `StrictMode`
   - Side Effects
-- **Rendering**
-  - General
-  - Local Variables
-  - State
 - **Built-In Components**
   - HTML Elements
   - `<Fragment>`
@@ -375,6 +374,28 @@ export default function MyComponent({ counter, handler }) {
   }
   ```
 
+## Data
+
+### Local Variables
+
+"Local variables don’t persist between renders." ([React](https://react.dev/learn/state-a-components-memory))
+
+"Changes to local variables won’t trigger renders." ([React](https://react.dev/learn/state-a-components-memory))
+
+### State
+
+> To update a component with new data, two things need to happen:
+>
+> 1. **Retain** the data between renders.
+> 2. **Trigger** React to render the component with new data (re-rendering).
+>
+> The `useState` Hook provides those two things:
+>
+> 1. A **state variable** to retain the data between renders.
+> 2. A **state setter function** to update the variable and trigger React to render the component again.
+>
+> [React](https://react.dev/learn/state-a-components-memory)
+
 ## Returned Value
 
 "In some situations, you won’t want to render anything at all. . . . A component must return something. In this case, you can return `null` . . . In practice, returning `null` from a component isn’t common . . . More often, you would conditionally include or exclude the component in the parent component’s JSX." ([React](https://react.dev/learn/conditional-rendering))
@@ -411,37 +432,6 @@ export default function MyComponent({ counter, handler }) {
 "In React, side effects usually belong inside event handlers. . . . Even though event handlers are defined _inside_ your component, they don’t run _during_ rendering! So event handlers don’t need to be pure." ([React](https://react.dev/learn/keeping-components-pure))
 
 "If you’ve exhausted all other options and can’t find the right event handler for your side effect, you can still attach it to your returned JSX with a `useEffect` call in your component. This tells React to execute it later, after rendering, when side effects are allowed. However, this approach should be your last resort. When possible, try to express your logic with rendering alone." ([React](https://react.dev/learn/keeping-components-pure))
-
-## Rendering
-
-### General
-
-> There are two reasons for a component to render:
->
-> 1. It’s the component’s **initial render**.
-> 2. The component’s (or one of its ancestors’) **state has been updated**.
->
-> [React](https://react.dev/learn/render-and-commit)
-
-### Local Variables
-
-"Local variables don’t persist between renders." ([React](https://react.dev/learn/state-a-components-memory))
-
-"Changes to local variables won’t trigger renders." ([React](https://react.dev/learn/state-a-components-memory))
-
-### State
-
-> To update a component with new data, two things need to happen:
->
-> 1. **Retain** the data between renders.
-> 2. **Trigger** React to render the component with new data (re-rendering).
->
-> The `useState` Hook provides those two things:
->
-> 1. A **state variable** to retain the data between renders.
-> 2. A **state setter function** to update the variable and trigger React to render the component again.
->
-> [React](https://react.dev/learn/state-a-components-memory)
 
 ## Built-In Components
 
@@ -1193,6 +1183,13 @@ const initialTasks = [
 "After rendering is done and React updated the DOM, the browser will repaint the screen. Although this process is known as “browser rendering”, we’ll refer to it as “painting” to avoid confusion throughout the docs." ([React](https://react.dev/learn/render-and-commit))
 
 ## The Render Tree
+
+> There are two reasons for a component to render:
+>
+> 1. It’s the component’s **initial render**.
+> 2. The component’s (or one of its ancestors’) **state has been updated**.
+>
+> [React](https://react.dev/learn/render-and-commit)
 
 "As we nest components, we have the concept of parent and child components, where each parent component may itself be a child of another component. When we render a React app, we can model this relationship in a tree, known as the render tree." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
 
