@@ -2,7 +2,9 @@
 
 ## TOC
 
-### Overview
+### Introduction
+
+- **Example**
 
 ### Components
 
@@ -109,7 +111,63 @@
   - Children
   - `style` Property
 
-# Overview
+# Introduction
+
+## Example
+
+```html
+<!-- index.html -->
+
+<!-- ... -->
+  <body>
+    <div id="root"></div>
+
+    <script src="/src/main.jsx" type="module"></script>
+  </body>
+</html>
+```
+
+```jsx
+/* main.jsx */
+
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.jsx";
+import "./styles/index.css";
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+```
+
+```jsx
+/* App.jsx */
+
+import { useState } from 'react';
+import MyComponent  from './components/MyComponent.jsx';
+import myLogo       from './assets/logo.svg';
+import                   './styles/App.css';
+
+export default function App() {
+  const [ count, setCount ] = useState(0);
+
+  function handleClick() {
+    setCount(count + 1);
+    // OR:
+    // setCount(c => c + 1);
+  }
+
+  return (
+    <>
+      <MyComponent counter={count} handler={handleClick} />
+      <p className="class1">...</p>
+      <img src={myLogo} alt="App">
+    </>
+  )
+}
+```
 
 ```jsx
 /* MyComponent.jsx */
@@ -142,60 +200,6 @@ export default function MyComponent({ counter, handler }) {
     </>
   );
 }
-```
-
-```jsx
-/* App.jsx */
-
-import { useState } from 'react';
-import MyComponent  from './components/MyComponent.jsx';
-import myLogo       from './assets/logo.svg';
-import                   './styles/App.css';
-
-export default function App() {
-  const [ count, setCount ] = useState(0);
-
-  function handleClick() {
-    setCount(count + 1);
-    // OR:
-    // setCount(c => c + 1);
-  }
-
-  return (
-    <>
-      <MyComponent counter={count} handler={handleClick} />
-      <p className="class1">...</p>
-      <img src={myLogo} alt="App">
-    </>
-  )
-}
-```
-
-```jsx
-/* main.jsx */
-
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
-import "./styles/index.css";
-
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
-```
-
-```html
-<!-- index.html -->
-
-<!-- ... -->
-  <body>
-    <div id="root"></div>
-
-    <script src="/src/main.jsx" type="module"></script>
-  </body>
-</html>
 ```
 
 # Components
