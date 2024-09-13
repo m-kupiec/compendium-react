@@ -41,6 +41,9 @@
   - Avoiding Duplication
   - Avoiding Dependence on Props
   - Avoiding Deep State Nesting
+- **Sharing**
+  - Bounds
+  - Lifting Up
 - **Management**
   - Preservation/Destruction
   - Update
@@ -81,7 +84,6 @@
 
 ### State
 
-- **Sharing State**
 - **Data Immutability and Rendering**
 
 ### Application Design & Development
@@ -496,6 +498,22 @@ export default function MyComponent({ counter, handler }) {
 "If the state is too nested to update easily, consider making it “flat” . . . (also known as “normalized”)" ([React](https://react.dev/learn/choosing-the-state-structure))
 
 "Sometimes, you can also reduce state nesting by moving some of the nested state into the child components. This works well for ephemeral UI state that doesn’t need to be stored, like whether an item is hovered." ([React](https://react.dev/learn/choosing-the-state-structure))
+
+## Sharing
+
+### Bounds
+
+"State is local to a component instance . . . if you render the same component twice, each copy will have completely isolated state" ([React](https://react.dev/learn/state-a-components-memory))
+
+"state is fully private to the component declaring it. The parent component can’t change it." ([React](https://react.dev/learn/state-a-components-memory))
+
+### Lifting Up
+
+"To collect data from multiple children, or to have two child components communicate with each other, declare the shared state in their parent component instead. The parent component can pass that state back down to the children via props. This keeps the child components in sync with each other and with their parent." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
+
+"Lifting state into a parent component is common when React components are refactored." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
+
+"It is common to call a component with some local state “uncontrolled”. . . . In contrast, you might say a component is “controlled” when the important information in it is driven by props rather than its own local state. This lets the parent component fully specify its behavior. . . . Uncontrolled components are easier to use within their parents because they require less configuration. But they’re less flexible when you want to coordinate them together. Controlled components are maximally flexible, but they require the parent components to fully configure them with props. In practice, “controlled” and “uncontrolled” aren’t strict technical terms—each component usually has some mix of both local state and props. However, this is a useful way to talk about how components are designed and what capabilities they offer." ([React](https://react.dev/learn/sharing-state-between-components))
 
 ## Management
 
@@ -1127,14 +1145,6 @@ Use cases:
     > [React](https://react.dev/learn/responding-to-events)
 
 # State
-
-## Sharing State
-
-- "State is local to a component instance . . . if you render the same component twice, each copy will have completely isolated state" ([React](https://react.dev/learn/state-a-components-memory))
-- "state is fully private to the component declaring it. The parent component can’t change it." ([React](https://react.dev/learn/state-a-components-memory))
-- "To collect data from multiple children, or to have two child components communicate with each other, declare the shared state in their parent component instead. The parent component can pass that state back down to the children via props. This keeps the child components in sync with each other and with their parent." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
-- "Lifting state into a parent component is common when React components are refactored." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
-- "It is common to call a component with some local state “uncontrolled”. . . . In contrast, you might say a component is “controlled” when the important information in it is driven by props rather than its own local state. This lets the parent component fully specify its behavior. . . . Uncontrolled components are easier to use within their parents because they require less configuration. But they’re less flexible when you want to coordinate them together. Controlled components are maximally flexible, but they require the parent components to fully configure them with props. In practice, “controlled” and “uncontrolled” aren’t strict technical terms—each component usually has some mix of both local state and props. However, this is a useful way to talk about how components are designed and what capabilities they offer." ([React](https://react.dev/learn/sharing-state-between-components))
 
 ## Data Immutability and Rendering
 
