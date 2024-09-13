@@ -939,11 +939,53 @@ Testing:
 Slightly modified version of the code from [React](https://react.dev/learn/passing-data-deeply-with-context):
 
 ```jsx
+/* App.js */
+
+import Heading from "./Heading.js";
+import Section from "./Section.js";
+
+export default function Page() {
+  return (
+    <Section>
+      <Heading>Heading #1</Heading>
+
+      <Section>
+        <Heading>Heading #2</Heading>
+
+        <Section>
+          <Heading>Heading #3</Heading>
+        </Section>
+      </Section>
+    </Section>
+  );
+}
+```
+
+```jsx
 /* LevelContext.js */
 
 import { createContext } from "react";
 
 export const LevelContext = createContext(0);
+```
+
+```jsx
+/* Section.js */
+
+import { useContext } from "react";
+import { LevelContext } from "./LevelContext.js";
+
+export default function Section({ children }) {
+  const level = useContext(LevelContext);
+
+  return (
+    <section>
+      <LevelContext.Provider value={level + 1}>
+        {children}
+      </LevelContext.Provider>
+    </section>
+  );
+}
 ```
 
 ```jsx
@@ -967,48 +1009,6 @@ export default function Heading({ children }) {
     default:
       throw Error("Unknown level");
   }
-}
-```
-
-```jsx
-/* Section.js */
-
-import { useContext } from "react";
-import { LevelContext } from "./LevelContext.js";
-
-export default function Section({ children }) {
-  const level = useContext(LevelContext);
-
-  return (
-    <section>
-      <LevelContext.Provider value={level + 1}>
-        {children}
-      </LevelContext.Provider>
-    </section>
-  );
-}
-```
-
-```jsx
-/* App.js */
-
-import Heading from "./Heading.js";
-import Section from "./Section.js";
-
-export default function Page() {
-  return (
-    <Section>
-      <Heading>Heading #1</Heading>
-
-      <Section>
-        <Heading>Heading #2</Heading>
-
-        <Section>
-          <Heading>Heading #3</Heading>
-        </Section>
-      </Section>
-    </Section>
-  );
 }
 ```
 
