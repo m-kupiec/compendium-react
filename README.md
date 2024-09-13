@@ -81,7 +81,6 @@
 
 ### State
 
-- **Defining State**
 - **Sharing State**
 - **Data Immutability and Rendering**
 
@@ -464,6 +463,8 @@ export default function MyComponent({ counter, handler }) {
 
 ### Grouping Related Data
 
+"It is a good idea to have multiple state variables if their state is unrelated . . . But if you find that you often change two state variables together, it might be easier to combine them into one. For example, if you have a form with many fields, it’s more convenient to have a single state variable that holds an object than state variable per field." ([React](https://react.dev/learn/state-a-components-memory))
+
 "if some two state variables always change together, it might be a good idea to unify them into a single state variable." ([React](https://react.dev/learn/choosing-the-state-structure))
 
 "Another case where you’ll group data into an object or an array is when you don’t know how many pieces of state you’ll need. For example, it’s helpful when you have a form where the user can add custom fields." ([React](https://react.dev/learn/choosing-the-state-structure))
@@ -475,6 +476,8 @@ export default function MyComponent({ counter, handler }) {
 ### Avoiding Redundancy
 
 "If you can calculate some information from the component’s props or its existing state variables during rendering, you should not put that information into that component’s state." ([React](https://react.dev/learn/choosing-the-state-structure))
+
+"you may notice that `xIsNext === true` when `currentMove` is even and `xIsNext === false` when `currentMove` is odd. In other words, if you know the value of `currentMove`, then you can always figure out what `xIsNext` should be. There’s no reason for you to store both of these in state. In fact, always try to avoid redundant state. Simplifying what you store in state reduces bugs and makes your code easier to understand. Change `Game` so that it doesn’t store `xIsNext` as a separate state variable and instead figures it out based on the `currentMove` . . . You no longer need the `xIsNext` state declaration or the calls to `setXIsNext`. Now, there’s no chance for `xIsNext` to get out of sync with `currentMove`, even if you make a mistake while coding the components." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
 
 ### Avoiding Duplication
 
@@ -1124,11 +1127,6 @@ Use cases:
     > [React](https://react.dev/learn/responding-to-events)
 
 # State
-
-## Defining State
-
-- "you may notice that `xIsNext === true` when `currentMove` is even and `xIsNext === false` when `currentMove` is odd. In other words, if you know the value of `currentMove`, then you can always figure out what `xIsNext` should be. There’s no reason for you to store both of these in state. In fact, always try to avoid redundant state. Simplifying what you store in state reduces bugs and makes your code easier to understand. Change `Game` so that it doesn’t store `xIsNext` as a separate state variable and instead figures it out based on the `currentMove` . . . You no longer need the `xIsNext` state declaration or the calls to `setXIsNext`. Now, there’s no chance for `xIsNext` to get out of sync with `currentMove`, even if you make a mistake while coding the components." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
-- "It is a good idea to have multiple state variables if their state is unrelated . . . But if you find that you often change two state variables together, it might be easier to combine them into one. For example, if you have a form with many fields, it’s more convenient to have a single state variable that holds an object than state variable per field." ([React](https://react.dev/learn/state-a-components-memory))
 
 ## Sharing State
 
