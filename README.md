@@ -60,6 +60,24 @@
   - Reset
     - Different Position
     - Different `key`
+- **Management**
+  - Reducers
+    - Definition
+    - Usage
+    - Best Practices
+      - Actions
+      - Reducer
+    - Example
+    - Use Cases
+  - Context
+    - Definition
+    - Operation
+    - Example
+    - Use Cases
+    - Alternatives
+  - Reducers With Context
+    - General
+    - Example
 
 ### UI Updates
 
@@ -104,12 +122,6 @@
 - **Step 3: Drafting State**
 - **Step 4: Refactoring State**
 - **Step 5: Connecting State and Triggers**
-
-### State Management
-
-- **Reducers**
-- **Context**
-- **Reducers With Context**
 
 ### Effects
 
@@ -760,6 +772,393 @@ export default function MyComponent({ counter, handler }) {
 "keys are not globally unique. They only specify the position _within_ the parent." ([React](https://react.dev/learn/preserving-and-resetting-state))
 
 "Resetting state with a key is particularly useful when dealing with forms." ([React](https://react.dev/learn/preserving-and-resetting-state))
+
+## Management
+
+### Reducers
+
+#### Definition
+
+"named after the `reduce()` operation that you can perform on arrays. . . . The function you pass to `reduce` is known as a “reducer”. It takes the _result so far_ and the _current item_, then it returns the _next result_. React reducers are an example of the same idea: they take the _state so far_ and the _action_, and return the _next state_. In this way, they accumulate actions over time into state." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+
+"Managing state with reducers is slightly different from directly setting state. Instead of telling React “what to do” by setting state, you specify “what the user just did” by dispatching “actions” from your event handlers. (The state update logic will live elsewhere!)" ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+
+#### Usage
+
+> To convert from `useState` to `useReducer`:
+>
+> 1. Dispatch actions from event handlers.
+> 2. Write a reducer function that returns the next state for a given state and action.
+> 3. Replace `useState` with `useReducer`.
+>
+> [React](https://react.dev/learn/extracting-state-logic-into-a-reducer)
+
+#### Best Practices
+
+##### Actions
+
+"it should contain the minimal information about _what happened_." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+
+"An action object can have any shape. By convention, it is common to give it a string `type` that describes what happened, and pass any additional information in other fields. The `type` is specific to a component, so in this example either `'added'` or `'added_task'` would be fine. Choose a name that says what happened!" ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+
+"**Each action describes a single user interaction, even if that leads to multiple changes in the data.** For example, if a user presses “Reset” on a form with five fields managed by a reducer, it makes more sense to dispatch one reset_form action rather than five separate set_field actions." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+
+##### Reducer
+
+"Because the reducer function takes state . . . as an argument, you can declare it outside of your component. This decreases the indentation level and can make your code easier to read." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+
+"it’s a convention to use `switch` statements inside reducers. . . . We recommend wrapping each case block into the `{` and `}` curly braces so that variables declared inside of different `case`s don’t clash with each other." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+
+"**Reducers must be pure.** Similar to state updater functions, reducers run during rendering! (Actions are queued until the next render.) This means that reducers must be pure—same inputs always result in the same output. They should not send requests, schedule timeouts, or perform any side effects (operations that impact things outside the component). They should update objects and arrays without mutations." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+
+#### Example
+
+Taken from [React](https://react.dev/learn/extracting-state-logic-into-a-reducer):
+
+```jsx
+import { useReducer } from "react";
+import AddTask from "./AddTask.js";
+import TaskList from "./TaskList.js";
+
+export default function TaskApp() {
+  const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);
+
+  function handleAddTask(text) {
+    dispatch({
+      type: "added",
+      id: nextId++,
+      text: text,
+    });
+  }
+
+  function handleChangeTask(task) {
+    dispatch({
+      type: "changed",
+      task: task,
+    });
+  }
+
+  function handleDeleteTask(taskId) {
+    dispatch({
+      type: "deleted",
+      id: taskId,
+    });
+  }
+
+  return (
+    <>
+      <h1>Prague itinerary</h1>
+      <AddTask onAddTask={handleAddTask} />
+      <TaskList
+        tasks={tasks}
+        onChangeTask={handleChangeTask}
+        onDeleteTask={handleDeleteTask}
+      />
+    </>
+  );
+}
+
+function tasksReducer(tasks, action) {
+  switch (action.type) {
+    case "added": {
+      return [
+        ...tasks,
+        {
+          id: action.id,
+          text: action.text,
+          done: false,
+        },
+      ];
+    }
+    case "changed": {
+      return tasks.map((t) => {
+        if (t.id === action.task.id) {
+          return action.task;
+        } else {
+          return t;
+        }
+      });
+    }
+    case "deleted": {
+      return tasks.filter((t) => t.id !== action.id);
+    }
+    default: {
+      throw Error("Unknown action: " + action.type);
+    }
+  }
+}
+
+let nextId = 3;
+const initialTasks = [
+  { id: 0, text: "Visit Kafka Museum", done: true },
+  { id: 1, text: "Watch a puppet show", done: false },
+  { id: 2, text: "Lennon Wall pic", done: false },
+];
+```
+
+#### Use Cases
+
+General:
+
+- "It’s a matter of preference. You can always convert between `useState` and `useReducer` back and forth: they are equivalent!" ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+- "We recommend using a reducer if you often encounter bugs due to incorrect state updates in some component, and want to introduce more structure to its code." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+- "You don’t have to use reducers for everything: feel free to mix and match! You can even `useState` and `useReducer` in the same component." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+
+Code maintainability:
+
+- "`useReducer` can help cut down on the code if many event handlers modify state in a similar way." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+- "when the state updates . . . get more complex, they can bloat your component’s code and make it difficult to scan. In this case, `useReducer` lets you cleanly separate the _how_ of update logic from the _what happened_ of event handlers." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+- "Component logic can be easier to read when you separate concerns like this. Now the event handlers only specify _what happened_ by dispatching actions, and the reducer function determines _how the state updates_ in response to them." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+
+Debugging:
+
+- "When you have a bug with `useState`, it can be difficult to tell _where_ the state was set incorrectly, and _why_. With `useReducer`, you can add a console log into your reducer to see every state update, and _why_ it happened (due to which `action`). If each `action` is correct, you’ll know that the mistake is in the reducer logic itself." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+
+Testing:
+
+- "A reducer is a pure function that doesn’t depend on your component. This means that you can export and test it separately in isolation. While generally it’s best to test components in a more realistic environment, for complex state update logic it can be useful to assert that your reducer returns a particular state for a particular initial state and action." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
+
+### Context
+
+#### Definition
+
+"Context lets the parent component make some information available to any component in the tree below it—no matter how deep—without passing it explicitly through props." ([React](https://react.dev/learn/passing-data-deeply-with-context))
+
+"Context lets you write components that “adapt to their surroundings” and display themselves differently depending on _where_ (or, in other words, _in which context_) they are being rendered." ([React](https://react.dev/learn/passing-data-deeply-with-context))
+
+#### Operation
+
+"How context works might remind you of CSS property inheritance. In CSS, you can specify `color: blue` for a `<div>`, and any DOM node inside of it, no matter how deep, will inherit that color unless some other DOM node in the middle overrides it with `color: green`. Similarly, in React, the only way to override some context coming from above is to wrap children into a context provider with a different value." ([React](https://react.dev/learn/passing-data-deeply-with-context))
+
+"different React contexts don’t override each other. Each context that you make with `createContext()` is completely separate from other ones . . . One component may use or provide many different contexts without a problem." ([React](https://react.dev/learn/passing-data-deeply-with-context))
+
+"Context is not limited to static values. If you pass a different value on the next render, React will update all the components reading it below! This is why context is often used in combination with state." ([React](https://react.dev/learn/passing-data-deeply-with-context))
+
+#### Example
+
+Slightly modified version of the code from [React](https://react.dev/learn/passing-data-deeply-with-context):
+
+```jsx
+/* LevelContext.js */
+
+import { createContext } from "react";
+
+export const LevelContext = createContext(0);
+```
+
+```jsx
+/* Heading.js */
+
+import { useContext } from "react";
+import { LevelContext } from "./LevelContext.js";
+
+export default function Heading({ children }) {
+  const level = useContext(LevelContext);
+
+  switch (level) {
+    case 0:
+      throw Error("Heading must be inside a Section!");
+    case 1:
+      return <h1>{children}</h1>;
+    case 2:
+      return <h2>{children}</h2>;
+    case 3:
+      return <h3>{children}</h3>;
+    default:
+      throw Error("Unknown level");
+  }
+}
+```
+
+```jsx
+/* Section.js */
+
+import { useContext } from "react";
+import { LevelContext } from "./LevelContext.js";
+
+export default function Section({ children }) {
+  const level = useContext(LevelContext);
+
+  return (
+    <section>
+      <LevelContext.Provider value={level + 1}>
+        {children}
+      </LevelContext.Provider>
+    </section>
+  );
+}
+```
+
+```jsx
+/* App.js */
+
+import Heading from "./Heading.js";
+import Section from "./Section.js";
+
+export default function Page() {
+  return (
+    <Section>
+      <Heading>Heading #1</Heading>
+
+      <Section>
+        <Heading>Heading #2</Heading>
+
+        <Section>
+          <Heading>Heading #3</Heading>
+        </Section>
+      </Section>
+    </Section>
+  );
+}
+```
+
+#### Use Cases
+
+General:
+
+- "The nearest common ancestor could be far removed from the components that need data, and lifting state up that high can lead to a situation called “prop drilling”." ([React](https://react.dev/learn/passing-data-deeply-with-context))
+- "In general, if some information is needed by distant components in different parts of the tree, it’s a good indication that context will help you." ([React](https://react.dev/learn/passing-data-deeply-with-context))
+
+"**Theming:** If your app lets the user change its appearance (e.g. dark mode), you can put a context provider at the top of your app, and use that context in components that need to adjust their visual look." ([React](https://react.dev/learn/passing-data-deeply-with-context))
+
+"**Current account:** Many components might need to know the currently logged in user. Putting it in context makes it convenient to read it anywhere in the tree. Some apps also let you operate multiple accounts at the same time (e.g. to leave a comment as a different user). In those cases, it can be convenient to wrap a part of the UI into a nested provider with a different current account value." ([React](https://react.dev/learn/passing-data-deeply-with-context))
+
+"**Routing:** Most routing solutions use context internally to hold the current route. This is how every link “knows” whether it’s active or not. If you build your own router, you might want to do it too." ([React](https://react.dev/learn/passing-data-deeply-with-context))
+
+"**Managing state:** As your app grows, you might end up with a lot of state closer to the top of your app. Many distant components below may want to change it. It is common to use a reducer together with context to manage complex state and pass it down to distant components without too much hassle." ([React](https://react.dev/learn/passing-data-deeply-with-context))
+
+#### Alternatives
+
+> Just because you need to pass some props several levels deep doesn’t mean you should put that information into context. Here’s a few alternatives you should consider before using context:
+>
+> 1. **Start by passing props.** If your components are not trivial, it’s not unusual to pass a dozen props down through a dozen components. It may feel like a slog, but it makes it very clear which components use which data! The person maintaining your code will be glad you’ve made the data flow explicit with props.
+> 2. **Extract components and pass JSX as children to them.** If you pass some data through many layers of intermediate components that don’t use that data (and only pass it further down), this often means that you forgot to extract some components along the way. For example, maybe you pass data props like `posts` to visual components that don’t use them directly, like `<Layout posts={posts} />`. Instead, make `Layout` take `children` as a prop, and render `<Layout><Posts posts={posts} /></Layout>`. This reduces the number of layers between the component specifying the data and the one that needs it.
+>
+> If neither of these approaches works well for you, consider context.
+>
+> [React](https://react.dev/learn/passing-data-deeply-with-context)
+
+### Reducers With Context
+
+#### General
+
+"You can combine reducer with context to let any component read and update state above it . . . to manage state of a complex screen." ([React](https://react.dev/learn/scaling-up-with-reducer-and-context))
+
+"You can have many context-reducer pairs like this in your app." ([React](https://react.dev/learn/scaling-up-with-reducer-and-context))
+
+> To provide state and the dispatch function to components below:
+>
+> 1. Create two contexts (for state and for dispatch functions).
+> 2. Provide both contexts from the component that uses the reducer.
+> 3. Use either context from components that need to read them.
+>
+> [React](https://react.dev/learn/scaling-up-with-reducer-and-context)
+
+> You can further declutter the components by moving all wiring into one file.
+>
+> - You can export a component like `TasksProvider` that provides context.
+> - You can also export custom Hooks like `useTasks` and `useTasksDispatch` to read it.
+>
+> [React](https://react.dev/learn/scaling-up-with-reducer-and-context)
+
+#### Example
+
+Slightly modified version of the code from [React](https://react.dev/learn/scaling-up-with-reducer-and-context):
+
+```jsx
+/* TasksContext.js */
+
+import { createContext, useContext, useReducer } from "react";
+
+const TasksContext = createContext(null);
+const TasksDispatchContext = createContext(null);
+
+export function TasksProvider({ children }) {
+  const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);
+
+  return (
+    <TasksContext.Provider value={tasks}>
+      <TasksDispatchContext.Provider value={dispatch}>
+        {children}
+      </TasksDispatchContext.Provider>
+    </TasksContext.Provider>
+  );
+}
+
+export function useTasks() {
+  return useContext(TasksContext);
+}
+
+export function useTasksDispatch() {
+  return useContext(TasksDispatchContext);
+}
+
+function tasksReducer(tasks, action) {
+  switch (action.type) {
+    case "added": {
+      return [
+        ...tasks,
+        {
+          id: action.id,
+          text: action.text,
+          done: false,
+        },
+      ];
+    }
+    case "changed": {
+      return tasks.map((t) => {
+        if (t.id === action.task.id) {
+          return action.task;
+        } else {
+          return t;
+        }
+      });
+    }
+    case "deleted": {
+      return tasks.filter((t) => t.id !== action.id);
+    }
+    default: {
+      throw Error("Unknown action: " + action.type);
+    }
+  }
+}
+
+const initialTasks = [
+  { id: 0, text: "Philosopher’s Path", done: true },
+  { id: 1, text: "Visit the temple", done: false },
+  { id: 2, text: "Drink matcha", done: false },
+];
+```
+
+```jsx
+/* AddTask.js */
+
+/* ... */
+import { useTasksDispatch } from "./TasksContext.js";
+
+export default function AddTask() {
+  /* ... */
+  const dispatch = useTasksDispatch();
+  /* ... */
+}
+```
+
+```jsx
+/* App.js */
+
+import AddTask from "./AddTask.js";
+import TaskList from "./TaskList.js";
+import { TasksProvider } from "./TasksContext.js";
+
+export default function TaskApp() {
+  return (
+    <TasksProvider>
+      <AddTask />
+      <TaskList />
+    </TasksProvider>
+  );
+}
+```
 
 # UI Updates
 
@@ -1432,361 +1831,6 @@ Component design and development phases:
 "create event handlers that update the state." ([React](https://react.dev/learn/reacting-to-input-with-state))
 
 "Expressing all interactions as state changes lets you later introduce new visual states without breaking existing ones. It also lets you change what should be displayed in each state without changing the logic of the interaction itself." ([React](https://react.dev/learn/reacting-to-input-with-state))
-
-# State Management
-
-## Reducers
-
-Definition:
-
-- "named after the `reduce()` operation that you can perform on arrays. . . . The function you pass to `reduce` is known as a “reducer”. It takes the _result so far_ and the _current item_, then it returns the _next result_. React reducers are an example of the same idea: they take the _state so far_ and the _action_, and return the _next state_. In this way, they accumulate actions over time into state." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
-- "Managing state with reducers is slightly different from directly setting state. Instead of telling React “what to do” by setting state, you specify “what the user just did” by dispatching “actions” from your event handlers. (The state update logic will live elsewhere!)" ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
-
-Usage:
-
-> To convert from `useState` to `useReducer`:
->
-> 1. Dispatch actions from event handlers.
-> 2. Write a reducer function that returns the next state for a given state and action.
-> 3. Replace `useState` with `useReducer`.
->
-> [React](https://react.dev/learn/extracting-state-logic-into-a-reducer)
-
-Rules:
-
-- Actions:
-  - "it should contain the minimal information about _what happened_." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
-  - "An action object can have any shape. By convention, it is common to give it a string `type` that describes what happened, and pass any additional information in other fields. The `type` is specific to a component, so in this example either `'added'` or `'added_task'` would be fine. Choose a name that says what happened!" ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
-  - "**Each action describes a single user interaction, even if that leads to multiple changes in the data.** For example, if a user presses “Reset” on a form with five fields managed by a reducer, it makes more sense to dispatch one reset_form action rather than five separate set_field actions." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
-- Reducer:
-  - "Because the reducer function takes state . . . as an argument, you can declare it outside of your component. This decreases the indentation level and can make your code easier to read." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
-  - "it’s a convention to use `switch` statements inside reducers. . . . We recommend wrapping each case block into the `{` and `}` curly braces so that variables declared inside of different `case`s don’t clash with each other." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
-  - "**Reducers must be pure.** Similar to state updater functions, reducers run during rendering! (Actions are queued until the next render.) This means that reducers must be pure—same inputs always result in the same output. They should not send requests, schedule timeouts, or perform any side effects (operations that impact things outside the component). They should update objects and arrays without mutations." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
-
-Example (taken from [React](https://react.dev/learn/extracting-state-logic-into-a-reducer)):
-
-```jsx
-import { useReducer } from "react";
-import AddTask from "./AddTask.js";
-import TaskList from "./TaskList.js";
-
-export default function TaskApp() {
-  const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);
-
-  function handleAddTask(text) {
-    dispatch({
-      type: "added",
-      id: nextId++,
-      text: text,
-    });
-  }
-
-  function handleChangeTask(task) {
-    dispatch({
-      type: "changed",
-      task: task,
-    });
-  }
-
-  function handleDeleteTask(taskId) {
-    dispatch({
-      type: "deleted",
-      id: taskId,
-    });
-  }
-
-  return (
-    <>
-      <h1>Prague itinerary</h1>
-      <AddTask onAddTask={handleAddTask} />
-      <TaskList
-        tasks={tasks}
-        onChangeTask={handleChangeTask}
-        onDeleteTask={handleDeleteTask}
-      />
-    </>
-  );
-}
-
-function tasksReducer(tasks, action) {
-  switch (action.type) {
-    case "added": {
-      return [
-        ...tasks,
-        {
-          id: action.id,
-          text: action.text,
-          done: false,
-        },
-      ];
-    }
-    case "changed": {
-      return tasks.map((t) => {
-        if (t.id === action.task.id) {
-          return action.task;
-        } else {
-          return t;
-        }
-      });
-    }
-    case "deleted": {
-      return tasks.filter((t) => t.id !== action.id);
-    }
-    default: {
-      throw Error("Unknown action: " + action.type);
-    }
-  }
-}
-
-let nextId = 3;
-const initialTasks = [
-  { id: 0, text: "Visit Kafka Museum", done: true },
-  { id: 1, text: "Watch a puppet show", done: false },
-  { id: 2, text: "Lennon Wall pic", done: false },
-];
-```
-
-Use cases:
-
-- General:
-  - "It’s a matter of preference. You can always convert between `useState` and `useReducer` back and forth: they are equivalent!" ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
-  - "We recommend using a reducer if you often encounter bugs due to incorrect state updates in some component, and want to introduce more structure to its code." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
-  - "You don’t have to use reducers for everything: feel free to mix and match! You can even `useState` and `useReducer` in the same component." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
-- Code maintainability:
-  - "`useReducer` can help cut down on the code if many event handlers modify state in a similar way." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
-  - "when the state updates . . . get more complex, they can bloat your component’s code and make it difficult to scan. In this case, `useReducer` lets you cleanly separate the _how_ of update logic from the _what happened_ of event handlers." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
-  - "Component logic can be easier to read when you separate concerns like this. Now the event handlers only specify _what happened_ by dispatching actions, and the reducer function determines _how the state updates_ in response to them." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
-- Debugging:
-  - "When you have a bug with `useState`, it can be difficult to tell _where_ the state was set incorrectly, and _why_. With `useReducer`, you can add a console log into your reducer to see every state update, and _why_ it happened (due to which `action`). If each `action` is correct, you’ll know that the mistake is in the reducer logic itself." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
-- Testing:
-  - "A reducer is a pure function that doesn’t depend on your component. This means that you can export and test it separately in isolation. While generally it’s best to test components in a more realistic environment, for complex state update logic it can be useful to assert that your reducer returns a particular state for a particular initial state and action." ([React](https://react.dev/learn/extracting-state-logic-into-a-reducer))
-
-## Context
-
-Definition:
-
-- "Context lets the parent component make some information available to any component in the tree below it—no matter how deep—without passing it explicitly through props." ([React](https://react.dev/learn/passing-data-deeply-with-context))
-- "Context lets you write components that “adapt to their surroundings” and display themselves differently depending on _where_ (or, in other words, _in which context_) they are being rendered." ([React](https://react.dev/learn/passing-data-deeply-with-context))
-
-- Operation:
-  - "How context works might remind you of CSS property inheritance. In CSS, you can specify `color: blue` for a `<div>`, and any DOM node inside of it, no matter how deep, will inherit that color unless some other DOM node in the middle overrides it with `color: green`. Similarly, in React, the only way to override some context coming from above is to wrap children into a context provider with a different value." ([React](https://react.dev/learn/passing-data-deeply-with-context))
-  - "different React contexts don’t override each other. Each context that you make with `createContext()` is completely separate from other ones . . . One component may use or provide many different contexts without a problem." ([React](https://react.dev/learn/passing-data-deeply-with-context))
-  - "Context is not limited to static values. If you pass a different value on the next render, React will update all the components reading it below! This is why context is often used in combination with state." ([React](https://react.dev/learn/passing-data-deeply-with-context))
-
-Example (slightly modified version of the code from [React](https://react.dev/learn/passing-data-deeply-with-context)):
-
-```jsx
-/* LevelContext.js */
-
-import { createContext } from "react";
-
-export const LevelContext = createContext(0);
-```
-
-```jsx
-/* Heading.js */
-
-import { useContext } from "react";
-import { LevelContext } from "./LevelContext.js";
-
-export default function Heading({ children }) {
-  const level = useContext(LevelContext);
-
-  switch (level) {
-    case 0:
-      throw Error("Heading must be inside a Section!");
-    case 1:
-      return <h1>{children}</h1>;
-    case 2:
-      return <h2>{children}</h2>;
-    case 3:
-      return <h3>{children}</h3>;
-    default:
-      throw Error("Unknown level");
-  }
-}
-```
-
-```jsx
-/* Section.js */
-
-import { useContext } from "react";
-import { LevelContext } from "./LevelContext.js";
-
-export default function Section({ children }) {
-  const level = useContext(LevelContext);
-
-  return (
-    <section>
-      <LevelContext.Provider value={level + 1}>
-        {children}
-      </LevelContext.Provider>
-    </section>
-  );
-}
-```
-
-```jsx
-/* App.js */
-
-import Heading from "./Heading.js";
-import Section from "./Section.js";
-
-export default function Page() {
-  return (
-    <Section>
-      <Heading>Heading #1</Heading>
-
-      <Section>
-        <Heading>Heading #2</Heading>
-
-        <Section>
-          <Heading>Heading #3</Heading>
-        </Section>
-      </Section>
-    </Section>
-  );
-}
-```
-
-Use cases:
-
-- General:
-  - "The nearest common ancestor could be far removed from the components that need data, and lifting state up that high can lead to a situation called “prop drilling”." ([React](https://react.dev/learn/passing-data-deeply-with-context))
-  - "In general, if some information is needed by distant components in different parts of the tree, it’s a good indication that context will help you." ([React](https://react.dev/learn/passing-data-deeply-with-context))
-- "**Theming:** If your app lets the user change its appearance (e.g. dark mode), you can put a context provider at the top of your app, and use that context in components that need to adjust their visual look." ([React](https://react.dev/learn/passing-data-deeply-with-context))
-- "**Current account:** Many components might need to know the currently logged in user. Putting it in context makes it convenient to read it anywhere in the tree. Some apps also let you operate multiple accounts at the same time (e.g. to leave a comment as a different user). In those cases, it can be convenient to wrap a part of the UI into a nested provider with a different current account value." ([React](https://react.dev/learn/passing-data-deeply-with-context))
-- "**Routing:** Most routing solutions use context internally to hold the current route. This is how every link “knows” whether it’s active or not. If you build your own router, you might want to do it too." ([React](https://react.dev/learn/passing-data-deeply-with-context))
-- "**Managing state:** As your app grows, you might end up with a lot of state closer to the top of your app. Many distant components below may want to change it. It is common to use a reducer together with context to manage complex state and pass it down to distant components without too much hassle." ([React](https://react.dev/learn/passing-data-deeply-with-context))
-
-Alternatives:
-
-> Just because you need to pass some props several levels deep doesn’t mean you should put that information into context. Here’s a few alternatives you should consider before using context:
->
-> 1. **Start by passing props.** If your components are not trivial, it’s not unusual to pass a dozen props down through a dozen components. It may feel like a slog, but it makes it very clear which components use which data! The person maintaining your code will be glad you’ve made the data flow explicit with props.
-> 2. **Extract components and pass JSX as children to them.** If you pass some data through many layers of intermediate components that don’t use that data (and only pass it further down), this often means that you forgot to extract some components along the way. For example, maybe you pass data props like `posts` to visual components that don’t use them directly, like `<Layout posts={posts} />`. Instead, make `Layout` take `children` as a prop, and render `<Layout><Posts posts={posts} /></Layout>`. This reduces the number of layers between the component specifying the data and the one that needs it.
->
-> If neither of these approaches works well for you, consider context.
->
-> [React](https://react.dev/learn/passing-data-deeply-with-context)
-
-## Reducers With Context
-
-"You can combine reducer with context to let any component read and update state above it . . . to manage state of a complex screen." ([React](https://react.dev/learn/scaling-up-with-reducer-and-context))
-
-"You can have many context-reducer pairs like this in your app." ([React](https://react.dev/learn/scaling-up-with-reducer-and-context))
-
-> To provide state and the dispatch function to components below:
->
-> 1. Create two contexts (for state and for dispatch functions).
-> 2. Provide both contexts from the component that uses the reducer.
-> 3. Use either context from components that need to read them.
->
-> [React](https://react.dev/learn/scaling-up-with-reducer-and-context)
-
-> You can further declutter the components by moving all wiring into one file.
->
-> - You can export a component like `TasksProvider` that provides context.
-> - You can also export custom Hooks like `useTasks` and `useTasksDispatch` to read it.
->
-> [React](https://react.dev/learn/scaling-up-with-reducer-and-context)
-
-Example (slightly modified version of the code from [React](https://react.dev/learn/scaling-up-with-reducer-and-context)):
-
-```jsx
-/* TasksContext.js */
-
-import { createContext, useContext, useReducer } from "react";
-
-const TasksContext = createContext(null);
-const TasksDispatchContext = createContext(null);
-
-export function TasksProvider({ children }) {
-  const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);
-
-  return (
-    <TasksContext.Provider value={tasks}>
-      <TasksDispatchContext.Provider value={dispatch}>
-        {children}
-      </TasksDispatchContext.Provider>
-    </TasksContext.Provider>
-  );
-}
-
-export function useTasks() {
-  return useContext(TasksContext);
-}
-
-export function useTasksDispatch() {
-  return useContext(TasksDispatchContext);
-}
-
-function tasksReducer(tasks, action) {
-  switch (action.type) {
-    case "added": {
-      return [
-        ...tasks,
-        {
-          id: action.id,
-          text: action.text,
-          done: false,
-        },
-      ];
-    }
-    case "changed": {
-      return tasks.map((t) => {
-        if (t.id === action.task.id) {
-          return action.task;
-        } else {
-          return t;
-        }
-      });
-    }
-    case "deleted": {
-      return tasks.filter((t) => t.id !== action.id);
-    }
-    default: {
-      throw Error("Unknown action: " + action.type);
-    }
-  }
-}
-
-const initialTasks = [
-  { id: 0, text: "Philosopher’s Path", done: true },
-  { id: 1, text: "Visit the temple", done: false },
-  { id: 2, text: "Drink matcha", done: false },
-];
-```
-
-```jsx
-/* AddTask.js */
-
-/* ... */
-import { useTasksDispatch } from "./TasksContext.js";
-
-export default function AddTask() {
-  /* ... */
-  const dispatch = useTasksDispatch();
-  /* ... */
-}
-```
-
-```jsx
-/* App.js */
-
-import AddTask from "./AddTask.js";
-import TaskList from "./TaskList.js";
-import { TasksProvider } from "./TasksContext.js";
-
-export default function TaskApp() {
-  return (
-    <TasksProvider>
-      <AddTask />
-      <TaskList />
-    </TasksProvider>
-  );
-}
-```
 
 # Effects
 
