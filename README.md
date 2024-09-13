@@ -31,17 +31,24 @@
   - HTML Elements
   - `<Fragment>`
 
+### State
+
+- **Management**
+  - Preservation/Destruction
+  - Update
+    - General
+    - State Setter Function
+      - Operation
+      - Best Practices
+  - Reset
+    - Different Position
+    - Different `key`
+  - Patterns
+
 ### UI Updates
 
 - **Overview**
 - **The Render Tree**
-
-### State Updates
-
-- **General**
-- **State Setter Function**
-  - Operation
-  - Best Practices
 
 ### JSX
 
@@ -439,6 +446,181 @@ export default function MyComponent({ counter, handler }) {
 
 "What do you do when each item needs to render not one, but several DOM nodes? The short `<>...</>` Fragment syntax won’t let you pass a key, so you need to either group them into a single `<div>`, or use the slightly longer and more explicit `<Fragment>` syntax . . . Fragments disappear from the DOM, so this will produce a flat list" ([React](https://react.dev/learn/rendering-lists))
 
+# State
+
+## Management
+
+### Preservation/Destruction
+
+"when React removes a component, it destroys its state. . . . React preserves a component’s state for as long as it’s being rendered at its position in the UI tree." ([React](https://react.dev/learn/preserving-and-resetting-state))
+
+> In this example, there are two different `<Counter />` tags:
+>
+> ```jsx
+> /* ... */
+> return (
+>   <div>
+>     {isFancy ? (
+>       <Counter isFancy={true} />
+>     ) : (
+>       <Counter isFancy={false} />
+>     )}
+> /* ... */
+> ```
+>
+> When you tick or clear the checkbox, the counter state does not get reset. Whether `isFancy` is `true` or `false`, you always have a `<Counter />` as the first child of the `div` returned from the root `App` component . . . It’s the same component at the same position, so from React’s perspective, it’s the same counter.
+>
+> Remember that it’s the position in the UI tree—not in the JSX markup—that matters to React! . . . React doesn’t know where you place the conditions in your function. All it “sees” is the tree you return. In both cases, the `App` component returns a `<div>` with `<Counter />` as a first child. To React, these two counters have the same “address”: the first child of the first child of the root. This is how React matches them up between the previous and next renders, regardless of how you structure your logic.
+>
+> [React](https://react.dev/learn/preserving-and-resetting-state)
+
+"Different components at the same position reset state . . . you switch between different component types at the same position. Initially, the first child of the `<div>` contained a `Counter`. But when you swapped in a `p`, React removed the `Counter` from the UI tree and destroyed its state." ([React](https://react.dev/learn/preserving-and-resetting-state))
+
+"Also, when you render a different component in the same position, it resets the state of its entire subtree." ([React](https://react.dev/learn/preserving-and-resetting-state))
+
+"As a rule of thumb, if you want to preserve the state between re-renders, the structure of your tree needs to “match up” from one render to another. If the structure is different, the state gets destroyed because React destroys state when it removes a component from the tree." ([React](https://react.dev/learn/preserving-and-resetting-state))
+
+> you should not nest component function definitions.
+>
+> ```jsx
+> import { useState } from "react";
+>
+> export default function MyComponent() {
+>   const [counter, setCounter] = useState(0);
+>
+>   function MyTextField() {
+>     const [text, setText] = useState("");
+>
+>     return <input value={text} onChange={(e) => setText(e.target.value)} />;
+>   }
+>
+>   return (
+>     <>
+>       <MyTextField />
+>       <button
+>         onClick={() => {
+>           setCounter(counter + 1);
+>         }}
+>       >
+>         Clicked {counter} times
+>       </button>
+>     </>
+>   );
+> }
+> ```
+>
+> Every time you click the button, the input state disappears! This is because a _different_ `MyTextField` function is created for every render of `MyComponent`. You’re rendering a _different_ component in the same position, so React resets all state below. This leads to bugs and performance problems. To avoid this problem, always declare component functions at the top level, and don’t nest their definitions.
+>
+> [React](https://react.dev/learn/preserving-and-resetting-state)
+
+### Update
+
+#### General
+
+"state behaves more like a snapshot. Setting it does not change the state variable you already have, but instead triggers a re-render." ([React](https://react.dev/learn/state-as-a-snapshot))
+
+"Setting state only changes it for the next render. . . . The state stored in React may have changed by the time the `alert` runs, but it was scheduled using a snapshot of the state at the time the user interacted with it! A state variable’s value never changes within a render, even if its event handler’s code is asynchronous. . . . the value of `number` continues to be `0` even after `setNumber(number + 5)` was called . . . React keeps the state values “fixed” within one render’s event handlers. . . . Event handlers created in the past have the state values from the render in which they were created." ([React](https://react.dev/learn/state-as-a-snapshot))
+
+"React waits until all code in the event handlers has run before processing your state updates. . . . This behavior, also known as batching, makes your React app run much faster. . . . React does not batch across _multiple_ intentional events like clicks—each click is handled separately. Rest assured that React only does batching when it’s generally safe to do." ([React](https://react.dev/learn/queueing-a-series-of-state-updates))
+
+#### State Setter Function
+
+##### Operation
+
+> It is an uncommon use case, but if you would like to update the same state variable multiple times before the next render, instead of passing the next state value like `setNumber(number + 1)`, you can pass a function that calculates the next state based on the previous one in the queue, like `setNumber(n => n + 1)`. . . . `n => n + 1` is called an updater function. When you pass it to a state setter:
+>
+> 1. React queues this function to be processed after all the other code in the event handler has run.
+> 2. During the next render, React goes through the queue and gives you the final updated state.
+>
+> . . . React takes the return value of your previous updater function and passes it to the next updater
+>
+> [React](https://react.dev/learn/queueing-a-series-of-state-updates)
+
+`setNumber(number + 5); setNumber(n => n + 1);` (for `number === 0` initially) will result in `number === 6` in the next render (see [React](https://react.dev/learn/queueing-a-series-of-state-updates))
+
+`setNumber(number + 5); setNumber(n => n + 1); setNumber(number + 4);` (for `number === 0` initially) will result in `number === 4` in the next render (see [React](https://react.dev/learn/queueing-a-series-of-state-updates))
+
+"`setState(5)` actually works like `setState(n => 5)`, but `n` is unused!" ([React](https://react.dev/learn/queueing-a-series-of-state-updates))
+
+##### Best Practices
+
+"Updater functions run during rendering, so **updater functions must be pure** and only _return_ the result. Don’t try to set state from inside of them or run other side effects. In Strict Mode, React will run each updater function twice (but discard the second result) to help you find mistakes." ([React](https://react.dev/learn/queueing-a-series-of-state-updates))
+
+> It’s common to name the updater function argument by the first letters of the corresponding state variable:
+>
+> ```jsx
+> setEnabled((e) => !e);
+> setLastName((ln) => ln.reverse());
+> setFriendCount((fc) => fc * 2);
+> ```
+>
+> If you prefer more verbose code, another common convention is to repeat the full state variable name, like `setEnabled(enabled => !enabled)`, or to use a prefix like `setEnabled(prevEnabled => !prevEnabled)`.
+>
+> [React](https://react.dev/learn/queueing-a-series-of-state-updates)
+
+### Reset
+
+#### Different Position
+
+> By default, React preserves state of a component while it stays at the same position.
+>
+> ```jsx
+> /* ... */
+> {
+>   isPlayerA ? <Counter person="Taylor" /> : <Counter person="Sarah" />;
+> }
+> /* ... */
+> ```
+>
+> Currently, when you change the player, the score is preserved. The two `Counter`s appear in the same position, so React sees them as _the same_ `Counter` whose `person` prop has changed. . . . If you want these two `Counter`s to be independent, you can render them in two different positions:
+>
+> ```jsx
+> /* ... */
+> {
+>   isPlayerA && <Counter person="Taylor" />;
+> }
+> {
+>   !isPlayerA && <Counter person="Sarah" />;
+> }
+> /* ... */
+> ```
+>
+> Each Counter’s state gets destroyed each time it’s removed from the DOM. . . . This solution is convenient when you only have a few independent components rendered in the same place.
+>
+> [React](https://react.dev/learn/preserving-and-resetting-state)
+
+#### Different `key`
+
+> There is also another, more generic, way to reset a component’s state. . . . You can use keys to make React distinguish between any components. By default, React uses order within the parent (“first counter”, “second counter”) to discern between components. But keys let you tell React that this is not just a _first_ counter, or a _second_ counter, but a specific counter . . . In this example, the two `<Counter />`s don’t share state even though they appear in the same place in JSX:
+>
+> ```jsx
+> {
+>   isPlayerA ? (
+>     <Counter key="Taylor" person="Taylor" />
+>   ) : (
+>     <Counter key="Sarah" person="Sarah" />
+>   );
+> }
+> ```
+>
+> [React](https://react.dev/learn/preserving-and-resetting-state)
+
+"keys are not globally unique. They only specify the position _within_ the parent." ([React](https://react.dev/learn/preserving-and-resetting-state))
+
+"Resetting state with a key is particularly useful when dealing with forms." ([React](https://react.dev/learn/preserving-and-resetting-state))
+
+### Patterns
+
+"adjusting state based on props or other state makes your data flow more difficult to understand and debug. Always check whether you can reset all state with a key or calculate everything during rendering instead. For example, instead of storing (and resetting) the selected _item_, you can store the selected _item ID_" ([React](https://react.dev/learn/you-might-not-need-an-effect))
+
+> There are a few ways to keep the state “alive” for a component that’s no longer visible:
+>
+> - You could render _all_ chats instead of just the current one, but hide all the others with CSS. The chats would not get removed from the tree, so their local state would be preserved. This solution works great for simple UIs. But it can get very slow if the hidden trees are large and contain a lot of DOM nodes.
+> - You could lift the state up and hold the pending message for each recipient in the parent component. This way, when the child components get removed, it doesn’t matter, because it’s the parent that keeps the important information. This is the most common solution.
+> - You might also use a different source in addition to React state. For example, you probably want a message draft to persist even if the user accidentally closes the page. To implement this, you could have the `Chat` component initialize its state by reading from the `localStorage`, and save the drafts there too.
+>
+> [React](https://react.dev/learn/preserving-and-resetting-state)
+
 # UI Updates
 
 ## Overview
@@ -473,166 +655,19 @@ export default function MyComponent({ counter, handler }) {
 
 ## The Render Tree
 
-- "As we nest components, we have the concept of parent and child components, where each parent component may itself be a child of another component. When we render a React app, we can model this relationship in a tree, known as the render tree." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
-- > The root node in a React render tree is the root component of the app. In this case, the root component is `App` and it is the first component React renders. . . .
-  >
-  > ![Image](/assets/conditional_render_tree.webp)
-  >
-  > With conditional rendering, across different renders, the render tree may render different components.
-  >
-  > [React](https://react.dev/learn/understanding-your-ui-as-a-tree)
-- "the render tree is only composed of React components. React, as a UI framework, is platform agnostic. On react.dev, we showcase examples that render to the web, which uses HTML markup as its UI primitives. But a React app could just as likely render to a mobile or desktop platform, which may use different UI primitives like UIView or FrameworkElement. These platform UI primitives are not a part of React. React render trees can provide insight to our React app regardless of what platform your app renders to." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
-- "Although render trees may differ across render passes, these trees are generally helpful for identifying what the `top-level` and `leaf components` are in a React app. Top-level components are the components nearest to the root component and affect the rendering performance of all the components beneath them and often contain the most complexity. Leaf components are near the bottom of the tree and have no child components and are often frequently re-rendered." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
-- "Top-level components affect the rendering performance of all components beneath them and leaf components are often re-rendered frequently. Identifying them is useful for understanding and debugging rendering performance." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
-- "when React removes a component, it destroys its state. . . . React preserves a component’s state for as long as it’s being rendered at its position in the UI tree." ([React](https://react.dev/learn/preserving-and-resetting-state))
-- > In this example, there are two different `<Counter />` tags:
-  >
-  > ```jsx
-  > /* ... */
-  > return (
-  >   <div>
-  >     {isFancy ? (
-  >       <Counter isFancy={true} />
-  >     ) : (
-  >       <Counter isFancy={false} />
-  >     )}
-  > /* ... */
-  > ```
-  >
-  > When you tick or clear the checkbox, the counter state does not get reset. Whether `isFancy` is `true` or `false`, you always have a `<Counter />` as the first child of the `div` returned from the root `App` component . . . It’s the same component at the same position, so from React’s perspective, it’s the same counter.
-  >
-  > Remember that it’s the position in the UI tree—not in the JSX markup—that matters to React! . . . React doesn’t know where you place the conditions in your function. All it “sees” is the tree you return. In both cases, the `App` component returns a `<div>` with `<Counter />` as a first child. To React, these two counters have the same “address”: the first child of the first child of the root. This is how React matches them up between the previous and next renders, regardless of how you structure your logic.
-  >
-  > [React](https://react.dev/learn/preserving-and-resetting-state)
-- "Different components at the same position reset state . . . you switch between different component types at the same position. Initially, the first child of the `<div>` contained a `Counter`. But when you swapped in a `p`, React removed the `Counter` from the UI tree and destroyed its state." ([React](https://react.dev/learn/preserving-and-resetting-state))
-- "Also, when you render a different component in the same position, it resets the state of its entire subtree." ([React](https://react.dev/learn/preserving-and-resetting-state))
-- "As a rule of thumb, if you want to preserve the state between re-renders, the structure of your tree needs to “match up” from one render to another. If the structure is different, the state gets destroyed because React destroys state when it removes a component from the tree." ([React](https://react.dev/learn/preserving-and-resetting-state))
-- > you should not nest component function definitions.
-  >
-  > ```jsx
-  > import { useState } from "react";
-  >
-  > export default function MyComponent() {
-  >   const [counter, setCounter] = useState(0);
-  >
-  >   function MyTextField() {
-  >     const [text, setText] = useState("");
-  >
-  >     return <input value={text} onChange={(e) => setText(e.target.value)} />;
-  >   }
-  >
-  >   return (
-  >     <>
-  >       <MyTextField />
-  >       <button
-  >         onClick={() => {
-  >           setCounter(counter + 1);
-  >         }}
-  >       >
-  >         Clicked {counter} times
-  >       </button>
-  >     </>
-  >   );
-  > }
-  > ```
-  >
-  > Every time you click the button, the input state disappears! This is because a _different_ `MyTextField` function is created for every render of `MyComponent`. You’re rendering a _different_ component in the same position, so React resets all state below. This leads to bugs and performance problems. To avoid this problem, always declare component functions at the top level, and don’t nest their definitions.
-  >
-  > [React](https://react.dev/learn/preserving-and-resetting-state)
-- > By default, React preserves state of a component while it stays at the same position.
-  >
-  > ```jsx
-  > /* ... */
-  > {
-  >   isPlayerA ? <Counter person="Taylor" /> : <Counter person="Sarah" />;
-  > }
-  > /* ... */
-  > ```
-  >
-  > Currently, when you change the player, the score is preserved. The two `Counter`s appear in the same position, so React sees them as _the same_ `Counter` whose `person` prop has changed. . . . If you want these two `Counter`s to be independent, you can render them in two different positions:
-  >
-  > ```jsx
-  > /* ... */
-  > {
-  >   isPlayerA && <Counter person="Taylor" />;
-  > }
-  > {
-  >   !isPlayerA && <Counter person="Sarah" />;
-  > }
-  > /* ... */
-  > ```
-  >
-  > Each Counter’s state gets destroyed each time it’s removed from the DOM. . . . This solution is convenient when you only have a few independent components rendered in the same place.
-  >
-  > [React](https://react.dev/learn/preserving-and-resetting-state)
-- > There is also another, more generic, way to reset a component’s state. . . . You can use keys to make React distinguish between any components. By default, React uses order within the parent (“first counter”, “second counter”) to discern between components. But keys let you tell React that this is not just a _first_ counter, or a _second_ counter, but a specific counter . . . In this example, the two `<Counter />`s don’t share state even though they appear in the same place in JSX:
-  >
-  > ```jsx
-  > {
-  >   isPlayerA ? (
-  >     <Counter key="Taylor" person="Taylor" />
-  >   ) : (
-  >     <Counter key="Sarah" person="Sarah" />
-  >   );
-  > }
-  > ```
-  >
-  > [React](https://react.dev/learn/preserving-and-resetting-state)
-  - "keys are not globally unique. They only specify the position _within_ the parent." ([React](https://react.dev/learn/preserving-and-resetting-state))
-- "Resetting state with a key is particularly useful when dealing with forms." ([React](https://react.dev/learn/preserving-and-resetting-state))
-- "adjusting state based on props or other state makes your data flow more difficult to understand and debug. Always check whether you can reset all state with a key or calculate everything during rendering instead. For example, instead of storing (and resetting) the selected _item_, you can store the selected _item ID_" ([React](https://react.dev/learn/you-might-not-need-an-effect))
-- > There are a few ways to keep the state “alive” for a component that’s no longer visible:
-  >
-  > - You could render _all_ chats instead of just the current one, but hide all the others with CSS. The chats would not get removed from the tree, so their local state would be preserved. This solution works great for simple UIs. But it can get very slow if the hidden trees are large and contain a lot of DOM nodes.
-  > - You could lift the state up and hold the pending message for each recipient in the parent component. This way, when the child components get removed, it doesn’t matter, because it’s the parent that keeps the important information. This is the most common solution.
-  > - You might also use a different source in addition to React state. For example, you probably want a message draft to persist even if the user accidentally closes the page. To implement this, you could have the `Chat` component initialize its state by reading from the `localStorage`, and save the drafts there too.
-  >
-  > [React](https://react.dev/learn/preserving-and-resetting-state)
+"As we nest components, we have the concept of parent and child components, where each parent component may itself be a child of another component. When we render a React app, we can model this relationship in a tree, known as the render tree." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
 
-# State Updates
-
-## General
-
-"state behaves more like a snapshot. Setting it does not change the state variable you already have, but instead triggers a re-render." ([React](https://react.dev/learn/state-as-a-snapshot))
-
-"Setting state only changes it for the next render. . . . The state stored in React may have changed by the time the `alert` runs, but it was scheduled using a snapshot of the state at the time the user interacted with it! A state variable’s value never changes within a render, even if its event handler’s code is asynchronous. . . . the value of `number` continues to be `0` even after `setNumber(number + 5)` was called . . . React keeps the state values “fixed” within one render’s event handlers. . . . Event handlers created in the past have the state values from the render in which they were created." ([React](https://react.dev/learn/state-as-a-snapshot))
-
-"React waits until all code in the event handlers has run before processing your state updates. . . . This behavior, also known as batching, makes your React app run much faster. . . . React does not batch across _multiple_ intentional events like clicks—each click is handled separately. Rest assured that React only does batching when it’s generally safe to do." ([React](https://react.dev/learn/queueing-a-series-of-state-updates))
-
-## State Setter Function
-
-### Operation
-
-> It is an uncommon use case, but if you would like to update the same state variable multiple times before the next render, instead of passing the next state value like `setNumber(number + 1)`, you can pass a function that calculates the next state based on the previous one in the queue, like `setNumber(n => n + 1)`. . . . `n => n + 1` is called an updater function. When you pass it to a state setter:
+> The root node in a React render tree is the root component of the app. In this case, the root component is `App` and it is the first component React renders. . . .
 >
-> 1. React queues this function to be processed after all the other code in the event handler has run.
-> 2. During the next render, React goes through the queue and gives you the final updated state.
+> ![Image](/assets/conditional_render_tree.webp)
 >
-> . . . React takes the return value of your previous updater function and passes it to the next updater
+> With conditional rendering, across different renders, the render tree may render different components.
 >
-> [React](https://react.dev/learn/queueing-a-series-of-state-updates)
+> [React](https://react.dev/learn/understanding-your-ui-as-a-tree)
 
-`setNumber(number + 5); setNumber(n => n + 1);` (for `number === 0` initially) will result in `number === 6` in the next render (see [React](https://react.dev/learn/queueing-a-series-of-state-updates))
+"the render tree is only composed of React components. React, as a UI framework, is platform agnostic. On react.dev, we showcase examples that render to the web, which uses HTML markup as its UI primitives. But a React app could just as likely render to a mobile or desktop platform, which may use different UI primitives like UIView or FrameworkElement. These platform UI primitives are not a part of React. React render trees can provide insight to our React app regardless of what platform your app renders to." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
 
-`setNumber(number + 5); setNumber(n => n + 1); setNumber(number + 4);` (for `number === 0` initially) will result in `number === 4` in the next render (see [React](https://react.dev/learn/queueing-a-series-of-state-updates))
-
-"`setState(5)` actually works like `setState(n => 5)`, but `n` is unused!" ([React](https://react.dev/learn/queueing-a-series-of-state-updates))
-
-### Best Practices
-
-"Updater functions run during rendering, so **updater functions must be pure** and only _return_ the result. Don’t try to set state from inside of them or run other side effects. In Strict Mode, React will run each updater function twice (but discard the second result) to help you find mistakes." ([React](https://react.dev/learn/queueing-a-series-of-state-updates))
-
-> It’s common to name the updater function argument by the first letters of the corresponding state variable:
->
-> ```jsx
-> setEnabled((e) => !e);
-> setLastName((ln) => ln.reverse());
-> setFriendCount((fc) => fc * 2);
-> ```
->
-> If you prefer more verbose code, another common convention is to repeat the full state variable name, like `setEnabled(enabled => !enabled)`, or to use a prefix like `setEnabled(prevEnabled => !prevEnabled)`.
->
-> [React](https://react.dev/learn/queueing-a-series-of-state-updates)
+"Although render trees may differ across render passes, these trees are generally helpful for identifying what the `top-level` and `leaf components` are in a React app. Top-level components are the components nearest to the root component and affect the rendering performance of all the components beneath them and often contain the most complexity. Leaf components are near the bottom of the tree and have no child components and are often frequently re-rendered. . . . Identifying [top-level components] . . . is useful for understanding and debugging rendering performance." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
 
 # JSX
 
