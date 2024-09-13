@@ -97,10 +97,11 @@
 ### State Structuring
 
 - **Overview**
-- **Grouping Related State Variables**
-- **Avoiding State Contradictions**
-- **Avoiding State Redundancies**
-- **Avoiding State Duplications**
+- **Grouping Related Data**
+- **Avoiding Contradiction**
+- **Avoiding Redundancy**
+- **Avoiding Duplication**
+- **Avoiding Dependence on Props**
 - **Avoiding Deep State Nesting**
 
 ### State Management
@@ -1371,26 +1372,29 @@ Component design and development phases:
 >
 > [React](https://react.dev/learn/choosing-the-state-structure)
 
-## Grouping Related State Variables
+## Grouping Related Data
 
-- "if some two state variables always change together, it might be a good idea to unify them into a single state variable." ([React](https://react.dev/learn/choosing-the-state-structure))
-- "Another case where you’ll group data into an object or an array is when you don’t know how many pieces of state you’ll need. For example, it’s helpful when you have a form where the user can add custom fields." ([React](https://react.dev/learn/choosing-the-state-structure))
+"if some two state variables always change together, it might be a good idea to unify them into a single state variable." ([React](https://react.dev/learn/choosing-the-state-structure))
 
-## Avoiding State Contradictions
+"Another case where you’ll group data into an object or an array is when you don’t know how many pieces of state you’ll need. For example, it’s helpful when you have a form where the user can add custom fields." ([React](https://react.dev/learn/choosing-the-state-structure))
+
+## Avoiding Contradiction
 
 "For example, if you forget to call `setIsSent` and `setIsSending` together, you may end up in a situation where both `isSending` and `isSent` are `true` at the same time. The more complex your component is, the harder it is to understand what happened. Since `isSending` and `isSent` should never be `true` at the same time, it is better to replace them with one `status` state variable" ([React](https://react.dev/learn/choosing-the-state-structure))
 
-## Avoiding State Redundancies
+## Avoiding Redundancy
 
 "If you can calculate some information from the component’s props or its existing state variables during rendering, you should not put that information into that component’s state." ([React](https://react.dev/learn/choosing-the-state-structure))
+
+## Avoiding Duplication
+
+"instead of a `selectedItem` object (which creates a duplication with objects inside `items`), you hold the `selectedId` in state, and then get the `selectedItem` by searching the `items` array for an item with that ID . . . You didn’t need to hold _the selected item_ in state, because only the _selected ID_ is essential. The rest could be calculated during render." ([React](https://react.dev/learn/choosing-the-state-structure))
+
+## Avoiding Dependence on Props
 
 "Don’t mirror props in state . . . if the parent component passes a different value . . . state variable would not be updated! The state is only initialized during the first render. . . . ”Mirroring” props into state only makes sense when you want to ignore all updates for a specific prop. By convention, start the prop name with `initial` or `default` to clarify that its new values are ignored" ([React](https://react.dev/learn/choosing-the-state-structure))
 
 "adjusting state based on props or other state makes your data flow more difficult to understand and debug. Always check whether you can reset all state with a key or calculate everything during rendering instead. For example, instead of storing (and resetting) the selected _item_, you can store the selected _item ID_" ([React](https://react.dev/learn/you-might-not-need-an-effect))
-
-## Avoiding State Duplications
-
-"instead of a `selectedItem` object (which creates a duplication with objects inside `items`), you hold the `selectedId` in state, and then get the `selectedItem` by searching the `items` array for an item with that ID . . . You didn’t need to hold _the selected item_ in state, because only the _selected ID_ is essential. The rest could be calculated during render." ([React](https://react.dev/learn/choosing-the-state-structure))
 
 ## Avoiding Deep State Nesting
 
