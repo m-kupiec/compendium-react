@@ -14,6 +14,7 @@
   - Immutability
   - Forwarding
   - The `children` Prop
+- **Returned Value**
 - **Built-In Components**
   - HTML Elements
   - `<Fragment>`
@@ -22,7 +23,6 @@
   - General
   - `StrictMode`
   - Side Effects
-- **Returned Value**
 - **The Render Tree**
 - **The Module Dependency Tree**
 - **Organization**
@@ -309,6 +309,10 @@ export default function MyComponent({ counter, handler }) {
   }
   ```
 
+## Returned Value
+
+"In some situations, you won’t want to render anything at all. . . . A component must return something. In this case, you can return `null` . . . In practice, returning `null` from a component isn’t common . . . More often, you would conditionally include or exclude the component in the parent component’s JSX." ([React](https://react.dev/learn/conditional-rendering))
+
 ## Built-In Components
 
 ### HTML Elements
@@ -420,10 +424,6 @@ export default function MyComponent({ counter, handler }) {
 - "changes—updating the screen, starting an animation, changing the data—are called **side effects**. They’re things that happen _“on the side”_, not during rendering." ([React](https://react.dev/learn/keeping-components-pure))
 - "In React, side effects usually belong inside event handlers. . . . Even though event handlers are defined _inside_ your component, they don’t run _during_ rendering! So event handlers don’t need to be pure." ([React](https://react.dev/learn/keeping-components-pure))
 - "If you’ve exhausted all other options and can’t find the right event handler for your side effect, you can still attach it to your returned JSX with a `useEffect` call in your component. This tells React to execute it later, after rendering, when side effects are allowed. However, this approach should be your last resort. When possible, try to express your logic with rendering alone." ([React](https://react.dev/learn/keeping-components-pure))
-
-## Returned Value
-
-- "In some situations, you won’t want to render anything at all. . . . A component must return something. In this case, you can return `null` . . . In practice, returning `null` from a component isn’t common . . . More often, you would conditionally include or exclude the component in the parent component’s JSX." ([React](https://react.dev/learn/conditional-rendering))
 
 ## The Render Tree
 
