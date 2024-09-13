@@ -48,7 +48,13 @@
   - Preservation/Destruction
   - Update
     - General
+    - Stored Object's Immutability
+      - Rules
+        - Objects
+        - Arrays
+      - Effects
     - State Setter Function
+      - Role
       - Operation
       - Best Practices
   - Reset
@@ -81,10 +87,6 @@
 - **Custom**
 
 ### Events
-
-### State
-
-- **Data Immutability and Rendering**
 
 ### Application Design & Development
 
@@ -598,7 +600,82 @@ export default function MyComponent({ counter, handler }) {
 
 "React waits until all code in the event handlers has run before processing your state updates. . . . This behavior, also known as batching, makes your React app run much faster. . . . React does not batch across _multiple_ intentional events like clicks—each click is handled separately. Rest assured that React only does batching when it’s generally safe to do." ([React](https://react.dev/learn/queueing-a-series-of-state-updates))
 
+#### Stored Object's Immutability
+
+##### Rules
+
+###### Objects
+
+"you shouldn’t change objects that you hold in the React state directly. Instead, when you want to update an object, you need to create a new one (or make a copy of an existing one), and then set the state to use that copy. . . . Mutation is only a problem when you change _existing_ objects that are already in state. Mutating an object you’ve just created is okay because _no other code references it yet_. Changing it isn’t going to accidentally impact something that depends on it. This is called a “local mutation”. You can even do local mutation while rendering. Very convenient and completely okay!" ([React](https://react.dev/learn/updating-objects-in-state))
+
+"even if you copy an array, you can’t mutate existing [object] items inside of it directly. This is because copying is shallow—the new array will contain the same items as the original one. So if you modify an object inside the copied array, you are mutating the existing state. . . . When updating nested state, you need to create copies from the point where you want to update, and all the way up to the top level." ([React](https://react.dev/learn/updating-arrays-in-state))
+
+> Updating a nested object . . .
+>
+> ```jsx
+> setPerson({
+>   ...person, // Copy other fields
+>   artwork: {
+>     // but replace the artwork
+>     ...person.artwork, // with the same one
+>     city: "New Delhi", // but in New Delhi!
+>   },
+> });
+> ```
+>
+> [React](https://react.dev/learn/updating-objects-in-state)
+
+"In general, you should only mutate objects that you have just created." ([React](https://react.dev/learn/updating-arrays-in-state))
+
+###### Arrays
+
+"Arrays are mutable in JavaScript, but you should treat them as immutable when you store them in state. Just like with objects, when you want to update an array stored in state, you need to create a new one (or make a copy of an existing one), and then set state to use the new array. . . . In JavaScript, arrays are just another kind of object." ([React](https://react.dev/learn/updating-arrays-in-state))
+
+> you should treat arrays in React state as read-only. This means that you shouldn’t reassign items inside an array like `arr[0] = 'bird'`, and you also shouldn’t use methods that mutate the array, such as `push()` and `pop()`. Instead, every time you want to update an array, you’ll want to pass a new array to your state setting function. . . .
+>
+> |           | avoid (mutates the array)  | prefer (returns a new array) |
+> | --------- | -------------------------- | ---------------------------- |
+> | adding    | `push`, `unshift`          | `concat`, `[...arr]` . . .   |
+> | removing  | `pop`, `shift`, `splice`   | `filter`, `slice` . . .      |
+> | replacing | `splice`, `arr[i] =` . . . | `map` . . .                  |
+> | sorting   | `reverse`, `sort`          | copy the array first . . .   |
+>
+> [React](https://react.dev/learn/updating-arrays-in-state)
+
+"to remove an item from an array is to _filter it out_. In other words, you will produce a new array that will not contain that item. To do this, use the `filter` method" ([React](https://react.dev/learn/updating-arrays-in-state))
+
+"To replace an item, create a new array with `map`. Inside your `map` call, you will receive the item index as the second argument. Use it to decide whether to return the original item (the first argument) or something else" ([React](https://react.dev/learn/updating-arrays-in-state))
+
+> to insert an item at a particular position that’s neither at the beginning nor at the end. To do this, you can use the `...` array spread syntax together with the `slice()` method. . . .
+>
+> ```jsx
+> const nextArtists = [
+>   // Items before the insertion point:
+>   ...artists.slice(0, insertAt),
+>   // New item:
+>   { id: nextId++, name: name },
+>   // Items after the insertion point:
+>   ...artists.slice(insertAt),
+> ];
+> ```
+>
+> [React](https://react.dev/learn/updating-arrays-in-state)
+
+##### Effects
+
+"Avoiding direct data mutation lets you keep previous versions of the data intact, and reuse them later." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
+
+"By default, all child components re-render automatically when the state of a parent component changes. . . . Immutability makes it very cheap for components to compare whether their data has changed or not. You can learn more about how React chooses when to re-render a component in the `memo` API reference." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
+
+"When you store objects in state, mutating them will not trigger renders and will change the state in previous render “snapshots”." ([React](https://react.dev/learn/updating-objects-in-state))
+
 #### State Setter Function
+
+##### Role
+
+"Calling the `setSquares` function lets React know the state of the component has changed. This will trigger a re-render of the components that use the `squares` state (`Board`) as well as its child components (the `Square` components that make up the board)." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
+
+"without using the state setting function, React has no idea that object has changed. So React does not do anything in response." ([React](https://react.dev/learn/updating-objects-in-state))
 
 ##### Operation
 
@@ -1143,60 +1220,6 @@ Use cases:
     > If you rely on propagation and it’s difficult to trace which handlers execute and why, try this approach instead.
     >
     > [React](https://react.dev/learn/responding-to-events)
-
-# State
-
-## Data Immutability and Rendering
-
-- "Calling the `setSquares` function lets React know the state of the component has changed. This will trigger a re-render of the components that use the `squares` state (`Board`) as well as its child components (the `Square` components that make up the board)." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
-- "Avoiding direct data mutation lets you keep previous versions of the data intact, and reuse them later." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
-- "By default, all child components re-render automatically when the state of a parent component changes. . . . Immutability makes it very cheap for components to compare whether their data has changed or not. You can learn more about how React chooses when to re-render a component in the `memo` API reference." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
-- "without using the state setting function, React has no idea that object has changed. So React does not do anything in response." ([React](https://react.dev/learn/updating-objects-in-state))
-- "When you store objects in state, mutating them will not trigger renders and will change the state in previous render “snapshots”." ([React](https://react.dev/learn/updating-objects-in-state))
-- "you shouldn’t change objects that you hold in the React state directly. Instead, when you want to update an object, you need to create a new one (or make a copy of an existing one), and then set the state to use that copy. . . . Mutation is only a problem when you change _existing_ objects that are already in state. Mutating an object you’ve just created is okay because _no other code references it yet_. Changing it isn’t going to accidentally impact something that depends on it. This is called a “local mutation”. You can even do local mutation while rendering. Very convenient and completely okay!" ([React](https://react.dev/learn/updating-objects-in-state))
-  - > Updating a nested object . . .
-    >
-    > ```jsx
-    > setPerson({
-    >   ...person, // Copy other fields
-    >   artwork: {
-    >     // but replace the artwork
-    >     ...person.artwork, // with the same one
-    >     city: "New Delhi", // but in New Delhi!
-    >   },
-    > });
-    > ```
-    >
-    > [React](https://react.dev/learn/updating-objects-in-state)
-- "In general, you should only mutate objects that you have just created." ([React](https://react.dev/learn/updating-arrays-in-state))
-- "Arrays are mutable in JavaScript, but you should treat them as immutable when you store them in state. Just like with objects, when you want to update an array stored in state, you need to create a new one (or make a copy of an existing one), and then set state to use the new array. . . . In JavaScript, arrays are just another kind of object." ([React](https://react.dev/learn/updating-arrays-in-state))
-- "even if you copy an array, you can’t mutate existing items inside of it directly. This is because copying is shallow—the new array will contain the same items as the original one. So if you modify an object inside the copied array, you are mutating the existing state. . . . When updating nested state, you need to create copies from the point where you want to update, and all the way up to the top level." ([React](https://react.dev/learn/updating-arrays-in-state))
-- > you should treat arrays in React state as read-only. This means that you shouldn’t reassign items inside an array like `arr[0] = 'bird'`, and you also shouldn’t use methods that mutate the array, such as `push()` and `pop()`. Instead, every time you want to update an array, you’ll want to pass a new array to your state setting function. . . .
-  >
-  > |           | avoid (mutates the array)  | prefer (returns a new array) |
-  > | --------- | -------------------------- | ---------------------------- |
-  > | adding    | `push`, `unshift`          | `concat`, `[...arr]` . . .   |
-  > | removing  | `pop`, `shift`, `splice`   | `filter`, `slice` . . .      |
-  > | replacing | `splice`, `arr[i] =` . . . | `map` . . .                  |
-  > | sorting   | `reverse`, `sort`          | copy the array first . . .   |
-  >
-  > [React](https://react.dev/learn/updating-arrays-in-state)
-  - "to remove an item from an array is to _filter it out_. In other words, you will produce a new array that will not contain that item. To do this, use the `filter` method" ([React](https://react.dev/learn/updating-arrays-in-state))
-  - "To replace an item, create a new array with `map`. Inside your `map` call, you will receive the item index as the second argument. Use it to decide whether to return the original item (the first argument) or something else" ([React](https://react.dev/learn/updating-arrays-in-state))
-  - > to insert an item at a particular position that’s neither at the beginning nor at the end. To do this, you can use the `...` array spread syntax together with the `slice()` method. . . .
-    >
-    > ```jsx
-    > const nextArtists = [
-    >   // Items before the insertion point:
-    >   ...artists.slice(0, insertAt),
-    >   // New item:
-    >   { id: nextId++, name: name },
-    >   // Items after the insertion point:
-    >   ...artists.slice(insertAt),
-    > ];
-    > ```
-    >
-    > [React](https://react.dev/learn/updating-arrays-in-state)
 
 # Application Design & Development
 
