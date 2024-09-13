@@ -15,14 +15,14 @@
   - Forwarding
   - The `children` Prop
 - **Returned Value**
-- **Built-In Components**
-  - HTML Elements
-  - `<Fragment>`
-- **Rendering**
 - **Purity**
   - General
   - `StrictMode`
   - Side Effects
+- **Built-In Components**
+  - HTML Elements
+  - `<Fragment>`
+- **Rendering**
 - **The Render Tree**
 - **The Module Dependency Tree**
 - **Organization**
@@ -313,6 +313,39 @@ export default function MyComponent({ counter, handler }) {
 
 "In some situations, you won’t want to render anything at all. . . . A component must return something. In this case, you can return `null` . . . In practice, returning `null` from a component isn’t common . . . More often, you would conditionally include or exclude the component in the parent component’s JSX." ([React](https://react.dev/learn/conditional-rendering))
 
+## Purity
+
+### General
+
+> a pure function is a function with the following characteristics:
+>
+> - **It minds its own business.** It does not change any objects or variables that existed before it was called.
+> - **Same inputs, same output.** Given the same inputs, a pure function should always return the same result.
+>
+> [React](https://react.dev/learn/keeping-components-pure)
+
+"Components should only _return_ their JSX, and not _change_ any objects or variables that existed before rendering—that would make them impure!" ([React](https://react.dev/learn/keeping-components-pure))
+
+"Pure functions don’t mutate variables outside of the function’s scope or objects that were created before the call—that makes them impure! However, it’s completely fine to change variables and objects that you’ve _just_ created while rendering. . . . it’s fine because you’ve created them during the same render . . . No code outside of [it] . . . will ever know that this happened. This is called “local mutation”—it’s like your component’s little secret." ([React](https://react.dev/learn/keeping-components-pure))
+
+"React assumes that every component you write is a pure function. This means that React components you write must always return the same JSX given the same inputs" ([React](https://react.dev/learn/keeping-components-pure))
+
+### `StrictMode`
+
+"You should never change preexisting variables or objects while your component is rendering. React offers a “Strict Mode” in which it calls each component’s function twice during development. By calling the component functions twice, Strict Mode helps find components that break these rules. . . . Pure functions only calculate, so calling them twice won’t change anything" ([React](https://react.dev/learn/keeping-components-pure))
+
+"Strict Mode has no effect in production, so it won’t slow down the app for your users." ([React](https://react.dev/learn/keeping-components-pure))
+
+"To opt into Strict Mode, you can wrap your root component into `<React.StrictMode>`" ([React](https://react.dev/learn/keeping-components-pure))
+
+### Side Effects
+
+"changes—updating the screen, starting an animation, changing the data—are called **side effects**. They’re things that happen _“on the side”_, not during rendering." ([React](https://react.dev/learn/keeping-components-pure))
+
+"In React, side effects usually belong inside event handlers. . . . Even though event handlers are defined _inside_ your component, they don’t run _during_ rendering! So event handlers don’t need to be pure." ([React](https://react.dev/learn/keeping-components-pure))
+
+"If you’ve exhausted all other options and can’t find the right event handler for your side effect, you can still attach it to your returned JSX with a `useEffect` call in your component. This tells React to execute it later, after rendering, when side effects are allowed. However, this approach should be your last resort. When possible, try to express your logic with rendering alone." ([React](https://react.dev/learn/keeping-components-pure))
+
 ## Built-In Components
 
 ### HTML Elements
@@ -399,32 +432,6 @@ export default function MyComponent({ counter, handler }) {
   >
   > [React](https://react.dev/learn/queueing-a-series-of-state-updates)
 - "`setState(5)` actually works like `setState(n => 5)`, but `n` is unused!" ([React](https://react.dev/learn/queueing-a-series-of-state-updates))
-
-## Purity
-
-### General
-
-- > a pure function is a function with the following characteristics:
-  >
-  > - **It minds its own business.** It does not change any objects or variables that existed before it was called.
-  > - **Same inputs, same output.** Given the same inputs, a pure function should always return the same result.
-  >
-  > [React](https://react.dev/learn/keeping-components-pure)
-- "React assumes that every component you write is a pure function. This means that React components you write must always return the same JSX given the same inputs" ([React](https://react.dev/learn/keeping-components-pure))
-- "Components should only _return_ their JSX, and not _change_ any objects or variables that existed before rendering—that would make them impure!" ([React](https://react.dev/learn/keeping-components-pure))
-- "Pure functions don’t mutate variables outside of the function’s scope or objects that were created before the call—that makes them impure! However, it’s completely fine to change variables and objects that you’ve _just_ created while rendering. . . . it’s fine because you’ve created them during the same render . . . No code outside of [it] . . . will ever know that this happened. This is called “local mutation”—it’s like your component’s little secret." ([React](https://react.dev/learn/keeping-components-pure))
-
-### `StrictMode`
-
-- "You should never change preexisting variables or objects while your component is rendering. React offers a “Strict Mode” in which it calls each component’s function twice during development. By calling the component functions twice, Strict Mode helps find components that break these rules. . . . Pure functions only calculate, so calling them twice won’t change anything" ([React](https://react.dev/learn/keeping-components-pure))
-- "Strict Mode has no effect in production, so it won’t slow down the app for your users." ([React](https://react.dev/learn/keeping-components-pure))
-- "To opt into Strict Mode, you can wrap your root component into `<React.StrictMode>`" ([React](https://react.dev/learn/keeping-components-pure))
-
-### Side Effects
-
-- "changes—updating the screen, starting an animation, changing the data—are called **side effects**. They’re things that happen _“on the side”_, not during rendering." ([React](https://react.dev/learn/keeping-components-pure))
-- "In React, side effects usually belong inside event handlers. . . . Even though event handlers are defined _inside_ your component, they don’t run _during_ rendering! So event handlers don’t need to be pure." ([React](https://react.dev/learn/keeping-components-pure))
-- "If you’ve exhausted all other options and can’t find the right event handler for your side effect, you can still attach it to your returned JSX with a `useEffect` call in your component. This tells React to execute it later, after rendering, when side effects are allowed. However, this approach should be your last resort. When possible, try to express your logic with rendering alone." ([React](https://react.dev/learn/keeping-components-pure))
 
 ## The Render Tree
 
