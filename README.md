@@ -43,7 +43,6 @@
   - Reset
     - Different Position
     - Different `key`
-  - Patterns
 
 ### UI Updates
 
@@ -513,6 +512,14 @@ export default function MyComponent({ counter, handler }) {
 >
 > [React](https://react.dev/learn/preserving-and-resetting-state)
 
+> There are a few ways to keep the state “alive” for a component that’s no longer visible:
+>
+> - You could render _all_ chats instead of just the current one, but hide all the others with CSS. The chats would not get removed from the tree, so their local state would be preserved. This solution works great for simple UIs. But it can get very slow if the hidden trees are large and contain a lot of DOM nodes.
+> - You could lift the state up and hold the pending message for each recipient in the parent component. This way, when the child components get removed, it doesn’t matter, because it’s the parent that keeps the important information. This is the most common solution.
+> - You might also use a different source in addition to React state. For example, you probably want a message draft to persist even if the user accidentally closes the page. To implement this, you could have the `Chat` component initialize its state by reading from the `localStorage`, and save the drafts there too.
+>
+> [React](https://react.dev/learn/preserving-and-resetting-state)
+
 ### Update
 
 #### General
@@ -608,18 +615,6 @@ export default function MyComponent({ counter, handler }) {
 "keys are not globally unique. They only specify the position _within_ the parent." ([React](https://react.dev/learn/preserving-and-resetting-state))
 
 "Resetting state with a key is particularly useful when dealing with forms." ([React](https://react.dev/learn/preserving-and-resetting-state))
-
-### Patterns
-
-"adjusting state based on props or other state makes your data flow more difficult to understand and debug. Always check whether you can reset all state with a key or calculate everything during rendering instead. For example, instead of storing (and resetting) the selected _item_, you can store the selected _item ID_" ([React](https://react.dev/learn/you-might-not-need-an-effect))
-
-> There are a few ways to keep the state “alive” for a component that’s no longer visible:
->
-> - You could render _all_ chats instead of just the current one, but hide all the others with CSS. The chats would not get removed from the tree, so their local state would be preserved. This solution works great for simple UIs. But it can get very slow if the hidden trees are large and contain a lot of DOM nodes.
-> - You could lift the state up and hold the pending message for each recipient in the parent component. This way, when the child components get removed, it doesn’t matter, because it’s the parent that keeps the important information. This is the most common solution.
-> - You might also use a different source in addition to React state. For example, you probably want a message draft to persist even if the user accidentally closes the page. To implement this, you could have the `Chat` component initialize its state by reading from the `localStorage`, and save the drafts there too.
->
-> [React](https://react.dev/learn/preserving-and-resetting-state)
 
 # UI Updates
 
@@ -1390,6 +1385,8 @@ Component design and development phases:
 "If you can calculate some information from the component’s props or its existing state variables during rendering, you should not put that information into that component’s state." ([React](https://react.dev/learn/choosing-the-state-structure))
 
 "Don’t mirror props in state . . . if the parent component passes a different value . . . state variable would not be updated! The state is only initialized during the first render. . . . ”Mirroring” props into state only makes sense when you want to ignore all updates for a specific prop. By convention, start the prop name with `initial` or `default` to clarify that its new values are ignored" ([React](https://react.dev/learn/choosing-the-state-structure))
+
+"adjusting state based on props or other state makes your data flow more difficult to understand and debug. Always check whether you can reset all state with a key or calculate everything during rendering instead. For example, instead of storing (and resetting) the selected _item_, you can store the selected _item ID_" ([React](https://react.dev/learn/you-might-not-need-an-effect))
 
 ## Avoiding State Duplications
 
