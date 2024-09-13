@@ -25,7 +25,6 @@
 - **Purity**
   - General
   - `StrictMode`
-  - Side Effects
 - **Built-In Components**
   - HTML Elements
   - `<Fragment>`
@@ -102,6 +101,8 @@
 - **`useMemo`**
 - **`useSyncExternalStore`**
 - **Custom**
+
+### Side Effects
 
 ### Events
 
@@ -424,14 +425,6 @@ export default function MyComponent({ counter, handler }) {
 "Strict Mode has no effect in production, so it won’t slow down the app for your users." ([React](https://react.dev/learn/keeping-components-pure))
 
 "To opt into Strict Mode, you can wrap your root component into `<React.StrictMode>`" ([React](https://react.dev/learn/keeping-components-pure))
-
-### Side Effects
-
-"changes—updating the screen, starting an animation, changing the data—are called **side effects**. They’re things that happen _“on the side”_, not during rendering." ([React](https://react.dev/learn/keeping-components-pure))
-
-"In React, side effects usually belong inside event handlers. . . . Even though event handlers are defined _inside_ your component, they don’t run _during_ rendering! So event handlers don’t need to be pure." ([React](https://react.dev/learn/keeping-components-pure))
-
-"If you’ve exhausted all other options and can’t find the right event handler for your side effect, you can still attach it to your returned JSX with a `useEffect` call in your component. This tells React to execute it later, after rendering, when side effects are allowed. However, this approach should be your last resort. When possible, try to express your logic with rendering alone." ([React](https://react.dev/learn/keeping-components-pure))
 
 ## Built-In Components
 
@@ -1568,6 +1561,14 @@ Use cases:
 
 - "whenever you write an Effect, consider whether it would be clearer to also wrap it in a custom Hook. You shouldn’t need Effects very often, so if you’re writing one, it means that you need to “step outside React” to synchronize with some external system or to do something that React doesn’t have a built-in API for. Wrapping it into a custom Hook lets you precisely communicate your intent and how the data flows through it. . . . With time, most of your app’s Effects will be in custom Hooks." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
 - "Effects are an “escape hatch”: you use them when you need to “step outside React” and when there is no better built-in solution for your use case. With time, the React team’s goal is to reduce the number of the Effects in your app to the minimum by providing more specific solutions to more specific problems. Wrapping your Effects in custom Hooks makes it easier to upgrade your code when these solutions become available." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
+
+# Side Effects
+
+"changes—updating the screen, starting an animation, changing the data—are called **side effects**. They’re things that happen _“on the side”_, not during rendering." ([React](https://react.dev/learn/keeping-components-pure))
+
+"In React, side effects usually belong inside event handlers. . . . Even though event handlers are defined _inside_ your component, they don’t run _during_ rendering! So event handlers don’t need to be pure." ([React](https://react.dev/learn/keeping-components-pure))
+
+"If you’ve exhausted all other options and can’t find the right event handler for your side effect, you can still attach it to your returned JSX with a `useEffect` call in your component. This tells React to execute it later, after rendering, when side effects are allowed. However, this approach should be your last resort. When possible, try to express your logic with rendering alone." ([React](https://react.dev/learn/keeping-components-pure))
 
 # Events
 
