@@ -9,10 +9,14 @@
 ### Components
 
 - **General**
+- **Props**
+  - General
+  - Immutability
+  - Forwarding
+  - The `children` Prop
 - **Built-In Components**
   - HTML Elements
   - `<Fragment>`
-- **Props**
 - **Rendering**
 - **Purity**
   - General
@@ -212,6 +216,99 @@ export default function MyComponent({ counter, handler }) {
 
 "Components are used to render, manage, and update the UI elements in your application" ([React](https://react.dev/learn/tutorial-tic-tac-toe))
 
+## Props
+
+### General
+
+"React component functions accept a single argument, a `props` object . . . Usually you don’t need the whole `props` object itself, so you destructure it into individual props." ([React](https://react.dev/learn/passing-props-to-a-component))
+
+- > ```jsx
+  > function Avatar(props) {
+  >   let person = props.person;
+  >   let size = props.size;
+  >   // ...
+  > }
+  > ```
+  >
+  > ```jsx
+  > function Avatar({ person, size }) {
+  >   // ...
+  > }
+  > ```
+  >
+  > [React](https://react.dev/learn/passing-props-to-a-component)
+
+"If you want to give a prop a default value to fall back on when no value is specified, you can do it with the destructuring by putting `=` and the default value right after the parameter" ([React](https://react.dev/learn/passing-props-to-a-component))
+
+### Immutability
+
+"props are immutable . . . When a component needs to change its props (for example, in response to a user interaction or new data), it will have to “ask” its parent component to pass it different props—a new object! Its old props will then be cast aside, and eventually the JavaScript engine will reclaim the memory taken by them." ([React](https://react.dev/learn/passing-props-to-a-component))
+
+### Forwarding
+
+> Forwarding props with the JSX spread syntax . . .
+>
+> ```jsx
+> function Profile({ person, size, isSepia, thickBorder }) {
+>   return (
+>     <div className="card">
+>       <Avatar
+>         person={person}
+>         size={size}
+>         isSepia={isSepia}
+>         thickBorder={thickBorder}
+>       />
+>     </div>
+>   );
+> }
+> ```
+>
+> Some components forward all of their props to their children, like how this `Profile` does with `Avatar`. Because they don’t use any of their props directly, it can make sense to use a more concise “spread” syntax:
+>
+> ```jsx
+> function Profile(props) {
+>   return (
+>     <div className="card">
+>       <Avatar {...props} />
+>     </div>
+>   );
+> }
+> ```
+>
+> Use spread syntax with restraint. If you’re using it in every other component, something is wrong. Often, it indicates that you should split your components and pass children as JSX.
+>
+> [React](https://react.dev/learn/passing-props-to-a-component)
+
+### The `children` Prop
+
+"When you nest content inside a JSX tag, the parent component will receive that content in a prop called `children`. . . . You can think of a component with a `children` prop as having a “hole” that can be “filled in” by its parent components with arbitrary JSX. You will often use the `children` prop for visual wrappers: panels, grids, etc." ([React](https://react.dev/learn/passing-props-to-a-component))
+
+- ```jsx
+  import MyComponent from "./components/MyComponent.jsx";
+  import NestedComponent from "./components/NestedComponent.jsx";
+
+  export default function App() {
+    return (
+      <>
+        <MyComponent>
+          <NestedComponent />
+        </MyComponent>
+      </>
+    );
+  }
+  ```
+
+- ```jsx
+  export default function MyComponent({ children }) {
+    return (
+      <>
+        <h1>MyComponent</h1>
+        <section>{children}</section>
+      </>
+    );
+  }
+  ```
+
 ## Built-In Components
 
 ### HTML Elements
@@ -226,86 +323,6 @@ export default function MyComponent({ counter, handler }) {
 
 - "empty tag is called a _Fragment_. Fragments let you group things without leaving any trace in the browser HTML tree." ([React](https://react.dev/learn/writing-markup-with-jsx))
 - "What do you do when each item needs to render not one, but several DOM nodes? The short `<>...</>` Fragment syntax won’t let you pass a key, so you need to either group them into a single `<div>`, or use the slightly longer and more explicit `<Fragment>` syntax . . . Fragments disappear from the DOM, so this will produce a flat list" ([React](https://react.dev/learn/rendering-lists))
-
-## Props
-
-- "React component functions accept a single argument, a `props` object . . . Usually you don’t need the whole `props` object itself, so you destructure it into individual props." ([React](https://react.dev/learn/passing-props-to-a-component))
-  - > ```jsx
-    > function Avatar(props) {
-    >   let person = props.person;
-    >   let size = props.size;
-    >   // ...
-    > }
-    > ```
-    >
-    > ```jsx
-    > function Avatar({ person, size }) {
-    >   // ...
-    > }
-    > ```
-    >
-    > [React](https://react.dev/learn/passing-props-to-a-component)
-- "If you want to give a prop a default value to fall back on when no value is specified, you can do it with the destructuring by putting `=` and the default value right after the parameter" ([React](https://react.dev/learn/passing-props-to-a-component))
-- "props are immutable . . . When a component needs to change its props (for example, in response to a user interaction or new data), it will have to “ask” its parent component to pass it different props—a new object! Its old props will then be cast aside, and eventually the JavaScript engine will reclaim the memory taken by them." ([React](https://react.dev/learn/passing-props-to-a-component))
-- > Forwarding props with the JSX spread syntax . . .
-  >
-  > ```jsx
-  > function Profile({ person, size, isSepia, thickBorder }) {
-  >   return (
-  >     <div className="card">
-  >       <Avatar
-  >         person={person}
-  >         size={size}
-  >         isSepia={isSepia}
-  >         thickBorder={thickBorder}
-  >       />
-  >     </div>
-  >   );
-  > }
-  > ```
-  >
-  > Some components forward all of their props to their children, like how this `Profile` does with `Avatar`. Because they don’t use any of their props directly, it can make sense to use a more concise “spread” syntax:
-  >
-  > ```jsx
-  > function Profile(props) {
-  >   return (
-  >     <div className="card">
-  >       <Avatar {...props} />
-  >     </div>
-  >   );
-  > }
-  > ```
-  >
-  > Use spread syntax with restraint. If you’re using it in every other component, something is wrong. Often, it indicates that you should split your components and pass children as JSX.
-  >
-  > [React](https://react.dev/learn/passing-props-to-a-component)
-- "When you nest content inside a JSX tag, the parent component will receive that content in a prop called `children`. . . . You can think of a component with a `children` prop as having a “hole” that can be “filled in” by its parent components with arbitrary JSX. You will often use the `children` prop for visual wrappers: panels, grids, etc." ([React](https://react.dev/learn/passing-props-to-a-component))
-
-  - ```jsx
-    import MyComponent from "./components/MyComponent.jsx";
-    import NestedComponent from "./components/NestedComponent.jsx";
-
-    export default function App() {
-      return (
-        <>
-          <MyComponent>
-            <NestedComponent />
-          </MyComponent>
-        </>
-      );
-    }
-    ```
-
-  - ```jsx
-    export default function MyComponent({ children }) {
-      return (
-        <>
-          <h1>MyComponent</h1>
-          <section>{children}</section>
-        </>
-      );
-    }
-    ```
 
 ## Rendering
 
