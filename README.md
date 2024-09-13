@@ -206,9 +206,11 @@ export default function MyComponent({ counter, handler }) {
 
 ## General
 
-- "React components are JavaScript functions that return markup" ([React](https://react.dev/learn))
-  - "They return JSX markup" ([React](https://react.dev/learn/your-first-component))
-- "Components are used to render, manage, and update the UI elements in your application" ([React](https://react.dev/learn/tutorial-tic-tac-toe))
+"React components are JavaScript functions that return markup" ([React](https://react.dev/learn))
+
+- "They return JSX markup" ([React](https://react.dev/learn/your-first-component))
+
+"Components are used to render, manage, and update the UI elements in your application" ([React](https://react.dev/learn/tutorial-tic-tac-toe))
 
 ## Built-In Components
 
