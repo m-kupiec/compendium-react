@@ -47,13 +47,14 @@
 - **Changing**
   - Preservation/Destruction
   - Update
-    - General
-    - Stored Object's Immutability
+    - Scheduling
+    - Immutability
+      - Operation
       - Rules
         - Objects
         - Arrays
       - Effects
-    - State Setter Function
+    - Setter Function
       - Role
       - Operation
       - Best Practices
@@ -592,15 +593,17 @@ export default function MyComponent({ counter, handler }) {
 
 ### Update
 
-#### General
-
-"state behaves more like a snapshot. Setting it does not change the state variable you already have, but instead triggers a re-render." ([React](https://react.dev/learn/state-as-a-snapshot))
+#### Scheduling
 
 "Setting state only changes it for the next render. . . . The state stored in React may have changed by the time the `alert` runs, but it was scheduled using a snapshot of the state at the time the user interacted with it! A state variable’s value never changes within a render, even if its event handler’s code is asynchronous. . . . the value of `number` continues to be `0` even after `setNumber(number + 5)` was called . . . React keeps the state values “fixed” within one render’s event handlers. . . . Event handlers created in the past have the state values from the render in which they were created." ([React](https://react.dev/learn/state-as-a-snapshot))
 
 "React waits until all code in the event handlers has run before processing your state updates. . . . This behavior, also known as batching, makes your React app run much faster. . . . React does not batch across _multiple_ intentional events like clicks—each click is handled separately. Rest assured that React only does batching when it’s generally safe to do." ([React](https://react.dev/learn/queueing-a-series-of-state-updates))
 
-#### Stored Object's Immutability
+#### Immutability
+
+##### Operation
+
+"state behaves more like a snapshot. Setting it does not change the state variable you already have, but instead triggers a re-render." ([React](https://react.dev/learn/state-as-a-snapshot))
 
 ##### Rules
 
@@ -669,7 +672,7 @@ export default function MyComponent({ counter, handler }) {
 
 "When you store objects in state, mutating them will not trigger renders and will change the state in previous render “snapshots”." ([React](https://react.dev/learn/updating-objects-in-state))
 
-#### State Setter Function
+#### Setter Function
 
 ##### Role
 
