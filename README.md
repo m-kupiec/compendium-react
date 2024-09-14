@@ -24,7 +24,7 @@
 - **Data**
   - Local Variables
   - State
-- **JSX**
+- **Markup**
   - General
   - Internals
   - Escaping Into JavaScript
@@ -449,7 +449,7 @@ export default function MyComponent({ counter, handler }) {
 >
 > [React](https://react.dev/learn/state-a-components-memory)
 
-## JSX
+## Markup
 
 ### General
 
