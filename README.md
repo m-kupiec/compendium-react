@@ -1519,19 +1519,19 @@ const initialTasks = [
 >
 > [React](https://react.dev/learn/manipulating-the-dom-with-refs) (with a slightly modified code)
 
-## Events
+# Events
 
-### Architecture
+## Architecture
 
 "If you use a design system, it’s common for components like buttons to contain styling but not specify behavior. Instead, components like `PlayButton` and `UploadButton` will pass event handlers down." ([React](https://react.dev/learn/responding-to-events))
 
-### Naming Convention
+## Naming Convention
 
 "In React, it’s conventional to use `onSomething` names for props which represent events and `handleSomething` for the function definitions which handle those events." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
 
 "By convention, it is common to name event handlers as `handle` followed by the event name. You’ll often see `onClick={handleClick}`, `onMouseEnter={handleMouseEnter}`, and so on." ([React](https://react.dev/learn/responding-to-events))
 
-### Propagation
+## Propagation
 
 "Event handlers will also catch events from any children your component might have. We say that an event “bubbles” or “propagates” up the tree" ([React](https://react.dev/learn/responding-to-events))
 
@@ -1554,7 +1554,7 @@ const initialTasks = [
 >
 > [React](https://react.dev/learn/responding-to-events)
 
-### _Passing Handlers_ Pattern
+## _Passing Handlers_ Pattern
 
 "Explicitly calling an event handler prop from a child handler is a good alternative to propagation." ([React](https://react.dev/learn/responding-to-events))
 
