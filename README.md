@@ -91,6 +91,21 @@
     - General
     - Example
 
+### Refs
+
+- **Introduction**
+- **Use Cases**
+- **Operation**
+  - General
+  - DOM Nodes
+- **Usage**
+  - General
+  - DOM Nodes
+    - General
+    - Referencing Lists
+    - Flushing the DOM
+  - Components
+
 ### Hooks
 
 - **General**
@@ -1255,6 +1270,237 @@ const initialTasks = [
 ];
 ```
 
+# Refs
+
+## Introduction
+
+"Refs are an escape hatch to hold onto values that aren’t used for rendering. . . . Like state, refs let you retain information between re-renders of a component. Unlike state, setting the ref’s `current` value does not trigger a re-render." ([React](https://react.dev/learn/referencing-values-with-refs))
+
+## Use Cases
+
+"If your component needs to store some value, but it doesn’t impact the rendering logic, choose refs." ([React](https://react.dev/learn/referencing-values-with-refs))
+
+"sometimes you might need access to the DOM elements managed by React—for example, to focus a node, scroll to it, or measure its size and position. There is no built-in way to do those things in React, so you will need a _ref_ to the DOM node." ([React](https://react.dev/learn/manipulating-the-dom-with-refs))
+
+> Typically, you will use a ref when your component needs to “step outside” React and communicate with external APIs—often a browser API that won’t impact the appearance of the component. Here are a few of these rare situations:
+>
+> - Storing timeout IDs
+> - Storing and manipulating DOM elements . . .
+> - Storing other objects that aren’t necessary to calculate the JSX.
+>
+> [React](https://react.dev/learn/referencing-values-with-refs)
+
+## Operation
+
+### General
+
+> You can imagine that inside of React, useRef is implemented like this:
+>
+> ```jsx
+> // Inside of React
+> function useRef(initialValue) {
+>   const [ref, unused] = useState({ current: initialValue });
+>   return ref;
+> }
+> ```
+>
+> During the first render, `useRef` returns `{ current: initialValue }`. This object is stored by React, so during the next render the same object will be returned. Note how the state setter is unused in this example. It is unnecessary because `useRef` always needs to return the same object!
+>
+> [React](https://react.dev/learn/referencing-values-with-refs)
+
+> when you mutate the current value of a ref, it changes immediately:
+>
+> ```jsx
+> ref.current = 5;
+> console.log(ref.current); // 5
+> ```
+>
+> [React](https://react.dev/learn/referencing-values-with-refs)
+
+### DOM Nodes
+
+"During the first render, the DOM nodes have not yet been created, so `ref.current` will be `null`. And during the rendering of updates, the DOM nodes haven’t been updated yet. So it’s too early to read them. React sets `ref.current` during the commit. Before updating the DOM, React sets the affected `ref.current` values to `null`. After updating the DOM, React immediately sets them to the corresponding DOM nodes." ([React](https://react.dev/learn/manipulating-the-dom-with-refs))
+
+## Usage
+
+### General
+
+> ```jsx
+> import { useRef } from "react";
+>
+> /* ... */
+> const ref = useRef(0);
+> ```
+>
+> `useRef` returns an object like this:
+>
+> ```jsx
+> {
+>   current: 0; // The value you passed to useRef
+> }
+> ```
+>
+> [React](https://react.dev/learn/referencing-values-with-refs)
+
+"the `ref.current` property . . . value is intentionally mutable, meaning you can both read and write to it. . . . As long as the object you’re mutating isn’t used for rendering, React doesn’t care what you do with the ref or its contents." ([React](https://react.dev/learn/referencing-values-with-refs))
+
+"Don’t read or write `ref.current` during rendering. If some information is needed during rendering, use state instead. Since React doesn’t know when `ref.current` changes, even reading it while rendering makes your component’s behavior difficult to predict." ([React](https://react.dev/learn/referencing-values-with-refs))
+
+"Usually, you will access refs from event handlers. If you want to do something with a ref, but there is no particular event to do it in, you might need an Effect." ([React](https://react.dev/learn/manipulating-the-dom-with-refs))
+
+### DOM Nodes
+
+#### General
+
+> To access a DOM node managed by React . . . pass your ref [(`const myRef = useRef(null);`)] as the `ref` attribute to the JSX tag for which you want to get the DOM node:
+>
+> ```html
+> <div ref="{myRef}"></div>
+> ```
+>
+> [React](https://react.dev/learn/manipulating-the-dom-with-refs)
+
+> ```jsx
+> import { useRef } from "react";
+>
+> export default function Form() {
+>   const inputRef = useRef(null);
+>
+>   function handleClick() {
+>     inputRef.current.focus();
+>   }
+>
+>   return (
+>     <>
+>       <input ref={inputRef} />
+>       <button onClick={handleClick}>Focus the input</button>
+>     </>
+>   );
+> }
+> ```
+>
+> [React](https://react.dev/learn/manipulating-the-dom-with-refs)
+
+"If you stick to non-destructive actions like focusing and scrolling, you shouldn’t encounter any problems. However, if you try to modify the DOM manually, you can risk conflicting with the changes React is making. . . . Avoid changing DOM nodes managed by React. Modifying, adding children to, or removing children from elements that are managed by React can lead to inconsistent visual results or crashes . . . You can safely modify parts of the DOM that React has _no reason_ to update. For example, if some `<div>` is always empty in the JSX, React won’t have a reason to touch its children list. Therefore, it is safe to manually add or remove elements there." ([React](https://react.dev/learn/manipulating-the-dom-with-refs))
+
+#### Referencing Lists
+
+> sometimes you might need a ref to each item in the list, and you don’t know how many you will have. . . . You can’t call `useRef` in a loop, in a condition, or inside a `map()` call. . . . solution is to pass a function to the `ref` attribute. This is called a `ref` callback. React will call your `ref` callback with the DOM node when it’s time to set the ref, and with `null` when it’s time to clear it. This lets you maintain your own array or a Map, and access any ref by its index or some kind of ID. . . .
+>
+> ```jsx
+> /* ... */
+> const itemsRef = useRef(null);
+> /* ... */
+>
+> function getMap() {
+>   if (!itemsRef.current) {
+>     // Initialize the Map on first usage.
+>     itemsRef.current = new Map();
+>   }
+>   return itemsRef.current;
+> }
+>
+> /* ... */
+> <ul>
+>   {catList.map((cat) => (
+>     <li
+>       key={cat}
+>       ref={(node) => {
+>         const map = getMap();
+>         if (node) {
+>           map.set(cat, node);
+>         } else {
+>           map.delete(cat);
+>         }
+>       }}
+>     >
+>       <img src={cat} />
+>     </li>
+>   ))}
+> </ul>;
+> /* ... */
+> ```
+>
+> [React](https://react.dev/learn/manipulating-the-dom-with-refs)
+
+#### Flushing the DOM
+
+> Consider code like this, which adds a new todo and scrolls the screen down to the last child of the list. Notice how, for some reason, it always scrolls to the todo that was just before the last added one . . . The issue is with these two lines:
+>
+> ```jsx
+> setTodos([...todos, newTodo]);
+> listRef.current.lastChild.scrollIntoView();
+> ```
+>
+> In React, state updates are queued. Usually, this is what you want. However, here it causes a problem because `setTodos` does not immediately update the DOM. So the time you scroll the list to its last element, the todo has not yet been added. This is why scrolling always “lags behind” by one item. To fix this issue, you can force React to update (“flush”) the DOM synchronously. To do this, import `flushSync` from `react-dom` and wrap the state update into a `flushSync` call:
+>
+> ```jsx
+> flushSync(() => {
+>   setTodos([...todos, newTodo]);
+> });
+> listRef.current.lastChild.scrollIntoView();
+> ```
+>
+> This will instruct React to update the DOM synchronously right after the code wrapped in `flushSync` executes. As a result, the last todo will already be in the DOM by the time you try to scroll to it
+>
+> [React](https://react.dev/learn/manipulating-the-dom-with-refs)
+
+### Components
+
+"When you put a ref on a built-in component that outputs a browser element like `<input />`, React will set that ref’s `current` property to the corresponding DOM node (such as the actual `<input />` in the browser). However, if you try to put a ref on your own component, like `<MyInput />`, by default you will get `null`. . . . This happens because by default React does not let a component access the DOM nodes of other components. Not even for its own children! This is intentional. Refs are an escape hatch that should be used sparingly. Manually manipulating _another_ component’s DOM nodes makes your code even more fragile." ([React](https://react.dev/learn/manipulating-the-dom-with-refs))
+
+"In design systems, it is a common pattern for low-level components like buttons, inputs, and so on, to forward their refs to their DOM nodes. On the other hand, high-level components like forms, lists, or page sections usually won’t expose their DOM nodes to avoid accidental dependencies on the DOM structure." ([React](https://react.dev/learn/manipulating-the-dom-with-refs))
+
+> components that want to expose their DOM nodes have to opt in to that behavior. A component can specify that it “forwards” its ref to one of its children . . . can use the `forwardRef` API . . .
+>
+> ```jsx
+> import { forwardRef, useRef } from "react";
+>
+> const MyInput = forwardRef((props, ref) => {
+>   return <input {...props} ref={ref} />;
+> });
+>
+> export default function Form() {
+>   const inputRef = useRef(null);
+>
+>   function handleClick() {
+>     inputRef.current.focus();
+>   }
+>
+>   return (
+>     <>
+>       <MyInput ref={inputRef} />
+>       <button onClick={handleClick}>Focus the input</button>
+>     </>
+>   );
+> }
+> ```
+>
+> [React](https://react.dev/learn/manipulating-the-dom-with-refs)
+
+> Exposing a subset of the API with an imperative handle . . . In uncommon cases, you may want to restrict the exposed functionality. You can do that with `useImperativeHandle`:
+>
+> ```jsx
+> import { forwardRef, useRef, useImperativeHandle } from "react";
+>
+> const MyInput = forwardRef((props, ref) => {
+>   const restrictedRef = useRef(null);
+>
+>   useImperativeHandle(ref, () => ({
+>     // Only expose focus and nothing else
+>     focus() {
+>       restrictedRef.current.focus();
+>     },
+>   }));
+>
+>   return <input {...props} ref={restrictedRef} />;
+> });
+> ```
+>
+> . . . `inputRef.current` inside the `Form` component will only have the `focus` method. In this case, the ref “handle” is not the DOM node, but the custom object you create inside `useImperativeHandle` call.
+>
+> [React](https://react.dev/learn/manipulating-the-dom-with-refs) (with a slightly modified code)
+
 # Hooks
 
 ## General
@@ -1264,211 +1510,6 @@ const initialTasks = [
 - "_Hooks_ are special functions that are only available while React is rendering . . . They let you “hook into” different React features." ([React](https://react.dev/learn/state-a-components-memory))
 - "Hooks—functions starting with `use`—can only be called at the top level of your components or your own Hooks. You can’t call Hooks inside conditions, loops, or other nested functions. Hooks are functions, but it’s helpful to think of them as unconditional declarations about your component’s needs. You “use” React features at the top of your component similar to how you “import” modules at the top of your file." ([React](https://react.dev/learn/state-a-components-memory))
 - "If you want to use `useState` in a condition or a loop, extract a new component and put it there." ([React](https://react.dev/learn))
-
-## `useRef`
-
-Definition:
-
-- "Refs are an escape hatch to hold onto values that aren’t used for rendering. . . . Like state, refs let you retain information between re-renders of a component. Unlike state, setting the ref’s `current` value does not trigger a re-render." ([React](https://react.dev/learn/referencing-values-with-refs))
-- "the `ref.current` property . . . value is intentionally mutable, meaning you can both read and write to it. . . . As long as the object you’re mutating isn’t used for rendering, React doesn’t care what you do with the ref or its contents." ([React](https://react.dev/learn/referencing-values-with-refs))
-- > when you mutate the current value of a ref, it changes immediately:
-  >
-  > ```jsx
-  > ref.current = 5;
-  > console.log(ref.current); // 5
-  > ```
-  >
-  > [React](https://react.dev/learn/referencing-values-with-refs)
-- > You can imagine that inside of React, useRef is implemented like this:
-  >
-  > ```jsx
-  > // Inside of React
-  > function useRef(initialValue) {
-  >   const [ref, unused] = useState({ current: initialValue });
-  >   return ref;
-  > }
-  > ```
-  >
-  > During the first render, `useRef` returns `{ current: initialValue }`. This object is stored by React, so during the next render the same object will be returned. Note how the state setter is unused in this example. It is unnecessary because `useRef` always needs to return the same object!
-  >
-  > [React](https://react.dev/learn/referencing-values-with-refs)
-
-Rules:
-
-- "Don’t read or write `ref.current` during rendering. If some information is needed during rendering, use state instead. Since React doesn’t know when `ref.current` changes, even reading it while rendering makes your component’s behavior difficult to predict." ([React](https://react.dev/learn/referencing-values-with-refs))
-- "During the first render, the DOM nodes have not yet been created, so `ref.current` will be `null`. And during the rendering of updates, the DOM nodes haven’t been updated yet. So it’s too early to read them. React sets `ref.current` during the commit. Before updating the DOM, React sets the affected `ref.current` values to `null`. After updating the DOM, React immediately sets them to the corresponding DOM nodes. Usually, you will access refs from event handlers. If you want to do something with a ref, but there is no particular event to do it in, you might need an Effect." ([React](https://react.dev/learn/manipulating-the-dom-with-refs))
-- "If you stick to non-destructive actions like focusing and scrolling, you shouldn’t encounter any problems. However, if you try to modify the DOM manually, you can risk conflicting with the changes React is making. . . . Avoid changing DOM nodes managed by React. Modifying, adding children to, or removing children from elements that are managed by React can lead to inconsistent visual results or crashes . . . You can safely modify parts of the DOM that React has _no reason_ to update. For example, if some `<div>` is always empty in the JSX, React won’t have a reason to touch its children list. Therefore, it is safe to manually add or remove elements there." ([React](https://react.dev/learn/manipulating-the-dom-with-refs))
-
-Usage:
-
-- > ```jsx
-  > import { useRef } from "react";
-  >
-  > /* ... */
-  > const ref = useRef(0);
-  > ```
-  >
-  > `useRef` returns an object like this:
-  >
-  > ```jsx
-  > {
-  >   current: 0; // The value you passed to useRef
-  > }
-  > ```
-  >
-  > [React](https://react.dev/learn/referencing-values-with-refs)
-- > To access a DOM node managed by React . . . pass your ref [(`const myRef = useRef(null);`)] as the `ref` attribute to the JSX tag for which you want to get the DOM node:
-  >
-  > ```html
-  > <div ref="{myRef}"></div>
-  > ```
-  >
-  > [React](https://react.dev/learn/manipulating-the-dom-with-refs)
-- > sometimes you might need a ref to each item in the list, and you don’t know how many you will have. . . . You can’t call `useRef` in a loop, in a condition, or inside a `map()` call. . . . solution is to pass a function to the `ref` attribute. This is called a `ref` callback. React will call your `ref` callback with the DOM node when it’s time to set the ref, and with `null` when it’s time to clear it. This lets you maintain your own array or a Map, and access any ref by its index or some kind of ID. . . .
-  >
-  > ```jsx
-  > /* ... */
-  > const itemsRef = useRef(null);
-  > /* ... */
-  >
-  > function getMap() {
-  >   if (!itemsRef.current) {
-  >     // Initialize the Map on first usage.
-  >     itemsRef.current = new Map();
-  >   }
-  >   return itemsRef.current;
-  > }
-  >
-  > /* ... */
-  > <ul>
-  >   {catList.map((cat) => (
-  >     <li
-  >       key={cat}
-  >       ref={(node) => {
-  >         const map = getMap();
-  >         if (node) {
-  >           map.set(cat, node);
-  >         } else {
-  >           map.delete(cat);
-  >         }
-  >       }}
-  >     >
-  >       <img src={cat} />
-  >     </li>
-  >   ))}
-  > </ul>;
-  > /* ... */
-  > ```
-  >
-  > [React](https://react.dev/learn/manipulating-the-dom-with-refs)
-
-Example (from [React](https://react.dev/learn/manipulating-the-dom-with-refs)):
-
-```jsx
-import { useRef } from "react";
-
-export default function Form() {
-  const inputRef = useRef(null);
-
-  function handleClick() {
-    inputRef.current.focus();
-  }
-
-  return (
-    <>
-      <input ref={inputRef} />
-      <button onClick={handleClick}>Focus the input</button>
-    </>
-  );
-}
-```
-
-Use cases:
-
-- "If your component needs to store some value, but it doesn’t impact the rendering logic, choose refs." ([React](https://react.dev/learn/referencing-values-with-refs))
-- "sometimes you might need access to the DOM elements managed by React—for example, to focus a node, scroll to it, or measure its size and position. There is no built-in way to do those things in React, so you will need a _ref_ to the DOM node." ([React](https://react.dev/learn/manipulating-the-dom-with-refs))
-- > Typically, you will use a ref when your component needs to “step outside” React and communicate with external APIs—often a browser API that won’t impact the appearance of the component. Here are a few of these rare situations:
-  >
-  > - Storing timeout IDs
-  > - Storing and manipulating DOM elements, which we cover on the next page
-  > - Storing other objects that aren’t necessary to calculate the JSX.
-  >
-  > [React](https://react.dev/learn/referencing-values-with-refs)
-
-Custom components' refs:
-
-- "When you put a ref on a built-in component that outputs a browser element like `<input />`, React will set that ref’s `current` property to the corresponding DOM node (such as the actual `<input />` in the browser). However, if you try to put a ref on your own component, like `<MyInput />`, by default you will get `null`. . . . This happens because by default React does not let a component access the DOM nodes of other components. Not even for its own children! This is intentional. Refs are an escape hatch that should be used sparingly. Manually manipulating _another_ component’s DOM nodes makes your code even more fragile." ([React](https://react.dev/learn/manipulating-the-dom-with-refs))
-- "In design systems, it is a common pattern for low-level components like buttons, inputs, and so on, to forward their refs to their DOM nodes. On the other hand, high-level components like forms, lists, or page sections usually won’t expose their DOM nodes to avoid accidental dependencies on the DOM structure." ([React](https://react.dev/learn/manipulating-the-dom-with-refs))
-- > components that want to expose their DOM nodes have to opt in to that behavior. A component can specify that it “forwards” its ref to one of its children . . . can use the `forwardRef` API . . .
-  >
-  > ```jsx
-  > import { forwardRef, useRef } from "react";
-  >
-  > const MyInput = forwardRef((props, ref) => {
-  >   return <input {...props} ref={ref} />;
-  > });
-  >
-  > export default function Form() {
-  >   const inputRef = useRef(null);
-  >
-  >   function handleClick() {
-  >     inputRef.current.focus();
-  >   }
-  >
-  >   return (
-  >     <>
-  >       <MyInput ref={inputRef} />
-  >       <button onClick={handleClick}>Focus the input</button>
-  >     </>
-  >   );
-  > }
-  > ```
-  >
-  > [React](https://react.dev/learn/manipulating-the-dom-with-refs)
-- > Exposing a subset of the API with an imperative handle . . . In uncommon cases, you may want to restrict the exposed functionality. You can do that with `useImperativeHandle`:
-  >
-  > ```jsx
-  > import { forwardRef, useRef, useImperativeHandle } from "react";
-  >
-  > const MyInput = forwardRef((props, ref) => {
-  >   const restrictedRef = useRef(null);
-  >
-  >   useImperativeHandle(ref, () => ({
-  >     // Only expose focus and nothing else
-  >     focus() {
-  >       restrictedRef.current.focus();
-  >     },
-  >   }));
-  >
-  >   return <input {...props} ref={restrictedRef} />;
-  > });
-  > ```
-  >
-  > . . . `inputRef.current` inside the `Form` component will only have the `focus` method. In this case, the ref “handle” is not the DOM node, but the custom object you create inside `useImperativeHandle` call.
-  >
-  > [React](https://react.dev/learn/manipulating-the-dom-with-refs) (with a slightly modified code)
-
-Forcing the DOM to update synchronously:
-
-- > Consider code like this, which adds a new todo and scrolls the screen down to the last child of the list. Notice how, for some reason, it always scrolls to the todo that was just before the last added one . . . The issue is with these two lines:
-  >
-  > ```jsx
-  > setTodos([...todos, newTodo]);
-  > listRef.current.lastChild.scrollIntoView();
-  > ```
-  >
-  > In React, state updates are queued. Usually, this is what you want. However, here it causes a problem because `setTodos` does not immediately update the DOM. So the time you scroll the list to its last element, the todo has not yet been added. This is why scrolling always “lags behind” by one item. To fix this issue, you can force React to update (“flush”) the DOM synchronously. To do this, import `flushSync` from `react-dom` and wrap the state update into a `flushSync` call:
-  >
-  > ```jsx
-  > flushSync(() => {
-  >   setTodos([...todos, newTodo]);
-  > });
-  > listRef.current.lastChild.scrollIntoView();
-  > ```
-  >
-  > This will instruct React to update the DOM synchronously right after the code wrapped in `flushSync` executes. As a result, the last todo will already be in the DOM by the time you try to scroll to it
-  >
-  > [React](https://react.dev/learn/manipulating-the-dom-with-refs)
 
 ## `useMemo`
 
