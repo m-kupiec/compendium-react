@@ -9,6 +9,9 @@
   - Component Organization
   - The Module Dependency Tree
   - Styling
+- **Serving UI**
+  - Overview
+  - The Render Tree
 
 ### Components
 
@@ -76,11 +79,6 @@
   - Reducers With Context
     - General
     - Example
-
-### UI Updates
-
-- **Overview**
-- **The Render Tree**
 
 ### JSX
 
@@ -271,6 +269,61 @@ export default function MyComponent({ counter, handler }) {
 ### Styling
 
 "React does not prescribe how you add CSS files. In the simplest case, you’ll add a `<link>` tag to your HTML." ([React](https://react.dev/learn))
+
+## Serving UI
+
+### Overview
+
+> process of requesting and serving UI has three steps:
+>
+> 1. Triggering a render . . .
+> 2. Rendering the component . . .
+> 3. Committing to the DOM
+>
+> [React](https://react.dev/learn/render-and-commit)
+
+> After you trigger a render, React calls your components to figure out what to display on screen. “Rendering” is React calling your components.
+>
+> - On initial render, React will call the root component.
+> - For subsequent renders, React will call the function component whose state update triggered the render.
+>
+> This process is recursive: if the updated component returns some other component, React will render that component next, and if that component also returns something, it will render that component next, and so on. The process will continue until there are no more nested components and React knows exactly what should be displayed on screen.
+>
+> [React](https://react.dev/learn/render-and-commit)
+
+> After rendering (calling) your components, React will modify the DOM.
+>
+> - For the initial render, React will use the `appendChild()` DOM API to put all the DOM nodes it has created on screen.
+> - For re-renders, React will apply the minimal necessary operations (calculated while rendering!) to make the DOM match the latest rendering output.
+>
+> [React](https://react.dev/learn/render-and-commit)
+
+"React only changes the DOM nodes if there’s a difference between renders. . . . you can add some text into the `<input>`, updating its `value`, but the text doesn’t disappear when the component re-renders" ([React](https://react.dev/learn/render-and-commit))
+
+"After rendering is done and React updated the DOM, the browser will repaint the screen. Although this process is known as “browser rendering”, we’ll refer to it as “painting” to avoid confusion throughout the docs." ([React](https://react.dev/learn/render-and-commit))
+
+### The Render Tree
+
+> There are two reasons for a component to render:
+>
+> 1. It’s the component’s **initial render**.
+> 2. The component’s (or one of its ancestors’) **state has been updated**.
+>
+> [React](https://react.dev/learn/render-and-commit)
+
+"As we nest components, we have the concept of parent and child components, where each parent component may itself be a child of another component. When we render a React app, we can model this relationship in a tree, known as the render tree." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
+
+> The root node in a React render tree is the root component of the app. In this case, the root component is `App` and it is the first component React renders. . . .
+>
+> ![Image](/assets/conditional_render_tree.webp)
+>
+> With conditional rendering, across different renders, the render tree may render different components.
+>
+> [React](https://react.dev/learn/understanding-your-ui-as-a-tree)
+
+"the render tree is only composed of React components. React, as a UI framework, is platform agnostic. On react.dev, we showcase examples that render to the web, which uses HTML markup as its UI primitives. But a React app could just as likely render to a mobile or desktop platform, which may use different UI primitives like UIView or FrameworkElement. These platform UI primitives are not a part of React. React render trees can provide insight to our React app regardless of what platform your app renders to." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
+
+"Although render trees may differ across render passes, these trees are generally helpful for identifying what the `top-level` and `leaf components` are in a React app. Top-level components are the components nearest to the root component and affect the rendering performance of all the components beneath them and often contain the most complexity. Leaf components are near the bottom of the tree and have no child components and are often frequently re-rendered. . . . Identifying [top-level components] . . . is useful for understanding and debugging rendering performance." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
 
 # Components
 
@@ -1142,61 +1195,6 @@ const initialTasks = [
   { id: 2, text: "Drink matcha", done: false },
 ];
 ```
-
-# UI Updates
-
-## Overview
-
-> process of requesting and serving UI has three steps:
->
-> 1. Triggering a render . . .
-> 2. Rendering the component . . .
-> 3. Committing to the DOM
->
-> [React](https://react.dev/learn/render-and-commit)
-
-> After you trigger a render, React calls your components to figure out what to display on screen. “Rendering” is React calling your components.
->
-> - On initial render, React will call the root component.
-> - For subsequent renders, React will call the function component whose state update triggered the render.
->
-> This process is recursive: if the updated component returns some other component, React will render that component next, and if that component also returns something, it will render that component next, and so on. The process will continue until there are no more nested components and React knows exactly what should be displayed on screen.
->
-> [React](https://react.dev/learn/render-and-commit)
-
-> After rendering (calling) your components, React will modify the DOM.
->
-> - For the initial render, React will use the `appendChild()` DOM API to put all the DOM nodes it has created on screen.
-> - For re-renders, React will apply the minimal necessary operations (calculated while rendering!) to make the DOM match the latest rendering output.
->
-> [React](https://react.dev/learn/render-and-commit)
-
-"React only changes the DOM nodes if there’s a difference between renders. . . . you can add some text into the `<input>`, updating its `value`, but the text doesn’t disappear when the component re-renders" ([React](https://react.dev/learn/render-and-commit))
-
-"After rendering is done and React updated the DOM, the browser will repaint the screen. Although this process is known as “browser rendering”, we’ll refer to it as “painting” to avoid confusion throughout the docs." ([React](https://react.dev/learn/render-and-commit))
-
-## The Render Tree
-
-> There are two reasons for a component to render:
->
-> 1. It’s the component’s **initial render**.
-> 2. The component’s (or one of its ancestors’) **state has been updated**.
->
-> [React](https://react.dev/learn/render-and-commit)
-
-"As we nest components, we have the concept of parent and child components, where each parent component may itself be a child of another component. When we render a React app, we can model this relationship in a tree, known as the render tree." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
-
-> The root node in a React render tree is the root component of the app. In this case, the root component is `App` and it is the first component React renders. . . .
->
-> ![Image](/assets/conditional_render_tree.webp)
->
-> With conditional rendering, across different renders, the render tree may render different components.
->
-> [React](https://react.dev/learn/understanding-your-ui-as-a-tree)
-
-"the render tree is only composed of React components. React, as a UI framework, is platform agnostic. On react.dev, we showcase examples that render to the web, which uses HTML markup as its UI primitives. But a React app could just as likely render to a mobile or desktop platform, which may use different UI primitives like UIView or FrameworkElement. These platform UI primitives are not a part of React. React render trees can provide insight to our React app regardless of what platform your app renders to." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
-
-"Although render trees may differ across render passes, these trees are generally helpful for identifying what the `top-level` and `leaf components` are in a React app. Top-level components are the components nearest to the root component and affect the rendering performance of all the components beneath them and often contain the most complexity. Leaf components are near the bottom of the tree and have no child components and are often frequently re-rendered. . . . Identifying [top-level components] . . . is useful for understanding and debugging rendering performance." ([React](https://react.dev/learn/understanding-your-ui-as-a-tree))
 
 # JSX
 
