@@ -108,10 +108,10 @@
 
 ### Events
 
-Architecture
-Naming Convention
-Propagation
-_Passing Handlers_ Pattern
+- **Architecture**
+- **Naming Convention**
+- **Propagation**
+- **_Passing Handlers_ Pattern**
 
 ### Side Effects
 
@@ -134,7 +134,6 @@ _Passing Handlers_ Pattern
 ### Hooks
 
 - **General**
-- **`useRef`**
 - **`useMemo`**
 - **`useSyncExternalStore`**
 - **Custom**
