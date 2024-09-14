@@ -24,7 +24,18 @@
 - **Data**
   - Local Variables
   - State
-- **Returned Value**
+- **JSX**
+  - General
+  - Internals
+  - Escaping Into JavaScript
+    - General
+    - Element Attributes
+    - Control Flow
+      - Conditionals
+      - Loops
+        - General
+        - The `key` Attribute
+  - Returned Value
 - **Purity**
   - General
   - `StrictMode`
@@ -79,18 +90,6 @@
   - Reducers With Context
     - General
     - Example
-
-### JSX
-
-- **Definition**
-- **Internals**
-- **Escaping Into JavaScript**
-  - General
-  - HTML Attributes
-  - Control Flow
-    - Conditionals
-    - Loops
-- **Requirements**
 
 ### Hooks
 
@@ -450,7 +449,67 @@ export default function MyComponent({ counter, handler }) {
 >
 > [React](https://react.dev/learn/state-a-components-memory)
 
-## Returned Value
+## JSX
+
+### General
+
+"The markup syntax . . . is called _JSX_" ([React](https://react.dev/learn))
+
+"You have to close tags like `<br />`." ([React](https://react.dev/learn))
+
+### Internals
+
+"`<img />` is written like HTML, but it is actually JavaScript under the hood!" ([React](https://react.dev/learn/your-first-component))
+
+"JSX looks like HTML, but under the hood it is transformed into plain JavaScript objects. You can’t return two objects from a function without wrapping them into an array. This explains why you also can’t return two JSX tags without wrapping them into another tag or a Fragment." ([React](https://react.dev/learn/writing-markup-with-jsx))
+
+"JSX elements aren’t “instances” because they don’t hold any internal state and aren’t real DOM nodes." ([React](https://react.dev/learn/conditional-rendering))
+
+### Escaping Into JavaScript
+
+#### General
+
+"JSX lets you put markup into JavaScript. Curly braces let you “escape back” into JavaScript" ([React](https://react.dev/learn))
+
+"JavaScript inside the JSX `{` and `}` executes right away" ([React](https://react.dev/learn/responding-to-events))
+
+#### Element Attributes
+
+"You can also “escape into JavaScript” from JSX attributes, but you have to use curly braces _instead of quotes_" ([React](https://react.dev/learn))
+
+"`style={{}}` is not a special syntax, but a regular `{}` object inside the `style={ }` JSX curly braces. You can use the `style` attribute when your styles depend on JavaScript variables." ([React](https://react.dev/learn))
+
+#### Control Flow
+
+##### Conditionals
+
+"you can use the conditional `?` operator. Unlike `if`, it works inside JSX . . . you can also use a shorter logical `&&` syntax" ([React](https://react.dev/learn))
+
+"If the first operand of the `&&` operator after the automatic `Boolean` conversion becomes `false` but itself is not strictly `false` nor `null`/`undefined`, it will be rendered by React - examples include `0`, `NaN`, or `""`" (see [React](https://react.dev/learn/conditional-rendering))
+
+##### Loops
+
+###### General
+
+"You will rely on JavaScript features like `for` loop and the array `map()` function to render lists of components." ([React](https://react.dev/learn))
+
+###### The `key` Attribute
+
+"JSX elements directly inside a `map()` call always need keys!" ([React](https://react.dev/learn/rendering-lists))
+
+"`<li>` has a `key` attribute. For each item in a list, you should pass a string or a number that uniquely identifies that item among its siblings." ([React](https://react.dev/learn))
+
+Key generation rules:
+
+- "**Keys must be unique among siblings.** However, it’s okay to use the same keys for JSX nodes in different arrays." ([React](https://react.dev/learn/rendering-lists))
+- **Keys must not change** or that defeats their purpose! Don’t generate them while rendering. . . . do not generate keys on the fly, e.g. with `key={Math.random()}`. This will cause keys to never match up between renders, leading to all your components and DOM being recreated every time. Not only is this slow, but it will also lose any user input inside the list items. Instead, use a stable ID based on the data." ([React](https://react.dev/learn/rendering-lists))
+- "It’s strongly recommended that you assign proper keys whenever you build dynamic lists. If you don’t have an appropriate key, you may want to consider restructuring your data so that you do." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
+- "If your data is coming from a database, you can use the database keys/IDs, which are unique by nature. . . . If your data is generated and persisted locally (e.g. notes in a note-taking app), use an incrementing counter, `crypto.randomUUID()` or a package like `uuid` when creating items." ([React](https://react.dev/learn/rendering-lists))
+- "You might be tempted to use an item’s index in the array as its key. In fact, that’s what React will use if you don’t specify a `key` at all. But the order in which you render items will change over time if an item is inserted, deleted, or if the array gets reordered. Index as a key often leads to subtle and confusing bugs." ([React](https://react.dev/learn/rendering-lists))
+
+### Returned Value
+
+"Your component also can’t return multiple JSX tags. You have to wrap them into a shared parent, like a `<div>...</div>` or an empty `<>...</>` wrapper" ([React](https://react.dev/learn))
 
 "In some situations, you won’t want to render anything at all. . . . A component must return something. In this case, you can return `null` . . . In practice, returning `null` from a component isn’t common . . . More often, you would conditionally include or exclude the component in the parent component’s JSX." ([React](https://react.dev/learn/conditional-rendering))
 
@@ -1195,55 +1254,6 @@ const initialTasks = [
   { id: 2, text: "Drink matcha", done: false },
 ];
 ```
-
-# JSX
-
-## Definition
-
-- "The markup syntax . . . is called _JSX_" ([React](https://react.dev/learn))
-
-## Internals
-
-- "`<img />` is written like HTML, but it is actually JavaScript under the hood!" ([React](https://react.dev/learn/your-first-component))
-- "JSX looks like HTML, but under the hood it is transformed into plain JavaScript objects. You can’t return two objects from a function without wrapping them into an array. This explains why you also can’t return two JSX tags without wrapping them into another tag or a Fragment." ([React](https://react.dev/learn/writing-markup-with-jsx))
-- "JSX elements aren’t “instances” because they don’t hold any internal state and aren’t real DOM nodes." ([React](https://react.dev/learn/conditional-rendering))
-
-## Escaping Into JavaScript
-
-### General
-
-- "JSX lets you put markup into JavaScript. Curly braces let you “escape back” into JavaScript" ([React](https://react.dev/learn))
-- "JavaScript inside the JSX `{` and `}` executes right away" ([React](https://react.dev/learn/responding-to-events))
-
-### HTML Attributes
-
-- "You can also “escape into JavaScript” from JSX attributes, but you have to use curly braces _instead of quotes_" ([React](https://react.dev/learn))
-- "`style={{}}` is not a special syntax, but a regular `{}` object inside the `style={ }` JSX curly braces. You can use the `style` attribute when your styles depend on JavaScript variables." ([React](https://react.dev/learn))
-
-### Control Flow
-
-#### Conditionals
-
-- "you can use the conditional `?` operator. Unlike `if`, it works inside JSX . . . you can also use a shorter logical `&&` syntax" ([React](https://react.dev/learn))
-  - If the first operand of the `&&` operator after the automatic `Boolean` conversion becomes `false` but itself is not strictly `false` nor `null`/`undefined`, it will be rendered by React - examples include `0`, `NaN`, or `""` (see [React](https://react.dev/learn/conditional-rendering))
-
-#### Loops
-
-- "You will rely on JavaScript features like `for` loop and the array `map()` function to render lists of components." ([React](https://react.dev/learn))
-- The `key` attribute:
-  - "JSX elements directly inside a `map()` call always need keys!" ([React](https://react.dev/learn/rendering-lists))
-  - "`<li>` has a `key` attribute. For each item in a list, you should pass a string or a number that uniquely identifies that item among its siblings." ([React](https://react.dev/learn))
-  - Key generation rules:
-    - "**Keys must be unique among siblings.** However, it’s okay to use the same keys for JSX nodes in different arrays." ([React](https://react.dev/learn/rendering-lists))
-    - **Keys must not change** or that defeats their purpose! Don’t generate them while rendering. . . . do not generate keys on the fly, e.g. with `key={Math.random()}`. This will cause keys to never match up between renders, leading to all your components and DOM being recreated every time. Not only is this slow, but it will also lose any user input inside the list items. Instead, use a stable ID based on the data." ([React](https://react.dev/learn/rendering-lists))
-    - "It’s strongly recommended that you assign proper keys whenever you build dynamic lists. If you don’t have an appropriate key, you may want to consider restructuring your data so that you do." ([React](https://react.dev/learn/tutorial-tic-tac-toe))
-    - "If your data is coming from a database, you can use the database keys/IDs, which are unique by nature. . . . If your data is generated and persisted locally (e.g. notes in a note-taking app), use an incrementing counter, `crypto.randomUUID()` or a package like `uuid` when creating items." ([React](https://react.dev/learn/rendering-lists))
-    - "You might be tempted to use an item’s index in the array as its key. In fact, that’s what React will use if you don’t specify a `key` at all. But the order in which you render items will change over time if an item is inserted, deleted, or if the array gets reordered. Index as a key often leads to subtle and confusing bugs." ([React](https://react.dev/learn/rendering-lists))
-
-## Requirements
-
-- "You have to close tags like `<br />`." ([React](https://react.dev/learn))
-- "Your component also can’t return multiple JSX tags. You have to wrap them into a shared parent, like a `<div>...</div>` or an empty `<>...</>` wrapper" ([React](https://react.dev/learn))
 
 # Hooks
 
