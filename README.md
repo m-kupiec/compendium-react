@@ -176,23 +176,6 @@
   - Use Cases
 - **Memoization**
 
-### Application Design & Development
-
-- **Step 1: Designing a Component Hierarchy**
-- **Step 2: Building a Static Prototype**
-- **Step 3: Identifying the State**
-- **Step 4: Implementing the State Flowing Down**
-- **Step 5: Implementing the State Updates**
-
-### Component Design & Development
-
-- **Overview**
-- **Step 1: Identifying Visual States**
-- **Step 2: Identifying State Triggers**
-- **Step 3: Drafting State**
-- **Step 4: Refactoring State**
-- **Step 5: Connecting State and Triggers**
-
 ### TypeScript Intergration
 
 - **Setup**
@@ -211,6 +194,23 @@
   - DOM Events
   - Children
   - `style` Property
+
+### Application Design & Development
+
+- **Step 1: Designing a Component Hierarchy**
+- **Step 2: Building a Static Prototype**
+- **Step 3: Identifying the State**
+- **Step 4: Implementing the State Flowing Down**
+- **Step 5: Implementing the State Updates**
+
+### Component Design & Development
+
+- **Overview**
+- **Step 1: Identifying Visual States**
+- **Step 2: Identifying State Triggers**
+- **Step 3: Drafting State**
+- **Step 4: Refactoring State**
+- **Step 5: Connecting State and Triggers**
 
 # Introduction
 
@@ -2255,218 +2255,6 @@ const initialTasks = [
 
 "How to tell if a calculation is expensive? In general, unless you’re creating or looping over thousands of objects, it’s probably not expensive. If you want to get more confidence, you can add a console log to measure the time spent in a piece of code . . . If the overall logged time adds up to a significant amount (say, `1ms` or more), it might make sense to memoize that calculation. As an experiment, you can then wrap the calculation in `useMemo` to verify whether the total logged time has decreased for that interaction or not" ([React](https://react.dev/learn/you-might-not-need-an-effect))
 
-# Application Design & Development
-
-## Step 1: Designing a Component Hierarchy
-
-> Imagine that you already have a JSON API and a mockup from a designer. The JSON API returns some data that looks like this:
->
-> ```json
-> [
->   { "category": "Fruits", "price": "$1", "stocked": true, "name": "Apple" },
->   {
->     "category": "Fruits",
->     "price": "$1",
->     "stocked": true,
->     "name": "Dragonfruit"
->   },
->   {
->     "category": "Fruits",
->     "price": "$2",
->     "stocked": false,
->     "name": "Passionfruit"
->   },
->   {
->     "category": "Vegetables",
->     "price": "$2",
->     "stocked": true,
->     "name": "Spinach"
->   },
->   {
->     "category": "Vegetables",
->     "price": "$4",
->     "stocked": false,
->     "name": "Pumpkin"
->   },
->   { "category": "Vegetables", "price": "$1", "stocked": true, "name": "Peas" }
-> ]
-> ```
->
-> Start by drawing boxes around every component and subcomponent in the mockup and naming them. If you work with a designer, they may have already named these components in their design tool.
->
-> . . . a component should ideally only do one thing. If it ends up growing, it should be decomposed into smaller subcomponents.
->
-> . . . Separate your UI into components, where each component matches one piece of your data model.
->
-> ![Image](/assets/s_thinking-in-react_ui_outline.png)
->
-> Now that you’ve identified the components in the mockup, arrange them into a hierarchy. . . .
->
-> - FilterableProductTable
->   - SearchBar
->   - ProductTable
->     - ProductCategoryRow
->     - ProductRow
->
-> [React](https://react.dev/learn/thinking-in-react)
-
-## Step 2: Building a Static Prototype
-
-> The most straightforward approach is to build a version that renders the UI from your data model without adding any interactivity… yet! It’s often easier to build the static version first and add interactivity later. Building a static version requires a lot of typing and no thinking, but adding interactivity requires a lot of thinking and not a lot of typing.
->
-> . . . you’ll want to build components that reuse other components and pass data using props
->
-> . . . don’t use state at all to build this static version. State is reserved only for interactivity, that is, data that changes over time.
->
-> . . . You can either build “top down” by starting with building the components higher up in the hierarchy . . . or “bottom up” by working from components lower down . . . In simpler examples, it’s usually easier to go top-down, and on larger projects, it’s easier to go bottom-up.
->
-> . . . After building your components, you’ll have a library of reusable components that render your data model. . . . The component at the top of the hierarchy . . . will take your data model as a prop. This is called _one-way data flow_ because the data flows down from the top-level component to the ones at the bottom of the tree.
->
-> [React](https://react.dev/learn/thinking-in-react)
-
-## Step 3: Identifying the State
-
-> To make the UI interactive, you need to let users change your underlying data model. You will use _state_ for this.
->
-> Think of state as the minimal set of changing data that your app needs to remember. The most important principle for structuring state is to keep it DRY (Don’t Repeat Yourself). Figure out the absolute minimal representation of the state your application needs and compute everything else on-demand. . . .
->
-> - Does it **remain unchanged** over time? If so, it isn’t state.
-> - Is it **passed in from a parent** via props? If so, it isn’t state.
-> - **Can you compute it** based on existing state or props in your component? If so, it _definitely_ isn’t state!
->
-> [React](https://react.dev/learn/thinking-in-react)
-
-> 1. The original list of products is **passed in as props, so it’s not state**.
-> 2. The search text seems to be state since it changes over time and can’t be computed from anything.
-> 3. The value of the checkbox seems to be state since it changes over time and can’t be computed from anything.
-> 4. The filtered list of products **isn’t state because it can be computed** by taking the original list of products and filtering it according to the search text and value of the checkbox.
->
-> [React](https://react.dev/learn/thinking-in-react)
-
-> Props and state are different, but they work together. A parent component will often keep some information in state (so that it can change it), and _pass it down_ to child components as their props.
->
-> [React](https://react.dev/learn/thinking-in-react)
-
-## Step 4: Implementing the State Flowing Down
-
-> you need to identify which component is responsible for changing this state, or owns the state. Remember: React uses one-way data flow, passing data down the component hierarchy from parent to child component. . . .
->
-> For each piece of state in your application:
->
-> 1. Identify _every_ component that renders something based on that state.
-> 2. Find their closest common parent component—a component above them all in the hierarchy.
-> 3. Decide where the state should live:
->    1. Often, you can put the state directly into their common parent.
->    2. You can also put the state into some component above their common parent.
->    3. If you can’t find a component where it makes sense to own the state, create a new component solely for holding the state and add it somewhere in the hierarchy above the common parent component.
->
-> Add state to the component with the `useState()` Hook. . . . Add . . . state variables at the top . . . and specify their initial state . . . Then, pass . . . as props
->
-> [React](https://react.dev/learn/thinking-in-react)
-
-## Step 5: Implementing the State Updates
-
-> to change the state according to user input, you will need to support data flowing the other way: the form components deep in the hierarchy need to update the state . . .
->
-> The state is owned by `FilterableProductTable`, so only it can call `setFilterText` and `setInStockOnly`. To let `SearchBar` update the `FilterableProductTable`’s state, you need to pass these functions down to `SearchBar`
->
-> [React](https://react.dev/learn/thinking-in-react)
-
-# Component Design & Development
-
-## Overview
-
-"React provides a declarative way to manipulate the UI. Instead of manipulating individual pieces of the UI directly, you describe the different states that your component can be in, and switch between them in response to the user input. This is similar to how designers think about the UI. . . . In imperative programming . . . you have to write the exact instructions to manipulate the UI depending on what just happened. . . . Manipulating the UI imperatively works well enough for isolated examples, but it gets exponentially more difficult to manage in more complex systems. Imagine updating a page full of different forms like this one. Adding a new UI element or a new interaction would require carefully checking all existing code to make sure you haven’t introduced a bug (for example, forgetting to show or hide something). React was built to solve this problem. In React, you don’t directly manipulate the UI . . . Instead, you declare what you want to show, and React figures out how to update the UI." ([React](https://react.dev/learn/reacting-to-input-with-state))
-
-Component design and development phases:
-
-> 1. **Identify** your component’s different visual states
-> 2. **Determine** what triggers those state changes
-> 3. **Represent** the state in memory using useState
-> 4. **Remove** any non-essential state variables
-> 5. **Connect** the event handlers to set the state
->
-> [React](https://react.dev/learn/reacting-to-input-with-state)
-
-## Step 1: Identifying Visual States
-
-"you need to visualize all the different “states” of the UI the user might see . . . Just like a designer, you’ll want to “mock up” or create “mocks” for the different states before you add logic. . . . a mock for just the visual part of the form . . . mock is controlled by a prop . . . Mocking lets you quickly iterate on the UI before you wire up any logic. . . . prototype of the same component . . . “controlled” by the . . . prop" ([React](https://react.dev/learn/reacting-to-input-with-state))
-
-> If a component has a lot of visual states, it can be convenient to show them all on one page:
->
-> ```jsx
-> let statuses = ["empty", "typing", "submitting", "success", "error"];
->
-> export default function App() {
->   return (
->     <>
->       {statuses.map((status) => (
->         <section key={status}>
->           <h4>Form ({status}):</h4>
->           <Form status={status} />
->         </section>
->       ))}
->     </>
->   );
-> }
-> ```
->
-> Pages like this are often called “living styleguides” or “storybooks”.
->
-> [React](https://react.dev/learn/reacting-to-input-with-state)
-
-## Step 2: Identifying State Triggers
-
-> You can trigger state updates in response to two kinds of inputs:
->
-> 1. **Human inputs**, like clicking a button, typing in a field, navigating a link.
-> 2. **Computer inputs**, like a network response arriving, a timeout completing, an image loading.
->
-> [React](https://react.dev/learn/reacting-to-input-with-state)
-
-> For the form you’re developing, you will need to change state in response to a few different inputs:
->
-> - **Changing the text input** (human) should switch it from the _Empty_ state to the _Typing_ state or back, depending on whether the text box is empty or not.
-> - **Clicking the Submit button** (human) should switch it to the _Submitting_ state.
-> - **Successful network response** (computer) should switch it to the _Success_ state.
-> - **Failed network response** (computer) should switch it to the _Error_ state with the matching error message.
->
-> [React](https://react.dev/learn/reacting-to-input-with-state)
-
-> To help visualize . . . [the] flow, try drawing each state on paper as a labeled circle, and each change between two states as an arrow. You can sketch out many flows this way and sort out bugs long before implementation.
->
-> ![Image](/assets/responding_to_input_flow.webp)
->
-> [React](https://react.dev/learn/reacting-to-input-with-state)
-
-## Step 3: Drafting State
-
-"you’ll need to represent the visual states of your component in memory with `useState`. Simplicity is key" ([React](https://react.dev/learn/reacting-to-input-with-state))
-
-"you’ll need to store the `answer` for the input, and the `error` (if it exists) to store the last error . . . Then, you’ll need a state variable representing which one of the visual states that you want to display. There’s usually more than a single way to represent that in memory, so you’ll need to experiment with it. . . . start by adding enough state that you’re _definitely_ sure that all the possible visual states are covered . . . Your first idea likely won’t be the best, but that’s ok—refactoring state is a part of the process!" ([React](https://react.dev/learn/reacting-to-input-with-state))
-
-## Step 4: Refactoring State
-
-"Spending a little time on refactoring your state structure will make your components easier to understand, reduce duplication, and avoid unintended meanings." ([React](https://react.dev/learn/reacting-to-input-with-state))
-
-> Here are some questions you can ask about your state variables:
->
-> - **Does this state cause a paradox?** For example, `isTyping` and `isSubmitting` can’t both be `true`. A paradox usually means that the state is not constrained enough. There are four possible combinations of two booleans, but only three correspond to valid states. To remove the “impossible” state, you can combine these into a `status` that must be one of three values: `'typing'`, `'submitting'`, or `'success'`.
-> - **Is the same information available in another state variable already?** . . .
-> - **Can you get the same information from the inverse of another state variable?**
->
-> [React](https://react.dev/learn/reacting-to-input-with-state)
-
-"You know they are essential, because you can’t remove any of them without breaking the functionality." ([React](https://react.dev/learn/reacting-to-input-with-state))
-
-"a non-null `error` doesn’t make sense when `status` is `'success'`. To model the state more precisely, you can extract it into a reducer. Reducers let you unify multiple state variables into a single object and consolidate all the related logic!" ([React](https://react.dev/learn/reacting-to-input-with-state))
-
-## Step 5: Connecting State and Triggers
-
-"create event handlers that update the state." ([React](https://react.dev/learn/reacting-to-input-with-state))
-
-"Expressing all interactions as state changes lets you later introduce new visual states without breaking existing ones. It also lets you change what should be displayed in each state without changing the logic of the interaction itself." ([React](https://react.dev/learn/reacting-to-input-with-state))
-
 # TypeScript Intergration
 
 ## Setup
@@ -3007,3 +2795,215 @@ Alternatively:
 > ```
 >
 > [React](https://react.dev/learn/typescript)
+
+# Application Design & Development
+
+## Step 1: Designing a Component Hierarchy
+
+> Imagine that you already have a JSON API and a mockup from a designer. The JSON API returns some data that looks like this:
+>
+> ```json
+> [
+>   { "category": "Fruits", "price": "$1", "stocked": true, "name": "Apple" },
+>   {
+>     "category": "Fruits",
+>     "price": "$1",
+>     "stocked": true,
+>     "name": "Dragonfruit"
+>   },
+>   {
+>     "category": "Fruits",
+>     "price": "$2",
+>     "stocked": false,
+>     "name": "Passionfruit"
+>   },
+>   {
+>     "category": "Vegetables",
+>     "price": "$2",
+>     "stocked": true,
+>     "name": "Spinach"
+>   },
+>   {
+>     "category": "Vegetables",
+>     "price": "$4",
+>     "stocked": false,
+>     "name": "Pumpkin"
+>   },
+>   { "category": "Vegetables", "price": "$1", "stocked": true, "name": "Peas" }
+> ]
+> ```
+>
+> Start by drawing boxes around every component and subcomponent in the mockup and naming them. If you work with a designer, they may have already named these components in their design tool.
+>
+> . . . a component should ideally only do one thing. If it ends up growing, it should be decomposed into smaller subcomponents.
+>
+> . . . Separate your UI into components, where each component matches one piece of your data model.
+>
+> ![Image](/assets/s_thinking-in-react_ui_outline.png)
+>
+> Now that you’ve identified the components in the mockup, arrange them into a hierarchy. . . .
+>
+> - FilterableProductTable
+>   - SearchBar
+>   - ProductTable
+>     - ProductCategoryRow
+>     - ProductRow
+>
+> [React](https://react.dev/learn/thinking-in-react)
+
+## Step 2: Building a Static Prototype
+
+> The most straightforward approach is to build a version that renders the UI from your data model without adding any interactivity… yet! It’s often easier to build the static version first and add interactivity later. Building a static version requires a lot of typing and no thinking, but adding interactivity requires a lot of thinking and not a lot of typing.
+>
+> . . . you’ll want to build components that reuse other components and pass data using props
+>
+> . . . don’t use state at all to build this static version. State is reserved only for interactivity, that is, data that changes over time.
+>
+> . . . You can either build “top down” by starting with building the components higher up in the hierarchy . . . or “bottom up” by working from components lower down . . . In simpler examples, it’s usually easier to go top-down, and on larger projects, it’s easier to go bottom-up.
+>
+> . . . After building your components, you’ll have a library of reusable components that render your data model. . . . The component at the top of the hierarchy . . . will take your data model as a prop. This is called _one-way data flow_ because the data flows down from the top-level component to the ones at the bottom of the tree.
+>
+> [React](https://react.dev/learn/thinking-in-react)
+
+## Step 3: Identifying the State
+
+> To make the UI interactive, you need to let users change your underlying data model. You will use _state_ for this.
+>
+> Think of state as the minimal set of changing data that your app needs to remember. The most important principle for structuring state is to keep it DRY (Don’t Repeat Yourself). Figure out the absolute minimal representation of the state your application needs and compute everything else on-demand. . . .
+>
+> - Does it **remain unchanged** over time? If so, it isn’t state.
+> - Is it **passed in from a parent** via props? If so, it isn’t state.
+> - **Can you compute it** based on existing state or props in your component? If so, it _definitely_ isn’t state!
+>
+> [React](https://react.dev/learn/thinking-in-react)
+
+> 1. The original list of products is **passed in as props, so it’s not state**.
+> 2. The search text seems to be state since it changes over time and can’t be computed from anything.
+> 3. The value of the checkbox seems to be state since it changes over time and can’t be computed from anything.
+> 4. The filtered list of products **isn’t state because it can be computed** by taking the original list of products and filtering it according to the search text and value of the checkbox.
+>
+> [React](https://react.dev/learn/thinking-in-react)
+
+> Props and state are different, but they work together. A parent component will often keep some information in state (so that it can change it), and _pass it down_ to child components as their props.
+>
+> [React](https://react.dev/learn/thinking-in-react)
+
+## Step 4: Implementing the State Flowing Down
+
+> you need to identify which component is responsible for changing this state, or owns the state. Remember: React uses one-way data flow, passing data down the component hierarchy from parent to child component. . . .
+>
+> For each piece of state in your application:
+>
+> 1. Identify _every_ component that renders something based on that state.
+> 2. Find their closest common parent component—a component above them all in the hierarchy.
+> 3. Decide where the state should live:
+>    1. Often, you can put the state directly into their common parent.
+>    2. You can also put the state into some component above their common parent.
+>    3. If you can’t find a component where it makes sense to own the state, create a new component solely for holding the state and add it somewhere in the hierarchy above the common parent component.
+>
+> Add state to the component with the `useState()` Hook. . . . Add . . . state variables at the top . . . and specify their initial state . . . Then, pass . . . as props
+>
+> [React](https://react.dev/learn/thinking-in-react)
+
+## Step 5: Implementing the State Updates
+
+> to change the state according to user input, you will need to support data flowing the other way: the form components deep in the hierarchy need to update the state . . .
+>
+> The state is owned by `FilterableProductTable`, so only it can call `setFilterText` and `setInStockOnly`. To let `SearchBar` update the `FilterableProductTable`’s state, you need to pass these functions down to `SearchBar`
+>
+> [React](https://react.dev/learn/thinking-in-react)
+
+# Component Design & Development
+
+## Overview
+
+"React provides a declarative way to manipulate the UI. Instead of manipulating individual pieces of the UI directly, you describe the different states that your component can be in, and switch between them in response to the user input. This is similar to how designers think about the UI. . . . In imperative programming . . . you have to write the exact instructions to manipulate the UI depending on what just happened. . . . Manipulating the UI imperatively works well enough for isolated examples, but it gets exponentially more difficult to manage in more complex systems. Imagine updating a page full of different forms like this one. Adding a new UI element or a new interaction would require carefully checking all existing code to make sure you haven’t introduced a bug (for example, forgetting to show or hide something). React was built to solve this problem. In React, you don’t directly manipulate the UI . . . Instead, you declare what you want to show, and React figures out how to update the UI." ([React](https://react.dev/learn/reacting-to-input-with-state))
+
+Component design and development phases:
+
+> 1. **Identify** your component’s different visual states
+> 2. **Determine** what triggers those state changes
+> 3. **Represent** the state in memory using useState
+> 4. **Remove** any non-essential state variables
+> 5. **Connect** the event handlers to set the state
+>
+> [React](https://react.dev/learn/reacting-to-input-with-state)
+
+## Step 1: Identifying Visual States
+
+"you need to visualize all the different “states” of the UI the user might see . . . Just like a designer, you’ll want to “mock up” or create “mocks” for the different states before you add logic. . . . a mock for just the visual part of the form . . . mock is controlled by a prop . . . Mocking lets you quickly iterate on the UI before you wire up any logic. . . . prototype of the same component . . . “controlled” by the . . . prop" ([React](https://react.dev/learn/reacting-to-input-with-state))
+
+> If a component has a lot of visual states, it can be convenient to show them all on one page:
+>
+> ```jsx
+> let statuses = ["empty", "typing", "submitting", "success", "error"];
+>
+> export default function App() {
+>   return (
+>     <>
+>       {statuses.map((status) => (
+>         <section key={status}>
+>           <h4>Form ({status}):</h4>
+>           <Form status={status} />
+>         </section>
+>       ))}
+>     </>
+>   );
+> }
+> ```
+>
+> Pages like this are often called “living styleguides” or “storybooks”.
+>
+> [React](https://react.dev/learn/reacting-to-input-with-state)
+
+## Step 2: Identifying State Triggers
+
+> You can trigger state updates in response to two kinds of inputs:
+>
+> 1. **Human inputs**, like clicking a button, typing in a field, navigating a link.
+> 2. **Computer inputs**, like a network response arriving, a timeout completing, an image loading.
+>
+> [React](https://react.dev/learn/reacting-to-input-with-state)
+
+> For the form you’re developing, you will need to change state in response to a few different inputs:
+>
+> - **Changing the text input** (human) should switch it from the _Empty_ state to the _Typing_ state or back, depending on whether the text box is empty or not.
+> - **Clicking the Submit button** (human) should switch it to the _Submitting_ state.
+> - **Successful network response** (computer) should switch it to the _Success_ state.
+> - **Failed network response** (computer) should switch it to the _Error_ state with the matching error message.
+>
+> [React](https://react.dev/learn/reacting-to-input-with-state)
+
+> To help visualize . . . [the] flow, try drawing each state on paper as a labeled circle, and each change between two states as an arrow. You can sketch out many flows this way and sort out bugs long before implementation.
+>
+> ![Image](/assets/responding_to_input_flow.webp)
+>
+> [React](https://react.dev/learn/reacting-to-input-with-state)
+
+## Step 3: Drafting State
+
+"you’ll need to represent the visual states of your component in memory with `useState`. Simplicity is key" ([React](https://react.dev/learn/reacting-to-input-with-state))
+
+"you’ll need to store the `answer` for the input, and the `error` (if it exists) to store the last error . . . Then, you’ll need a state variable representing which one of the visual states that you want to display. There’s usually more than a single way to represent that in memory, so you’ll need to experiment with it. . . . start by adding enough state that you’re _definitely_ sure that all the possible visual states are covered . . . Your first idea likely won’t be the best, but that’s ok—refactoring state is a part of the process!" ([React](https://react.dev/learn/reacting-to-input-with-state))
+
+## Step 4: Refactoring State
+
+"Spending a little time on refactoring your state structure will make your components easier to understand, reduce duplication, and avoid unintended meanings." ([React](https://react.dev/learn/reacting-to-input-with-state))
+
+> Here are some questions you can ask about your state variables:
+>
+> - **Does this state cause a paradox?** For example, `isTyping` and `isSubmitting` can’t both be `true`. A paradox usually means that the state is not constrained enough. There are four possible combinations of two booleans, but only three correspond to valid states. To remove the “impossible” state, you can combine these into a `status` that must be one of three values: `'typing'`, `'submitting'`, or `'success'`.
+> - **Is the same information available in another state variable already?** . . .
+> - **Can you get the same information from the inverse of another state variable?**
+>
+> [React](https://react.dev/learn/reacting-to-input-with-state)
+
+"You know they are essential, because you can’t remove any of them without breaking the functionality." ([React](https://react.dev/learn/reacting-to-input-with-state))
+
+"a non-null `error` doesn’t make sense when `status` is `'success'`. To model the state more precisely, you can extract it into a reducer. Reducers let you unify multiple state variables into a single object and consolidate all the related logic!" ([React](https://react.dev/learn/reacting-to-input-with-state))
+
+## Step 5: Connecting State and Triggers
+
+"create event handlers that update the state." ([React](https://react.dev/learn/reacting-to-input-with-state))
+
+"Expressing all interactions as state changes lets you later introduce new visual states without breaking existing ones. It also lets you change what should be displayed in each state without changing the logic of the interaction itself." ([React](https://react.dev/learn/reacting-to-input-with-state))
