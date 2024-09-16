@@ -134,13 +134,15 @@
       - Moving Non-Reactive Values Outside Component
       - Updating State Without Using Reactive Values
       - Avoiding Objects/Functions as Dependencies
-- **Subscriptions**
+- **External Store Subscriptions**
+  - Introduction
+  - Usage
+  - Best Practices
 
 ### Hooks
 
 - **General**
 - **`useMemo`**
-- **`useSyncExternalStore`**
 - **Custom**
 
 ### Data Fetching
@@ -1780,9 +1782,47 @@ const initialTasks = [
 
 "You can write your own functions to group pieces of logic inside your Effect. As long as you also declare them _inside_ your Effect, they’re not reactive values, and so they don’t need to be dependencies of your Effect." ([React](https://react.dev/learn/removing-effect-dependencies))
 
-## Subscriptions
+## External Store Subscriptions
 
-. . .
+### Introduction
+
+"Sometimes, your components may need to subscribe to some data outside of the React state. This data could be from a third-party library or a built-in browser API. Since this data can change without React’s knowledge, you need to manually subscribe your components to it. . . . Although it’s common to use Effects for this, React has a purpose-built Hook for subscribing to an external store that is preferred instead. . . . This approach is less error-prone than manually syncing mutable data to React state with an Effect." ([React](https://react.dev/learn/you-might-not-need-an-effect))
+
+### Usage
+
+> ```jsx
+> import { useSyncExternalStore } from "react";
+>
+> function subscribe(callback) {
+>   window.addEventListener("online", callback);
+>   window.addEventListener("offline", callback);
+>
+>   return () => {
+>     window.removeEventListener("online", callback);
+>     window.removeEventListener("offline", callback);
+>   };
+> }
+>
+> function useOnlineStatus() {
+>   return useSyncExternalStore(
+>     subscribe,
+>     () => navigator.online,
+>     () => true
+>   );
+> }
+>
+> function ChatIndicator() {
+>   const isOnline = useOnlineStatus();
+>
+>   // ...
+> }
+> ```
+>
+> From [React](https://react.dev/learn/you-might-not-need-an-effect) (modified)
+
+### Best Practices
+
+"Typically, you’ll write a custom Hook . . . so that you don’t need to repeat this code in the individual components." ([React](https://react.dev/learn/you-might-not-need-an-effect))
 
 # Hooks
 
@@ -1826,42 +1866,6 @@ const initialTasks = [
 > [React](https://react.dev/learn/you-might-not-need-an-effect)
 
 "How to tell if a calculation is expensive? In general, unless you’re creating or looping over thousands of objects, it’s probably not expensive. If you want to get more confidence, you can add a console log to measure the time spent in a piece of code . . . If the overall logged time adds up to a significant amount (say, `1ms` or more), it might make sense to memoize that calculation. As an experiment, you can then wrap the calculation in useMemo to verify whether the total logged time has decreased for that interaction or not . . . `useMemo` won’t make the _first_ render faster. It only helps you skip unnecessary work on updates.
-
-## `useSyncExternalStore`
-
-"Sometimes, your components may need to subscribe to some data outside of the React state. This data could be from a third-party library or a built-in browser API. Since this data can change without React’s knowledge, you need to manually subscribe your components to it. . . . Although it’s common to use Effects for this, React has a purpose-built Hook for subscribing to an external store that is preferred instead. . . . This approach is less error-prone than manually syncing mutable data to React state with an Effect." ([React](https://react.dev/learn/you-might-not-need-an-effect))
-
-"Typically, you’ll write a custom Hook . . . so that you don’t need to repeat this code in the individual components." ([React](https://react.dev/learn/you-might-not-need-an-effect))
-
-Example (from [React](https://react.dev/learn/you-might-not-need-an-effect); modified):
-
-```jsx
-import { useSyncExternalStore } from "react";
-
-function subscribe(callback) {
-  window.addEventListener("online", callback);
-  window.addEventListener("offline", callback);
-
-  return () => {
-    window.removeEventListener("online", callback);
-    window.removeEventListener("offline", callback);
-  };
-}
-
-function useOnlineStatus() {
-  return useSyncExternalStore(
-    subscribe,
-    () => navigator.online,
-    () => true
-  );
-}
-
-function ChatIndicator() {
-  const isOnline = useOnlineStatus();
-
-  // ...
-}
-```
 
 ## Custom
 
