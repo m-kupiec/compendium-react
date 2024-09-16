@@ -156,7 +156,10 @@
     - Data Fetching
       - Introduction
       - Challenges
-      - Usage
+      - Addressing Race Conditions
+        - General
+        - Boolean Flag
+        - `AbortController`
 - **External Store Subscriptions**
   - Introduction
   - Usage
@@ -2009,7 +2012,20 @@ const initialTasks = [
 >
 > [React](https://react.dev/learn/synchronizing-with-effects)
 
-##### Usage
+##### Addressing Race Conditions
+
+###### General
+
+> You would typically notice a race condition (in React) when two slightly different requests for data have been made, and the application displays a different result depending on which request completes first. . . . There are a couple of approaches we can take here, both taking advantage of `useEffect`’s clean-up function:
+>
+> - If we're okay with making several requests, but only rendering the last result, we can use a boolean flag.
+> - Alternatively, if we don't have to support users on Internet Explorer, we can use `AbortController`.
+>
+> [Max Rozen](https://maxrozen.com/race-conditions-fetching-data-react-with-useeffect)
+
+###### Boolean Flag
+
+"You'll still have a race-condition in the sense that multiple requests will be in-flight, but only the results from the last one will be used." ([Max Rozen](https://maxrozen.com/race-conditions-fetching-data-react-with-useeffect))
 
 > If you don’t use a framework (and don’t want to build your own) but would like to make data fetching from Effects more ergonomic, consider extracting your fetching logic into a custom Hook like in this example:
 >
@@ -2049,6 +2065,48 @@ const initialTasks = [
 > You’ll likely also want to add some logic for error handling and to track whether the content is loading. . . . Although this alone won’t be as efficient as using a framework’s built-in data fetching mechanism, moving the data fetching logic into a custom Hook will make it easier to adopt an efficient data fetching strategy later.
 >
 > [React](https://react.dev/learn/you-might-not-need-an-effect)
+
+###### `AbortController`
+
+> ```jsx
+> useEffect(() => {
+>   const abortController = new AbortController();
+>
+>   const fetchData = async () => {
+>     try {
+>       const response = await fetch(`https://swapi.dev/api/people/${id}/`, {
+>         signal: abortController.signal,
+>       });
+>       const newData = await response.json();
+>
+>       setFetchedId(id);
+>       setData(newData);
+>     } catch (error) {
+>       if (error.name === "AbortError") {
+>         // Aborting a fetch throws an error
+>         // So we can't update state afterwards
+>       }
+>       // Handle other request errors here
+>     }
+>   };
+>
+>   fetchData();
+>   return () => {
+>     abortController.abort();
+>   };
+> }, [id]);
+> ```
+>
+> . . . we're:
+>
+> - initialising an `AbortController` at the start of the effect,
+> - passing the [`AbortController.signal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortController/signal) to `fetch` via the options argument,
+> - catching any `AbortError`s that get thrown (when `abort()` is called, the `fetch()` promise rejects with an `AbortError`, see [MDN reference](https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort)), and
+> - calling the `abort` function inside the clean-up function
+>
+> With this example, we're faced with the following trade-off: drop support for Internet Explorer/use a polyfill, in exchange for the ability to cancel in-flight HTTP requests.
+>
+> [Max Rozen](https://maxrozen.com/race-conditions-fetching-data-react-with-useeffect)
 
 ## External Store Subscriptions
 
