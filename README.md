@@ -131,6 +131,9 @@
       - Reactive Values
       - Mutable Values
     - Patterns
+      - Moving Non-Reactive Values Outside Component
+      - Updating State Without Using Reactive Values
+      - Avoiding Objects/Functions as Dependencies
 - **Subscriptions**
 
 ### Hooks
@@ -1719,7 +1722,11 @@ const initialTasks = [
 
 #### Patterns
 
+##### Moving Non-Reactive Values Outside Component
+
 "you could . . . “prove” to the linter that these values aren’t reactive values, i.e. that they can’t change as a result of a re-render. For example, if `serverUrl` and `roomId` don’t depend on rendering and always have the same values, you can move them outside the component. Now they don’t need to be dependencies . . . You can also move them _inside the Effect_. They aren’t calculated during rendering, so they’re not reactive" ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
+
+##### Updating State Without Using Reactive Values
 
 > If you want to update some state based on the previous state, pass an updater function. . . .
 >
@@ -1762,6 +1769,8 @@ const initialTasks = [
 > Notice how your Effect does not read the `messages` variable at all now. . . . As a result of this fix, receiving a chat message will no longer make the chat re-connect.
 >
 > [React](https://react.dev/learn/removing-effect-dependencies)
+
+##### Avoiding Objects/Functions as Dependencies
 
 "In JavaScript, each newly created object and function is considered distinct from all the others. It doesn’t matter that the contents inside of them may be the same! . . . Object and function dependencies can make your Effect re-synchronize more often than you need. This is why, whenever possible, you should try to avoid objects and functions as your Effect’s dependencies. Instead, try moving them outside the component, inside the Effect, or extracting primitive values out of them. . . . Move static objects and functions outside your component . . . Move dynamic objects and functions inside your Effect . . . If your object depends on some reactive value that may change as a result of a re-render . . . you can’t pull it outside your component. You can, however, move its creation inside of your Effect’s code" ([React](https://react.dev/learn/removing-effect-dependencies))
 
