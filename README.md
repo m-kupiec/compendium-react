@@ -125,7 +125,6 @@
     - Rendering
   - By Value Reactivity
 - **Effects**
-  - Use Cases
   - Operation
   - Lifecycle
   - Basic Usage
@@ -152,6 +151,12 @@
     - Separating Independent Processeses
     - Extracting into Effect Events
     - Extracting into Custom Hooks
+  - Use Cases
+    - General
+    - Data Fetching
+      - Introduction
+      - Challenges
+      - Usage
 - **External Store Subscriptions**
   - Introduction
   - Usage
@@ -161,11 +166,6 @@
 
 - **`useMemo`**
 - **Custom**
-
-### Data Fetching
-
-- **Using Frameworks/Libraries**
-- **Using `useEffect`**
 
 ### Application Design & Development
 
@@ -1656,16 +1656,6 @@ const initialTasks = [
 
 ## Effects
 
-### Use Cases
-
-"Use Effects only for code that should run _because_ the component was displayed to the user." ([React](https://react.dev/learn/you-might-not-need-an-effect))
-
-"Keep in mind that Effects are typically used to “step out” of your React code and synchronize with some _external_ system. This includes browser APIs, third-party widgets, network, and so on. If your Effect only adjusts some state based on other state, you might not need an Effect." ([React](https://react.dev/learn/synchronizing-with-effects))
-
-"You can use a similar approach to wrap legacy non-React code (like jQuery plugins) into declarative React components." ([React](https://react.dev/learn/synchronizing-with-effects))
-
-"You can also fetch data with Effects: for example, you can synchronize the search results with the current search query. Keep in mind that modern frameworks provide more efficient built-in data fetching mechanisms than writing Effects directly in your components." ([React](https://react.dev/learn/you-might-not-need-an-effect))
-
 ### Operation
 
 "Effects let you run some code after rendering so that you can synchronize your component with some system outside of React. . . . Effects run at the end of a commit after the screen updates. This is a good time to synchronize the React components with some external system (like network or a third-party library)." ([React](https://react.dev/learn/synchronizing-with-effects))
@@ -1981,6 +1971,85 @@ const initialTasks = [
 
 "In general, whenever you have to resort to writing Effects, keep an eye out for when you can extract a piece of functionality into a custom Hook with a more declarative and purpose-built API . . . The fewer raw `useEffect` calls you have in your components, the easier you will find to maintain your application." ([React](https://react.dev/learn/you-might-not-need-an-effect))
 
+### Use Cases
+
+#### General
+
+"Use Effects only for code that should run _because_ the component was displayed to the user." ([React](https://react.dev/learn/you-might-not-need-an-effect))
+
+"Keep in mind that Effects are typically used to “step out” of your React code and synchronize with some _external_ system. This includes browser APIs, third-party widgets, network, and so on. If your Effect only adjusts some state based on other state, you might not need an Effect." ([React](https://react.dev/learn/synchronizing-with-effects))
+
+"You can use a similar approach to wrap legacy non-React code (like jQuery plugins) into declarative React components." ([React](https://react.dev/learn/synchronizing-with-effects))
+
+#### Data Fetching
+
+##### Introduction
+
+"Writing fetch calls inside Effects is a popular way to fetch data, especially in fully client-side apps." ([React](https://react.dev/learn/synchronizing-with-effects))
+
+"You can also fetch data with Effects: for example, you can synchronize the search results with the current search query. Keep in mind that modern frameworks provide more efficient built-in data fetching mechanisms than writing Effects directly in your components." ([React](https://react.dev/learn/you-might-not-need-an-effect))
+
+> data fetching is not trivial to do well, so we recommend the following approaches:
+>
+> - If you use a framework, use its built-in data fetching mechanism. Modern React frameworks have integrated data fetching mechanisms that are efficient and don’t suffer from the above pitfalls.
+> - Otherwise, consider using or building a client-side cache. Popular open source solutions include React Query, useSWR, and React Router 6.4+.
+>
+> [React](https://react.dev/learn/synchronizing-with-effects)
+
+##### Challenges
+
+"You can build your own solution too, in which case you would use Effects under the hood, but add logic for deduplicating requests, caching responses, and avoiding network waterfalls (by preloading data or hoisting data requirements to routes)." ([React](https://react.dev/learn/synchronizing-with-effects))
+
+"Handling race conditions is not the only difficulty with implementing data fetching. You might also want to think about caching responses (so that the user can click Back and see the previous screen instantly), how to fetch data on the server (so that the initial server-rendered HTML contains the fetched content instead of a spinner), and how to avoid network waterfalls (so that a child can fetch data without waiting for every parent). These issues apply to any UI library, not just React. Solving them is not trivial, which is why modern frameworks provide more efficient built-in data fetching mechanisms than fetching data in Effects." ([React](https://react.dev/learn/you-might-not-need-an-effect))
+
+> - Effects **don’t run on the server**. This means that the initial server-rendered HTML will only include a loading state with no data. The client computer will have to download all JavaScript and render your app only to discover that now it needs to load the data. . . .
+> - Fetching directly in Effects makes it easy to create **“network waterfalls”**. You render the parent component, it fetches some data, renders the child components, and then they start fetching their data. If the network is not very fast, this is significantly slower than fetching all data in parallel.
+> - Fetching directly in Effects usually means you **don’t preload or cache data**. For example, if the component unmounts and then mounts again, it would have to fetch the data again.
+> - It’s not very ergonomic. There’s quite a bit of **boilerplate code** involved when writing `fetch` calls in a way that doesn’t suffer from bugs like race conditions.
+>
+> [React](https://react.dev/learn/synchronizing-with-effects)
+
+##### Usage
+
+> If you don’t use a framework (and don’t want to build your own) but would like to make data fetching from Effects more ergonomic, consider extracting your fetching logic into a custom Hook like in this example:
+>
+> ```jsx
+> function SearchResults({ query }) {
+>   const [page, setPage] = useState(1);
+>   const params = new URLSearchParams({ query, page });
+>   const results = useData(`/api/search?${params}`);
+>
+>   function handleNextPageClick() {
+>     setPage(page + 1);
+>   }
+>   // ...
+> }
+>
+> function useData(url) {
+>   const [data, setData] = useState(null);
+>
+>   useEffect(() => {
+>     let ignore = false;
+>
+>     fetch(url)
+>       .then((response) => response.json())
+>       .then((json) => {
+>         if (!ignore) {
+>           setData(json);
+>         }
+>       });
+>
+>     return () => (ignore = true);
+>   }, [url]);
+>
+>   return data;
+> }
+> ```
+>
+> You’ll likely also want to add some logic for error handling and to track whether the content is loading. . . . Although this alone won’t be as efficient as using a framework’s built-in data fetching mechanism, moving the data fetching logic into a custom Hook will make it easier to adopt an efficient data fetching strategy later.
+>
+> [React](https://react.dev/learn/you-might-not-need-an-effect)
+
 ## External Store Subscriptions
 
 ### Introduction
@@ -2088,77 +2157,6 @@ Use cases:
 
 - "whenever you write an Effect, consider whether it would be clearer to also wrap it in a custom Hook. You shouldn’t need Effects very often, so if you’re writing one, it means that you need to “step outside React” to synchronize with some external system or to do something that React doesn’t have a built-in API for. Wrapping it into a custom Hook lets you precisely communicate your intent and how the data flows through it. . . . With time, most of your app’s Effects will be in custom Hooks." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
 - "Effects are an “escape hatch”: you use them when you need to “step outside React” and when there is no better built-in solution for your use case. With time, the React team’s goal is to reduce the number of the Effects in your app to the minimum by providing more specific solutions to more specific problems. Wrapping your Effects in custom Hooks makes it easier to upgrade your code when these solutions become available." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
-
-# Data Fetching
-
-## Using Frameworks/Libraries
-
-"Handling race conditions is not the only difficulty with implementing data fetching. You might also want to think about caching responses (so that the user can click Back and see the previous screen instantly), how to fetch data on the server (so that the initial server-rendered HTML contains the fetched content instead of a spinner), and how to avoid network waterfalls (so that a child can fetch data without waiting for every parent). These issues apply to any UI library, not just React. Solving them is not trivial, which is why modern frameworks provide more efficient built-in data fetching mechanisms than fetching data in Effects." ([React](https://react.dev/learn/you-might-not-need-an-effect))
-
-> data fetching is not trivial to do well, so we recommend the following approaches:
->
-> - If you use a framework, use its built-in data fetching mechanism. Modern React frameworks have integrated data fetching mechanisms that are efficient and don’t suffer from the above pitfalls.
-> - Otherwise, consider using or building a client-side cache. Popular open source solutions include React Query, useSWR, and React Router 6.4+.
->
-> [React](https://react.dev/learn/synchronizing-with-effects)
-
-"You can build your own solution too, in which case you would use Effects under the hood, but add logic for deduplicating requests, caching responses, and avoiding network waterfalls (by preloading data or hoisting data requirements to routes)." ([React](https://react.dev/learn/synchronizing-with-effects))
-
-## Using `useEffect`
-
-"Writing fetch calls inside Effects is a popular way to fetch data, especially in fully client-side apps." ([React](https://react.dev/learn/synchronizing-with-effects))
-
-Downsides:
-
-> - Effects **don’t run on the server**. This means that the initial server-rendered HTML will only include a loading state with no data. The client computer will have to download all JavaScript and render your app only to discover that now it needs to load the data. . . .
-> - Fetching directly in Effects makes it easy to create **“network waterfalls”**. You render the parent component, it fetches some data, renders the child components, and then they start fetching their data. If the network is not very fast, this is significantly slower than fetching all data in parallel.
-> - Fetching directly in Effects usually means you **don’t preload or cache data**. For example, if the component unmounts and then mounts again, it would have to fetch the data again.
-> - It’s not very ergonomic. There’s quite a bit of **boilerplate code** involved when writing `fetch` calls in a way that doesn’t suffer from bugs like race conditions.
->
-> [React](https://react.dev/learn/synchronizing-with-effects)
-
-Usage:
-
-> If you don’t use a framework (and don’t want to build your own) but would like to make data fetching from Effects more ergonomic, consider extracting your fetching logic into a custom Hook like in this example:
->
-> ```jsx
-> function SearchResults({ query }) {
->   const [page, setPage] = useState(1);
->   const params = new URLSearchParams({ query, page });
->   const results = useData(`/api/search?${params}`);
->
->   function handleNextPageClick() {
->     setPage(page + 1);
->   }
->   // ...
-> }
->
-> function useData(url) {
->   const [data, setData] = useState(null);
->
->   useEffect(() => {
->     let ignore = false;
->
->     fetch(url)
->       .then((response) => response.json())
->       .then((json) => {
->         if (!ignore) {
->           setData(json);
->         }
->       });
->
->     return () => (ignore = true);
->   }, [url]);
->
->   return data;
-> }
-> ```
->
-> You’ll likely also want to add some logic for error handling and to track whether the content is loading. . . . Although this alone won’t be as efficient as using a framework’s built-in data fetching mechanism, moving the data fetching logic into a custom Hook will make it easier to adopt an efficient data fetching strategy later.
->
-> [React](https://react.dev/learn/you-might-not-need-an-effect)
-
-"You can build a Hook like this yourself or use one of the many solutions already available in the React ecosystem." ([React](https://react.dev/learn/you-might-not-need-an-effect))
 
 # Application Design & Development
 
