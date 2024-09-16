@@ -165,10 +165,10 @@
   - Usage
   - Best Practices
 
-### Hooks
+### Optimizations
 
-- **`useMemo`**
-- **Custom**
+- **Custom Hooks**
+- **Memoization**
 
 ### Application Design & Development
 
@@ -2150,9 +2150,40 @@ const initialTasks = [
 
 "Typically, you’ll write a custom Hook . . . so that you don’t need to repeat this code in the individual components." ([React](https://react.dev/learn/you-might-not-need-an-effect))
 
-# Hooks
+# Optimizations
 
-## `useMemo`
+## Custom Hooks
+
+"the code inside them describes what they want to do (use the online status!) rather than how to do it (by subscribing to the browser events). When you extract logic into custom Hooks, you can hide the gnarly details of how you deal with some external system or a browser API. The code of your components expresses your intent, not the implementation." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
+
+"You’ll likely often use custom Hooks created by others, but occasionally you might write one yourself! . . . Many excellent custom Hooks are maintained by the React community." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
+
+"Hook names must start with `use` followed by a capital letter . . . If your linter is configured for React, it will enforce this naming convention." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
+
+"Hooks may return arbitrary values." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
+
+"This convention guarantees that you can always look at a component and know where its state, Effects, and other React features might “hide”. For example, if you see a `getColor()` function call inside your component, you can be sure that it can’t possibly contain React state inside because its name doesn’t start with `use`. However, a function call like `useOnlineStatus()` will most likely contain calls to other Hooks inside! . . . Only Hooks and components can call other Hooks" ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
+
+"If your function doesn’t call any Hooks, avoid the `use` prefix. Instead, write it as a regular function without the `use` prefix. . . . This ensures that your code can call this regular function anywhere, including conditions" ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
+
+"You should give use prefix to a function (and thus make it a Hook) if it uses at least one Hook inside of it" ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
+
+"Custom Hooks let you share stateful logic but not state itself. Each call to a Hook is completely independent from every other call to the same Hook." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
+
+"The code inside your custom Hooks will re-run during every re-render of your component. This is why, like components, custom Hooks need to be pure. Think of custom Hooks’ code as part of your component’s body!" ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
+
+Best practices:
+
+- "Ideally, your custom Hook’s name should be clear enough that even a person who doesn’t write code often could have a good guess about what your custom Hook does, what it takes, and what it returns: ✅ `useData(url)` ✅ `useImpressionLog(eventName, extraData)` ✅ `useChatRoom(options)` When you synchronize with an external system, your custom Hook name may be more technical and use jargon specific to that system. It’s good as long as it would be clear to a person familiar with that system: ✅ `useMediaQuery(query)` ✅ `useSocket(url)` ✅ `useIntersectionObserver(ref, options)`" ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
+- "Keep custom Hooks focused on concrete high-level use cases. Avoid creating and using custom “lifecycle” Hooks that act as alternatives and convenience wrappers for the useEffect API itself: 🔴 `useMount(fn)` 🔴 `useEffectOnce(fn)` 🔴 `useUpdateEffect(fn)`" ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
+- "A good custom Hook makes the calling code more declarative by constraining what it does. For example, `useChatRoom(options)` can only connect to the chat room, while `useImpressionLog(eventName, extraData)` can only send an impression log to the analytics. If your custom Hook API doesn’t constrain the use cases and is very abstract, in the long run it’s likely to introduce more problems than it solves." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
+
+Use cases:
+
+- "whenever you write an Effect, consider whether it would be clearer to also wrap it in a custom Hook. You shouldn’t need Effects very often, so if you’re writing one, it means that you need to “step outside React” to synchronize with some external system or to do something that React doesn’t have a built-in API for. Wrapping it into a custom Hook lets you precisely communicate your intent and how the data flows through it. . . . With time, most of your app’s Effects will be in custom Hooks." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
+- "Effects are an “escape hatch”: you use them when you need to “step outside React” and when there is no better built-in solution for your use case. With time, the React team’s goal is to reduce the number of the Effects in your app to the minimum by providing more specific solutions to more specific problems. Wrapping your Effects in custom Hooks makes it easier to upgrade your code when these solutions become available." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
+
+## Memoization
 
 > ```jsx
 > function TodoList({ todos, filter }) {
@@ -2188,37 +2219,6 @@ const initialTasks = [
 "`useMemo` won’t make the _first_ render faster. It only helps you skip unnecessary work on updates." ([React](https://react.dev/learn/you-might-not-need-an-effect))
 
 "How to tell if a calculation is expensive? In general, unless you’re creating or looping over thousands of objects, it’s probably not expensive. If you want to get more confidence, you can add a console log to measure the time spent in a piece of code . . . If the overall logged time adds up to a significant amount (say, `1ms` or more), it might make sense to memoize that calculation. As an experiment, you can then wrap the calculation in `useMemo` to verify whether the total logged time has decreased for that interaction or not" ([React](https://react.dev/learn/you-might-not-need-an-effect))
-
-## Custom
-
-"the code inside them describes what they want to do (use the online status!) rather than how to do it (by subscribing to the browser events). When you extract logic into custom Hooks, you can hide the gnarly details of how you deal with some external system or a browser API. The code of your components expresses your intent, not the implementation." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
-
-"You’ll likely often use custom Hooks created by others, but occasionally you might write one yourself! . . . Many excellent custom Hooks are maintained by the React community." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
-
-"Hook names must start with `use` followed by a capital letter . . . If your linter is configured for React, it will enforce this naming convention." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
-
-"Hooks may return arbitrary values." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
-
-"This convention guarantees that you can always look at a component and know where its state, Effects, and other React features might “hide”. For example, if you see a `getColor()` function call inside your component, you can be sure that it can’t possibly contain React state inside because its name doesn’t start with `use`. However, a function call like `useOnlineStatus()` will most likely contain calls to other Hooks inside! . . . Only Hooks and components can call other Hooks" ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
-
-"If your function doesn’t call any Hooks, avoid the `use` prefix. Instead, write it as a regular function without the `use` prefix. . . . This ensures that your code can call this regular function anywhere, including conditions" ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
-
-"You should give use prefix to a function (and thus make it a Hook) if it uses at least one Hook inside of it" ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
-
-"Custom Hooks let you share stateful logic but not state itself. Each call to a Hook is completely independent from every other call to the same Hook." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
-
-"The code inside your custom Hooks will re-run during every re-render of your component. This is why, like components, custom Hooks need to be pure. Think of custom Hooks’ code as part of your component’s body!" ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
-
-Best practices:
-
-- "Ideally, your custom Hook’s name should be clear enough that even a person who doesn’t write code often could have a good guess about what your custom Hook does, what it takes, and what it returns: ✅ `useData(url)` ✅ `useImpressionLog(eventName, extraData)` ✅ `useChatRoom(options)` When you synchronize with an external system, your custom Hook name may be more technical and use jargon specific to that system. It’s good as long as it would be clear to a person familiar with that system: ✅ `useMediaQuery(query)` ✅ `useSocket(url)` ✅ `useIntersectionObserver(ref, options)`" ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
-- "Keep custom Hooks focused on concrete high-level use cases. Avoid creating and using custom “lifecycle” Hooks that act as alternatives and convenience wrappers for the useEffect API itself: 🔴 `useMount(fn)` 🔴 `useEffectOnce(fn)` 🔴 `useUpdateEffect(fn)`" ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
-- "A good custom Hook makes the calling code more declarative by constraining what it does. For example, `useChatRoom(options)` can only connect to the chat room, while `useImpressionLog(eventName, extraData)` can only send an impression log to the analytics. If your custom Hook API doesn’t constrain the use cases and is very abstract, in the long run it’s likely to introduce more problems than it solves." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
-
-Use cases:
-
-- "whenever you write an Effect, consider whether it would be clearer to also wrap it in a custom Hook. You shouldn’t need Effects very often, so if you’re writing one, it means that you need to “step outside React” to synchronize with some external system or to do something that React doesn’t have a built-in API for. Wrapping it into a custom Hook lets you precisely communicate your intent and how the data flows through it. . . . With time, most of your app’s Effects will be in custom Hooks." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
-- "Effects are an “escape hatch”: you use them when you need to “step outside React” and when there is no better built-in solution for your use case. With time, the React team’s goal is to reduce the number of the Effects in your app to the minimum by providing more specific solutions to more specific problems. Wrapping your Effects in custom Hooks makes it easier to upgrade your code when these solutions become available." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
 
 # Application Design & Development
 
