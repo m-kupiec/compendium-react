@@ -2179,11 +2179,15 @@ const initialTasks = [
 > }
 > ```
 >
-> This tells React that you don’t want the inner function to re-run unless either `todos` or `filter` have changed. React will remember the return value of `getFilteredTodos()` during the initial render. During the next renders, it will check if `todos` or `filter` are different. If they’re the same as last time, `useMemo` will return the last result it has stored. But if they are different, React will call the inner function again (and store its result). The function you wrap in `useMemo` runs during rendering, so this only works for pure calculations.
+> This tells React that you don’t want the inner function to re-run unless either `todos` or `filter` have changed. React will remember the return value of `getFilteredTodos()` during the initial render. During the next renders, it will check if `todos` or `filter` are different. If they’re the same as last time, `useMemo` will return the last result it has stored. But if they are different, React will call the inner function again (and store its result).
 >
 > [React](https://react.dev/learn/you-might-not-need-an-effect)
 
-"How to tell if a calculation is expensive? In general, unless you’re creating or looping over thousands of objects, it’s probably not expensive. If you want to get more confidence, you can add a console log to measure the time spent in a piece of code . . . If the overall logged time adds up to a significant amount (say, `1ms` or more), it might make sense to memoize that calculation. As an experiment, you can then wrap the calculation in useMemo to verify whether the total logged time has decreased for that interaction or not . . . `useMemo` won’t make the _first_ render faster. It only helps you skip unnecessary work on updates.
+"The function you wrap in `useMemo` runs during rendering, so this only works for pure calculations." ([React](https://react.dev/learn/you-might-not-need-an-effect))
+
+"`useMemo` won’t make the _first_ render faster. It only helps you skip unnecessary work on updates." ([React](https://react.dev/learn/you-might-not-need-an-effect))
+
+"How to tell if a calculation is expensive? In general, unless you’re creating or looping over thousands of objects, it’s probably not expensive. If you want to get more confidence, you can add a console log to measure the time spent in a piece of code . . . If the overall logged time adds up to a significant amount (say, `1ms` or more), it might make sense to memoize that calculation. As an experiment, you can then wrap the calculation in `useMemo` to verify whether the total logged time has decreased for that interaction or not" ([React](https://react.dev/learn/you-might-not-need-an-effect))
 
 ## Custom
 
