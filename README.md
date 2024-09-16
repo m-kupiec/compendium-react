@@ -128,6 +128,8 @@
     - Impact
     - Linting
     - Identification
+      - Reactive Values
+      - Mutable Values
     - Patterns
 - **Subscriptions**
 
@@ -1701,15 +1703,19 @@ const initialTasks = [
 
 #### Identification
 
+##### Reactive Values
+
 "Props and state aren’t the only reactive values. Values that you calculate from them are also reactive. If the props or state change, your component will re-render, and the values calculated from them will also change. This is why all variables from the component body used by the Effect should be in the Effect dependency list." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
 
 "Why doesn’t `serverUrl` need to be a dependency? This is because the `serverUrl` never changes due to a re-render. It’s always the same no matter how many times the component re-renders and why. Since `serverUrl` never changes, it wouldn’t make sense to specify it as a dependency. After all, dependencies only do something when they change over time! On the other hand, `roomId` may be different on a re-render. Props, state, and other values declared inside the component are reactive because they’re calculated during rendering and participate in the React data flow. If `serverUrl` was a state variable, it would be reactive. Reactive values must be included in dependencies" ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
 
-"Mutable values (including global variables) aren’t reactive. A mutable value like `location.pathname` can’t be a dependency. It’s mutable, so it can change at any time completely outside of the React rendering data flow. Changing it wouldn’t trigger a re-render of your component. Therefore, even if you specified it in the dependencies, React wouldn’t know to re-synchronize the Effect when it changes. . . . Instead, you should read and subscribe to an external mutable value with `useSyncExternalStore`." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
+##### Mutable Values
 
 "A mutable value like `ref.current` or things you read from it also can’t be a dependency. The ref object returned by `useRef` itself can be a dependency, but its `current` property is intentionally mutable. It lets you keep track of something without triggering a re-render. But since changing it doesn’t trigger a re-render, it’s not a reactive value, and React won’t know to re-run your Effect when it changes." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
 
-"the `ref` object has a stable identity: React guarantees you’ll always get the same object from the same `useRef` call on every render. It never changes, so it will never by itself cause the Effect to re-run. Therefore, it does not matter whether you include it or not. Including it is fine too . . . The `set` functions returned by `useState` also have stable identity, so you will often see them omitted from the dependencies too. If the linter lets you omit a dependency without errors, it is safe to do. Omitting always-stable dependencies only works when the linter can “see” that the object is stable. For example, if `ref` was passed from a parent component, you would have to specify it in the dependency array." ([React](https://react.dev/learn/synchronizing-with-effects))
+- "the `ref` object has a stable identity: React guarantees you’ll always get the same object from the same `useRef` call on every render. It never changes, so it will never by itself cause the Effect to re-run. Therefore, it does not matter whether you include it or not. Including it is fine too . . . The `set` functions returned by `useState` also have stable identity, so you will often see them omitted from the dependencies too. If the linter lets you omit a dependency without errors, it is safe to do. Omitting always-stable dependencies only works when the linter can “see” that the object is stable. For example, if `ref` was passed from a parent component, you would have to specify it in the dependency array." ([React](https://react.dev/learn/synchronizing-with-effects))
+
+"Mutable values (including global variables) aren’t reactive. A mutable value like `location.pathname` can’t be a dependency. It’s mutable, so it can change at any time completely outside of the React rendering data flow. Changing it wouldn’t trigger a re-render of your component. Therefore, even if you specified it in the dependencies, React wouldn’t know to re-synchronize the Effect when it changes. . . . Instead, you should read and subscribe to an external mutable value with `useSyncExternalStore`." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
 
 #### Patterns
 
