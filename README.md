@@ -1793,14 +1793,10 @@ const initialTasks = [
 > ```jsx
 > import { useSyncExternalStore } from "react";
 >
-> function subscribe(callback) {
->   window.addEventListener("online", callback);
->   window.addEventListener("offline", callback);
+> function ChatIndicator() {
+>   const isOnline = useOnlineStatus();
 >
->   return () => {
->     window.removeEventListener("online", callback);
->     window.removeEventListener("offline", callback);
->   };
+>   // ...
 > }
 >
 > function useOnlineStatus() {
@@ -1811,10 +1807,14 @@ const initialTasks = [
 >   );
 > }
 >
-> function ChatIndicator() {
->   const isOnline = useOnlineStatus();
+> function subscribe(callback) {
+>   window.addEventListener("online", callback);
+>   window.addEventListener("offline", callback);
 >
->   // ...
+>   return () => {
+>     window.removeEventListener("online", callback);
+>     window.removeEventListener("offline", callback);
+>   };
 > }
 > ```
 >
