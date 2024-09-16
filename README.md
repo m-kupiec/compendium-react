@@ -16,14 +16,14 @@
 ### Components
 
 - **General**
-- **Props**
-  - General
-  - Immutability
-  - Forwarding
-  - The `children` Prop
 - **Data**
-  - Local Variables
+  - Props
+    - General
+    - Immutability
+    - Forwarding
+    - The `children` Prop
   - State
+  - Local Variables
 - **Markup**
   - General
   - Internals
@@ -367,9 +367,11 @@ export default function MyComponent({ counter, handler }) {
 
 "Components are used to render, manage, and update the UI elements in your application" ([React](https://react.dev/learn/tutorial-tic-tac-toe))
 
-## Props
+## Data
 
-### General
+### Props
+
+#### General
 
 "React component functions accept a single argument, a `props` object . . . Usually you don’t need the whole `props` object itself, so you destructure it into individual props." ([React](https://react.dev/learn/passing-props-to-a-component))
 
@@ -391,11 +393,11 @@ export default function MyComponent({ counter, handler }) {
 
 "If you want to give a prop a default value to fall back on when no value is specified, you can do it with the destructuring by putting `=` and the default value right after the parameter" ([React](https://react.dev/learn/passing-props-to-a-component))
 
-### Immutability
+#### Immutability
 
 "props are immutable . . . When a component needs to change its props (for example, in response to a user interaction or new data), it will have to “ask” its parent component to pass it different props—a new object! Its old props will then be cast aside, and eventually the JavaScript engine will reclaim the memory taken by them." ([React](https://react.dev/learn/passing-props-to-a-component))
 
-### Forwarding
+#### Forwarding
 
 > Forwarding props with the JSX spread syntax . . .
 >
@@ -430,7 +432,7 @@ export default function MyComponent({ counter, handler }) {
 >
 > [React](https://react.dev/learn/passing-props-to-a-component)
 
-### The `children` Prop
+#### The `children` Prop
 
 "When you nest content inside a JSX tag, the parent component will receive that content in a prop called `children`. . . . You can think of a component with a `children` prop as having a “hole” that can be “filled in” by its parent components with arbitrary JSX. You will often use the `children` prop for visual wrappers: panels, grids, etc." ([React](https://react.dev/learn/passing-props-to-a-component))
 
@@ -460,14 +462,6 @@ export default function MyComponent({ counter, handler }) {
   }
   ```
 
-## Data
-
-### Local Variables
-
-"Local variables don’t persist between renders." ([React](https://react.dev/learn/state-a-components-memory))
-
-"Changes to local variables won’t trigger renders." ([React](https://react.dev/learn/state-a-components-memory))
-
 ### State
 
 > To update a component with new data, two things need to happen:
@@ -481,6 +475,12 @@ export default function MyComponent({ counter, handler }) {
 > 2. A **state setter function** to update the variable and trigger React to render the component again.
 >
 > [React](https://react.dev/learn/state-a-components-memory)
+
+### Local Variables
+
+"Local variables don’t persist between renders." ([React](https://react.dev/learn/state-a-components-memory))
+
+"Changes to local variables won’t trigger renders." ([React](https://react.dev/learn/state-a-components-memory))
 
 ## Markup
 
