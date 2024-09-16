@@ -2683,7 +2683,7 @@ Alternatively:
 
 #### `useContext`
 
-"The type of the value provided by the context is inferred from the value passed to the createContext call" ([React](https://react.dev/learn/typescript))
+"The type of the value provided by the context is inferred from the value passed to the `createContext` call" ([React](https://react.dev/learn/typescript))
 
 > ```ts
 > import { createContext, useContext, useState } from "react";
