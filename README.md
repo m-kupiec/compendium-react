@@ -178,22 +178,24 @@
 
 ### TypeScript Intergration
 
+- **Internals**
 - **Setup**
-- **Type Checking**
-  - Type Assertion
-  - Intrinsic vs. Value-Based Elements
-  - Result Type
 - **Usage**
-  - General
-  - `useState`
-  - `useReducer`
-  - `useContext`
-  - `useMemo`
-  - `useCallback`
-- **Built-In Types**
-  - DOM Events
-  - Children
-  - `style` Property
+  - Asserting Types
+  - Describing Props
+    - General
+    - Children
+    - Inline Styles
+  - Describing JSX
+  - Function Component Overloads
+  - Describing DOM Events
+  - Describing Hooks
+    - General
+    - `useState`
+    - `useReducer`
+    - `useContext`
+    - `useMemo`
+    - `useCallback`
 
 ### Application Design & Development
 
@@ -2257,79 +2259,7 @@ const initialTasks = [
 
 # TypeScript Intergration
 
-## Setup
-
-"JSX is an embeddable XML-like syntax. It is meant to be transformed into valid JavaScript, though the semantics of that transformation are implementation-specific. JSX rose to popularity with the React framework, but has since seen other implementations as well." ([TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html))
-
-"TypeScript supports embedding, type checking, and compiling JSX directly to JavaScript." ([TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html))
-
-> In order to use JSX you must do two things.
->
-> 1.  Name your files with a `.tsx` extension
-> 2.  Enable the `jsx` option
->
-> [TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)
-
-> TypeScript ships with three JSX modes: `preserve`, `react`, and `react-native`. These modes only affect the emit stage - type checking is unaffected. The `preserve` mode will keep the JSX as part of the output to be further consumed by another transform step (e.g. Babel). Additionally the output will have a `.jsx` file extension. The `react` mode will emit `React.createElement`, does not need to go through a JSX transformation before use, and the output will have a `.js` file extension. The react-native mode is the equivalent of `preserve` in that it keeps all JSX, but the output will instead have a `.js` file extension.
->
-> | Mode           | Input     | Output                                            | Output File Extension |
-> | -------------- | --------- | ------------------------------------------------- | --------------------- |
-> | `preserve`     | `<div />` | `<div />`                                         | `.jsx`                |
-> | `react`        | `<div />` | `React.createElement("div")`                      | `.js`                 |
-> | `react-native` | `<div />` | `<div />`                                         | `.js`                 |
-> | `react-jsx`    | `<div />` | `_jsx("div", {}, void 0);`                        | `.js`                 |
-> | `react-jsxdev` | `<div />` | `_jsxDEV("div", {}, void 0, false, {...}, this);` | `.js`                 |
->
-> [TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)
-
-"To use JSX with React you should use the [React typings](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react). These typings define the JSX namespace appropriately for use with React." ([TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html))
-
-> Out of the box, TypeScript supports JSX and you can get full React Web support by adding `@types/react` and `@types/react-dom` to your project.
->
-> ```bash
-> npm install @types/react @types/react-dom
-> ```
->
-> [React](https://react.dev/learn/typescript)
-
-> The following compiler options need to be set in your `tsconfig.json`:
->
-> - `dom` must be included in `lib` (Note: If no `lib` option is specified, `dom` is included by default).
-> - `jsx` must be set to one of the valid options. `preserve` should suffice for most applications. If you’re publishing a library, consult the [`jsx` documentation](https://www.typescriptlang.org/tsconfig/#jsx) on what value to choose.
->
-> [React](https://react.dev/learn/typescript)
-
-> There are multiple compiler flags which can be used to customize your JSX, which work as both a compiler flag and via inline per-file pragmas. To learn more see their tsconfig reference pages:
->
-> - `jsxFactory`
-> - `jsxFragmentFactory`
-> - `jsxImportSource`
->
-> [TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)
-
-## Type Checking
-
-### Type Assertion
-
-> Recall how to write a type assertion:
->
-> ```ts
-> const foo = <foo>bar;
-> ```
->
-> This asserts the variable `bar` to have the type `foo`. Since TypeScript also uses angle brackets for type assertions, combining it with JSX’s syntax would introduce certain parsing difficulties. As a result, TypeScript disallows angle bracket type assertions in `.tsx` files.
->
-> Since the above syntax cannot be used in `.tsx` files, an alternate type assertion operator should be used: `as`. The example can easily be rewritten with the `as` operator.
->
-> ```ts
-> const foo = bar as foo;
-> ```
->
-> The `as` operator is available in both `.ts` and `.tsx` files, and is identical in behavior to the angle-bracket type assertion style.
->
-> [TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)
-
-### Intrinsic vs. Value-Based Elements
+## Internals
 
 > In order to understand type checking with JSX, you must first understand the difference between intrinsic elements and value-based elements. Given a JSX expression `<expr />`, `expr` may either refer to something intrinsic to the environment (e.g. a `div` or `span` in a DOM environment) or to a custom component that you’ve created. This is important for two reasons:
 >
@@ -2368,39 +2298,85 @@ const initialTasks = [
 > 1.  Function Component (FC)
 > 2.  Class Component
 >
-> . . . [Function component] is defined as a JavaScript function where its first argument is a `props` object. TS enforces that its return type must be assignable to `JSX.Element`. . . . Because a Function Component is simply a JavaScript function, function overloads may be used here as well:
+> [TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)
+
+## Setup
+
+"JSX is an embeddable XML-like syntax. It is meant to be transformed into valid JavaScript, though the semantics of that transformation are implementation-specific. JSX rose to popularity with the React framework, but has since seen other implementations as well." ([TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html))
+
+"TypeScript supports embedding, type checking, and compiling JSX directly to JavaScript." ([TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html))
+
+> In order to use JSX you must do two things.
 >
-> ```ts
-> interface ClickableProps {
->   children: JSX.Element[] | JSX.Element;
-> }
->
-> interface HomeProps extends ClickableProps {
->   home: JSX.Element;
-> }
->
-> interface SideProps extends ClickableProps {
->   side: JSX.Element | string;
-> }
->
-> function MainButton(prop: HomeProps): JSX.Element;
-> function MainButton(prop: SideProps): JSX.Element;
-> function MainButton(prop: ClickableProps): JSX.Element {
->   // ...
-> }
-> ```
+> 1.  Name your files with a `.tsx` extension
+> 2.  Enable the `jsx` option
 >
 > [TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)
 
-### Result Type
+"Every file containing JSX must use the `.tsx` file extension. This is a TypeScript-specific extension that tells TypeScript that this file contains JSX." ([React](https://react.dev/learn/typescript))
 
-"By default the result of a JSX expression is typed as `any`. You can customize the type by specifying the `JSX.Element` interface. However, it is not possible to retrieve type information about the element, attributes or children of the JSX from this interface. It is a black box." ([TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html))
+> TypeScript ships with three JSX modes: `preserve`, `react`, and `react-native`. These modes only affect the emit stage - type checking is unaffected. The `preserve` mode will keep the JSX as part of the output to be further consumed by another transform step (e.g. Babel). Additionally the output will have a `.jsx` file extension. The `react` mode will emit `React.createElement`, does not need to go through a JSX transformation before use, and the output will have a `.js` file extension. The react-native mode is the equivalent of `preserve` in that it keeps all JSX, but the output will instead have a `.js` file extension.
+>
+> | Mode           | Input     | Output                                            | Output File Extension |
+> | -------------- | --------- | ------------------------------------------------- | --------------------- |
+> | `preserve`     | `<div />` | `<div />`                                         | `.jsx`                |
+> | `react`        | `<div />` | `React.createElement("div")`                      | `.js`                 |
+> | `react-native` | `<div />` | `<div />`                                         | `.js`                 |
+> | `react-jsx`    | `<div />` | `_jsx("div", {}, void 0);`                        | `.js`                 |
+> | `react-jsxdev` | `<div />` | `_jsxDEV("div", {}, void 0, false, {...}, this);` | `.js`                 |
+>
+> [TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)
+
+"To use JSX with React you should use the [React typings](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react). These typings define the JSX namespace appropriately for use with React." ([TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html))
+
+> Out of the box, TypeScript supports JSX and you can get full React Web support by adding `@types/react` and `@types/react-dom` to your project.
+>
+> ```bash
+> npm install @types/react @types/react-dom
+> ```
+>
+> [React](https://react.dev/learn/typescript)
+
+> The following compiler options need to be set in your `tsconfig.json`:
+>
+> - `dom` must be included in `lib` (Note: If no `lib` option is specified, `dom` is included by default).
+> - `jsx` must be set to one of the valid options. `preserve` should suffice for most applications. If you’re publishing a library, consult the [`jsx` documentation](https://www.typescriptlang.org/tsconfig/#jsx) on what value to choose.
+>
+> [React](https://react.dev/learn/typescript)
+
+> There are multiple compiler flags which can be used to customize your JSX, which work as both a compiler flag and via inline per-file pragmas. To learn more see their tsconfig reference pages:
+>
+> - `jsxFactory`
+> - `jsxFragmentFactory`
+> - `jsxImportSource`
+>
+> [TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)
 
 ## Usage
 
-### General
+### Asserting Types
 
-"Every file containing JSX must use the `.tsx` file extension. This is a TypeScript-specific extension that tells TypeScript that this file contains JSX." ([React](https://react.dev/learn/typescript))
+> Recall how to write a type assertion:
+>
+> ```ts
+> const foo = <foo>bar;
+> ```
+>
+> This asserts the variable `bar` to have the type `foo`. Since TypeScript also uses angle brackets for type assertions, combining it with JSX’s syntax would introduce certain parsing difficulties. As a result, TypeScript disallows angle bracket type assertions in `.tsx` files.
+>
+> Since the above syntax cannot be used in `.tsx` files, an alternate type assertion operator should be used: `as`. The example can easily be rewritten with the `as` operator.
+>
+> ```ts
+> const foo = bar as foo;
+> ```
+>
+> The `as` operator is available in both `.ts` and `.tsx` files, and is identical in behavior to the angle-bracket type assertion style.
+>
+> [TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)
+
+### Describing Props
+
+#### General
 
 Usage:
 
@@ -2427,274 +2403,7 @@ Alternatively:
 >
 > [React](https://react.dev/learn/typescript)
 
-"The type definitions from `@types/react` include types for the built-in Hooks, so you can use them in your components without any additional setup. They are built to take into account the code you write in your component, so you will get inferred types a lot of the time and ideally do not need to handle the minutiae of providing the types." ([React](https://react.dev/learn/typescript))
-
-### `useState`
-
-> The `useState` Hook will re-use the value passed in as the initial state to determine what the type of the value should be. For example:
->
-> ```ts
-> // Infer the type as "boolean"
-> const [enabled, setEnabled] = useState(false);
-> ```
->
-> This will assign the type of `boolean` to `enabled`, and `setEnabled` will be a function accepting either a `boolean` argument, or a function that returns a `boolean`.
->
-> [React](https://react.dev/learn/typescript)
-
-> If you want to explicitly provide a type for the state, you can do so by providing a type argument to the `useState` call . . .
->
-> a common case where you may want to provide a type is when you have a union type. For example, status here can be one of a few different strings:
->
-> ```ts
-> type Status = "idle" | "loading" | "success" | "error";
->
-> const [status, setStatus] = useState<Status>("idle");
-> ```
->
-> Or, as recommended . . . you can group related state as an object and describe the different possibilities via object types:
->
-> ```ts
-> type RequestState =
->   | { status: "idle" }
->   | { status: "loading" }
->   | { status: "success"; data: any }
->   | { status: "error"; error: Error };
->
-> const [requestState, setRequestState] = useState<RequestState>({
->   status: "idle",
-> });
-> ```
->
-> [React](https://react.dev/learn/typescript)
-
-### `useReducer`
-
-"The `useReducer` Hook . . . takes a reducer function and an initial state." ([React](https://react.dev/learn/typescript))
-
-"The types for the reducer function are inferred from the initial state." ([React](https://react.dev/learn/typescript))
-
-"You can optionally provide a type argument to the `useReducer` call to provide a type for the state, but it is often better to set the type on the initial state instead" ([React](https://react.dev/learn/typescript))
-
-> ```ts
-> import { useReducer } from "react";
->
-> interface State {
->   count: number;
-> }
->
-> type CounterAction =
->   | { type: "reset" }
->   | { type: "setCount"; value: State["count"] };
->
-> const initialState: State = { count: 0 };
->
-> function stateReducer(state: State, action: CounterAction): State {
->   switch (action.type) {
->     case "reset":
->       return initialState;
->     case "setCount":
->       return { ...state, count: action.value };
->     default:
->       throw new Error("Unknown action");
->   }
-> }
->
-> export default function App() {
->   const [state, dispatch] = useReducer(stateReducer, initialState);
->
->   const addFive = () =>
->     dispatch({ type: "setCount", value: state.count + 5 });
->   const reset = () => dispatch({ type: "reset" });
->
->   return (
->     <div>
->       <h1>Welcome to my counter</h1>
->
->       <p>Count: {state.count}</p>
->       <button onClick={addFive}>Add 5</button>
->       <button onClick={reset}>Reset</button>
->     </div>
->   );
-> }
-> ```
->
-> We are using TypeScript in a few key places:
->
-> - `interface State` describes the shape of the reducer’s state.
-> - `type CounterAction` describes the different actions which can be dispatched to the reducer.
-> - `const initialState: State` provides a type for the initial state, and also the type which is used by `useReducer` by default.
-> - `stateReducer(state: State, action: CounterAction): State` sets the types for the reducer function’s arguments and return value.
->
-> [React](https://react.dev/learn/typescript)
-
-> A more explicit alternative to setting the type on `initialState` is to provide a type argument to `useReducer`:
->
-> ```ts
-> import { stateReducer, State } from "./your-reducer-implementation";
->
-> const initialState = { count: 0 };
->
-> export default function App() {
->   const [state, dispatch] = useReducer<State>(stateReducer, initialState);
-> }
-> ```
->
-> [React](https://react.dev/learn/typescript)
-
-### `useContext`
-
-"The type of the value provided by the context is inferred from the value passed to the createContext call" ([React](https://react.dev/learn/typescript))
-
-> ```ts
-> import { createContext, useContext, useState } from "react";
->
-> type Theme = "light" | "dark" | "system";
-> const ThemeContext = createContext<Theme>("system");
->
-> const useGetTheme = () => useContext(ThemeContext);
->
-> export default function MyApp() {
->   const [theme, setTheme] = useState<Theme>("light");
->
->   return (
->     <ThemeContext.Provider value={theme}>
->       <MyComponent />
->     </ThemeContext.Provider>
->   );
-> }
->
-> function MyComponent() {
->   const theme = useGetTheme();
->
->   return (
->     <div>
->       <p>Current theme: {theme}</p>
->     </div>
->   );
-> }
-> ```
->
-> [React](https://react.dev/learn/typescript)
-
-> This technique works when you have a default value which makes sense - but there are occasionally cases when you do not, and in those cases `null` can feel reasonable as a default value. However, to allow the type-system to understand your code, you need to explicitly set `ContextShape | null` on the `createContext`. This causes the issue that you need to eliminate the `| null` in the type for context consumers. Our recommendation is to have the Hook do a runtime check for it’s existence and throw an error when not present:
->
-> ```ts
-> import { createContext, useContext, useState, useMemo } from "react";
->
-> // This is a simpler example, but you can imagine a more complex object here
-> type ComplexObject = {
->   kind: string;
-> };
->
-> // The context is created with `| null` in the type, to accurately reflect the default value.
-> const Context = createContext<ComplexObject | null>(null);
->
-> // The `| null` will be removed via the check in the Hook.
-> const useGetComplexObject = () => {
->   const object = useContext(Context);
->   if (!object) {
->     throw new Error("useGetComplexObject must be used within a Provider");
->   }
->   return object;
-> };
->
-> export default function MyApp() {
->   const object = useMemo(() => ({ kind: "complex" }), []);
->
->   return (
->     <Context.Provider value={object}>
->       <MyComponent />
->     </Context.Provider>
->   );
-> }
->
-> function MyComponent() {
->   const object = useGetComplexObject();
->
->   return (
->     <div>
->       <p>Current object: {object.kind}</p>
->     </div>
->   );
-> }
-> ```
->
-> [React](https://react.dev/learn/typescript)
-
-### `useMemo`
-
-"The result of calling the Hook is inferred from the return value from the function in the first parameter. You can be more explicit by providing a type argument to the Hook." ([React](https://react.dev/learn/typescript))
-
-> ```ts
-> // The type of visibleTodos is inferred from the return value of filterTodos
-> const visibleTodos = useMemo(() => filterTodos(todos, tab), [todos, tab]);
-> ```
->
-> [React](https://react.dev/learn/typescript)
-
-### `useCallback`
-
-"the function’s type is inferred from the return value of the function in the first parameter, and you can be more explicit by providing a type argument to the Hook." ([React](https://react.dev/learn/typescript))
-
-> When working in TypeScript strict mode `useCallback` requires adding types for the parameters in your callback. This is because the type of the callback is inferred from the return value of the function, and without parameters the type cannot be fully understood. Depending on your code-style preferences, you could use the `*EventHandler` functions from the React types to provide the type for the event handler at the same time as defining the callback:
-
-> ```ts
-> import { useState, useCallback } from "react";
->
-> export default function Form() {
->   const [value, setValue] = useState("Change me");
->
->   const handleChange = useCallback<
->     React.ChangeEventHandler<HTMLInputElement>
->   >(
->     (event) => {
->       setValue(event.currentTarget.value);
->     },
->     [setValue]
->   );
->
->   return (
->     <>
->       <input value={value} onChange={handleChange} />
->       <p>Value: {value}</p>
->     </>
->   );
-> }
-> ```
->
-> [React](https://react.dev/learn/typescript)
-
-## Built-In Types
-
-### DOM Events
-
-"When working with DOM events in React, the type of the event can often be inferred from the event handler. However, when you want to extract a function to be passed to an event handler, you will need to explicitly set the type of the event." ([React](https://react.dev/learn/typescript))
-
-> ```ts
-> import { useState } from "react";
->
-> export default function Form() {
->   const [value, setValue] = useState("Change me");
->
->   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
->     setValue(event.currentTarget.value);
->   }
->
->   return (
->     <>
->       <input value={value} onChange={handleChange} />
->       <p>Value: {value}</p>
->     </>
->   );
-> }
-> ```
->
-> [React](https://react.dev/learn/typescript)
-
-"There are many types of events provided in the React types - the full list can be found [here](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/b580df54c0819ec9df62b0835a315dd48b8594a9/types/react/index.d.ts#L1247C1-L1373) which is based on the most popular events from the DOM. When determining the type you are looking for you can first look at the hover information for the event handler you are using, which will show the type of the event. If you need to use an event that is not included in this list, you can use the `React.SyntheticEvent` type, which is the base type for all events." ([React](https://react.dev/learn/typescript))
-
-### Children
+#### Children
 
 > There are two common paths to describing the children of a component.
 >
@@ -2784,13 +2493,312 @@ Alternatively:
 >
 > [TypeScript](https://www.typescriptlang.org/play/#code/JYWwDg9gTgLgBAJQKYEMDG8BmUIjgIilQ3wChSB6CxYmAOmXRgDkIATJOdNJMGAZzgwAFpxAR+8YADswAVwGkZMJFEzpOjDKw4AFHGEEBvUnDhphwADZsi0gFw0mDWjqQBuUgF9yaCNMlENzgAXjgACjADfkctFnYkfQhDAEpQgD44AB42YAA3dKMo5P46C2tbJGkvLIpcgt9-QLi3AEEwMFCItJDMrPTTbIQ3dKywdIB5aU4kKyQQKpha8drhhIGzLLWODbNs3b3s8YAxKBQAcwXpAThMaGWDvbH0gFloGbmrgQfBzYpd1YjQZbEYARkB6zMwO2SHSAAlZlYIBCdtCRkZpHIrFYahQYQD8UYYFA5EhcfjyGYqHAXnJAsIUHlOOUbHYhMIIHJzsI0Qk4P9SLUBuRqXEXEwAKKfRZcNA8PiCfxWACecAAUgBlAAacFm80W-CU11U6h4TgwUv11yShjgJjMLMqDnN9Dilq+nh8pD8AXgCHdMrCkWisVoAet0R6fXqhWKhjKllZVVxMcavpd4Zg7U6Qaj+2hmdG4zeRF10uu-Aeq0LBfLMEe-V+T2L7zLVu+FBWLdLeq+lc7DYFf39deFVOotMCACNOCh1dq219a+30uC8YWoZsRyuEdjkevR8uvoVMdjyTWt4WiSSydXD4NqZP4AymeZE072ZzuUeZQKheQgA)
 
-### `style` Property
+#### Inline Styles
 
 "When using inline styles in React, you can use `React.CSSProperties` to describe the object passed to the `style` prop. This type is a union of all the possible CSS properties, and is a good way to ensure you are passing valid CSS properties to the `style` prop, and to get auto-complete in your editor." ([React](https://react.dev/learn/typescript))
 
 > ```ts
 > interface MyComponentProps {
 >   style: React.CSSProperties;
+> }
+> ```
+>
+> [React](https://react.dev/learn/typescript)
+
+### Describing JSX
+
+"By default the result of a JSX expression is typed as `any`. You can customize the type by specifying the `JSX.Element` interface. However, it is not possible to retrieve type information about the element, attributes or children of the JSX from this interface. It is a black box." ([TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html))
+
+### Function Component Overloads
+
+> [Function component] is defined as a JavaScript function where its first argument is a `props` object. TS enforces that its return type must be assignable to `JSX.Element`. . . . Because a Function Component is simply a JavaScript function, function overloads may be used here as well:
+>
+> ```ts
+> interface ClickableProps {
+>   children: JSX.Element[] | JSX.Element;
+> }
+>
+> interface HomeProps extends ClickableProps {
+>   home: JSX.Element;
+> }
+>
+> interface SideProps extends ClickableProps {
+>   side: JSX.Element | string;
+> }
+>
+> function MainButton(prop: HomeProps): JSX.Element;
+> function MainButton(prop: SideProps): JSX.Element;
+> function MainButton(prop: ClickableProps): JSX.Element {
+>   // ...
+> }
+> ```
+>
+> [TypeScript](https://www.typescriptlang.org/docs/handbook/jsx.html)
+
+### Describing DOM Events
+
+"When working with DOM events in React, the type of the event can often be inferred from the event handler. However, when you want to extract a function to be passed to an event handler, you will need to explicitly set the type of the event." ([React](https://react.dev/learn/typescript))
+
+"There are many types of events provided in the React types - the full list can be found [here](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/b580df54c0819ec9df62b0835a315dd48b8594a9/types/react/index.d.ts#L1247C1-L1373) which is based on the most popular events from the DOM. When determining the type you are looking for you can first look at the hover information for the event handler you are using, which will show the type of the event. If you need to use an event that is not included in this list, you can use the `React.SyntheticEvent` type, which is the base type for all events." ([React](https://react.dev/learn/typescript))
+
+> ```ts
+> import { useState } from "react";
+>
+> export default function Form() {
+>   const [value, setValue] = useState("Change me");
+>
+>   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+>     setValue(event.currentTarget.value);
+>   }
+>
+>   return (
+>     <>
+>       <input value={value} onChange={handleChange} />
+>       <p>Value: {value}</p>
+>     </>
+>   );
+> }
+> ```
+>
+> [React](https://react.dev/learn/typescript)
+
+### Describing Hooks
+
+#### General
+
+"The type definitions from `@types/react` include types for the built-in Hooks, so you can use them in your components without any additional setup. They are built to take into account the code you write in your component, so you will get inferred types a lot of the time and ideally do not need to handle the minutiae of providing the types." ([React](https://react.dev/learn/typescript))
+
+#### `useState`
+
+> The `useState` Hook will re-use the value passed in as the initial state to determine what the type of the value should be. For example:
+>
+> ```ts
+> // Infer the type as "boolean"
+> const [enabled, setEnabled] = useState(false);
+> ```
+>
+> This will assign the type of `boolean` to `enabled`, and `setEnabled` will be a function accepting either a `boolean` argument, or a function that returns a `boolean`.
+>
+> [React](https://react.dev/learn/typescript)
+
+> If you want to explicitly provide a type for the state, you can do so by providing a type argument to the `useState` call . . .
+>
+> a common case where you may want to provide a type is when you have a union type. For example, status here can be one of a few different strings:
+>
+> ```ts
+> type Status = "idle" | "loading" | "success" | "error";
+>
+> const [status, setStatus] = useState<Status>("idle");
+> ```
+>
+> Or, as recommended . . . you can group related state as an object and describe the different possibilities via object types:
+>
+> ```ts
+> type RequestState =
+>   | { status: "idle" }
+>   | { status: "loading" }
+>   | { status: "success"; data: any }
+>   | { status: "error"; error: Error };
+>
+> const [requestState, setRequestState] = useState<RequestState>({
+>   status: "idle",
+> });
+> ```
+>
+> [React](https://react.dev/learn/typescript)
+
+#### `useReducer`
+
+"The `useReducer` Hook . . . takes a reducer function and an initial state." ([React](https://react.dev/learn/typescript))
+
+"The types for the reducer function are inferred from the initial state." ([React](https://react.dev/learn/typescript))
+
+"You can optionally provide a type argument to the `useReducer` call to provide a type for the state, but it is often better to set the type on the initial state instead" ([React](https://react.dev/learn/typescript))
+
+> ```ts
+> import { useReducer } from "react";
+>
+> interface State {
+>   count: number;
+> }
+>
+> type CounterAction =
+>   | { type: "reset" }
+>   | { type: "setCount"; value: State["count"] };
+>
+> const initialState: State = { count: 0 };
+>
+> function stateReducer(state: State, action: CounterAction): State {
+>   switch (action.type) {
+>     case "reset":
+>       return initialState;
+>     case "setCount":
+>       return { ...state, count: action.value };
+>     default:
+>       throw new Error("Unknown action");
+>   }
+> }
+>
+> export default function App() {
+>   const [state, dispatch] = useReducer(stateReducer, initialState);
+>
+>   const addFive = () =>
+>     dispatch({ type: "setCount", value: state.count + 5 });
+>   const reset = () => dispatch({ type: "reset" });
+>
+>   return (
+>     <div>
+>       <h1>Welcome to my counter</h1>
+>
+>       <p>Count: {state.count}</p>
+>       <button onClick={addFive}>Add 5</button>
+>       <button onClick={reset}>Reset</button>
+>     </div>
+>   );
+> }
+> ```
+>
+> We are using TypeScript in a few key places:
+>
+> - `interface State` describes the shape of the reducer’s state.
+> - `type CounterAction` describes the different actions which can be dispatched to the reducer.
+> - `const initialState: State` provides a type for the initial state, and also the type which is used by `useReducer` by default.
+> - `stateReducer(state: State, action: CounterAction): State` sets the types for the reducer function’s arguments and return value.
+>
+> [React](https://react.dev/learn/typescript)
+
+> A more explicit alternative to setting the type on `initialState` is to provide a type argument to `useReducer`:
+>
+> ```ts
+> import { stateReducer, State } from "./your-reducer-implementation";
+>
+> const initialState = { count: 0 };
+>
+> export default function App() {
+>   const [state, dispatch] = useReducer<State>(stateReducer, initialState);
+> }
+> ```
+>
+> [React](https://react.dev/learn/typescript)
+
+#### `useContext`
+
+"The type of the value provided by the context is inferred from the value passed to the createContext call" ([React](https://react.dev/learn/typescript))
+
+> ```ts
+> import { createContext, useContext, useState } from "react";
+>
+> type Theme = "light" | "dark" | "system";
+> const ThemeContext = createContext<Theme>("system");
+>
+> const useGetTheme = () => useContext(ThemeContext);
+>
+> export default function MyApp() {
+>   const [theme, setTheme] = useState<Theme>("light");
+>
+>   return (
+>     <ThemeContext.Provider value={theme}>
+>       <MyComponent />
+>     </ThemeContext.Provider>
+>   );
+> }
+>
+> function MyComponent() {
+>   const theme = useGetTheme();
+>
+>   return (
+>     <div>
+>       <p>Current theme: {theme}</p>
+>     </div>
+>   );
+> }
+> ```
+>
+> [React](https://react.dev/learn/typescript)
+
+> This technique works when you have a default value which makes sense - but there are occasionally cases when you do not, and in those cases `null` can feel reasonable as a default value. However, to allow the type-system to understand your code, you need to explicitly set `ContextShape | null` on the `createContext`. This causes the issue that you need to eliminate the `| null` in the type for context consumers. Our recommendation is to have the Hook do a runtime check for it’s existence and throw an error when not present:
+>
+> ```ts
+> import { createContext, useContext, useState, useMemo } from "react";
+>
+> // This is a simpler example, but you can imagine a more complex object here
+> type ComplexObject = {
+>   kind: string;
+> };
+>
+> // The context is created with `| null` in the type, to accurately reflect the default value.
+> const Context = createContext<ComplexObject | null>(null);
+>
+> // The `| null` will be removed via the check in the Hook.
+> const useGetComplexObject = () => {
+>   const object = useContext(Context);
+>   if (!object) {
+>     throw new Error("useGetComplexObject must be used within a Provider");
+>   }
+>   return object;
+> };
+>
+> export default function MyApp() {
+>   const object = useMemo(() => ({ kind: "complex" }), []);
+>
+>   return (
+>     <Context.Provider value={object}>
+>       <MyComponent />
+>     </Context.Provider>
+>   );
+> }
+>
+> function MyComponent() {
+>   const object = useGetComplexObject();
+>
+>   return (
+>     <div>
+>       <p>Current object: {object.kind}</p>
+>     </div>
+>   );
+> }
+> ```
+>
+> [React](https://react.dev/learn/typescript)
+
+#### `useMemo`
+
+"The result of calling the Hook is inferred from the return value from the function in the first parameter. You can be more explicit by providing a type argument to the Hook." ([React](https://react.dev/learn/typescript))
+
+> ```ts
+> // The type of visibleTodos is inferred from the return value of filterTodos
+> const visibleTodos = useMemo(() => filterTodos(todos, tab), [todos, tab]);
+> ```
+>
+> [React](https://react.dev/learn/typescript)
+
+#### `useCallback`
+
+"the function’s type is inferred from the return value of the function in the first parameter, and you can be more explicit by providing a type argument to the Hook." ([React](https://react.dev/learn/typescript))
+
+> When working in TypeScript strict mode `useCallback` requires adding types for the parameters in your callback. This is because the type of the callback is inferred from the return value of the function, and without parameters the type cannot be fully understood. Depending on your code-style preferences, you could use the `*EventHandler` functions from the React types to provide the type for the event handler at the same time as defining the callback:
+
+> ```ts
+> import { useState, useCallback } from "react";
+>
+> export default function Form() {
+>   const [value, setValue] = useState("Change me");
+>
+>   const handleChange = useCallback<
+>     React.ChangeEventHandler<HTMLInputElement>
+>   >(
+>     (event) => {
+>       setValue(event.currentTarget.value);
+>     },
+>     [setValue]
+>   );
+>
+>   return (
+>     <>
+>       <input value={value} onChange={handleChange} />
+>       <p>Value: {value}</p>
+>     </>
+>   );
 > }
 > ```
 >
