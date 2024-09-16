@@ -4,7 +4,7 @@
 
 ### Introduction
 
-- **Example**
+- **Overview**
 - **Project Structure**
   - Component Organization
   - The Module Dependency Tree
@@ -214,7 +214,7 @@
 
 # Introduction
 
-## Example
+## Overview
 
 ```html
 <!-- index.html -->
