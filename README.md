@@ -147,6 +147,10 @@
     - Use Cases
       - Positive
       - Negative
+  - Best Practices
+    - Separating Independent Processeses
+    - Extracting into Effect Events
+    - Extracting into Custom Hooks
 - **External Store Subscriptions**
   - Introduction
   - Usage
@@ -1804,6 +1808,8 @@ const initialTasks = [
 
 ##### Avoiding Objects/Functions as Dependencies
 
+"Avoid relying on objects and functions as dependencies. If you create objects and functions during rendering and then read them from an Effect, they will be different on every render. This will cause your Effect to re-synchronize every time." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
+
 "In JavaScript, each newly created object and function is considered distinct from all the others. It doesn’t matter that the contents inside of them may be the same! . . . Object and function dependencies can make your Effect re-synchronize more often than you need. This is why, whenever possible, you should try to avoid objects and functions as your Effect’s dependencies. Instead, try moving them outside the component, inside the Effect, or extracting primitive values out of them. . . . Move static objects and functions outside your component . . . Move dynamic objects and functions inside your Effect . . . If your object depends on some reactive value that may change as a result of a re-render . . . you can’t pull it outside your component. You can, however, move its creation inside of your Effect’s code" ([React](https://react.dev/learn/removing-effect-dependencies))
 
 "Read primitive values from objects . . . Sometimes, you may receive an object from props . . . The risk here is that the parent component will create the object during rendering . . . This would cause your Effect to re-connect every time the parent component re-renders. To fix this, read information from the object _outside_ the Effect, and avoid having object and function dependencies" ([React](https://react.dev/learn/removing-effect-dependencies))
@@ -1946,6 +1952,24 @@ const initialTasks = [
 >
 > [React](https://react.dev/learn/synchronizing-with-effects)
 
+### Best Practices
+
+#### Separating Independent Processeses
+
+"Check that your Effect represents an independent synchronization process. If your Effect doesn’t synchronize anything, it might be unnecessary. If it synchronizes several independent things, split it up." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
+
+"Resist adding unrelated logic to your Effect only because this logic needs to run at the same time as an Effect you already wrote. For example, let’s say you want to send an analytics event when the user visits the room. You already have an Effect that depends on `roomId`, so you might feel tempted to add the analytics call there . . . But imagine you later add another dependency to this Effect that needs to re-establish the connection. If this Effect re-synchronizes, it will also call `logVisit(roomId)` for the same room, which you did not intend. Logging the visit is a separate process from connecting. Write them as two separate Effects . . . Each Effect in your code should represent a separate and independent synchronization process." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
+
+"deleting one Effect wouldn’t break the other Effect’s logic. This is a good indication that they synchronize different things, and so it made sense to split them up. On the other hand, if you split up a cohesive piece of logic into separate Effects, the code may look “cleaner” but will be more difficult to maintain. This is why you should think whether the processes are same or separate, not whether the code looks cleaner." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
+
+#### Extracting into Effect Events
+
+"If you want to read the latest value of props or state without “reacting” to it and re-synchronizing the Effect, you can split your Effect into a reactive part (which you’ll keep in the Effect) and a non-reactive part (which you’ll extract into something called an _Effect Event_)." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
+
+#### Extracting into Custom Hooks
+
+"In general, whenever you have to resort to writing Effects, keep an eye out for when you can extract a piece of functionality into a custom Hook with a more declarative and purpose-built API . . . The fewer raw `useEffect` calls you have in your components, the easier you will find to maintain your application." ([React](https://react.dev/learn/you-might-not-need-an-effect))
+
 ## External Store Subscriptions
 
 ### Introduction
@@ -2055,15 +2079,6 @@ Use cases:
 - "Effects are an “escape hatch”: you use them when you need to “step outside React” and when there is no better built-in solution for your use case. With time, the React team’s goal is to reduce the number of the Effects in your app to the minimum by providing more specific solutions to more specific problems. Wrapping your Effects in custom Hooks makes it easier to upgrade your code when these solutions become available." ([React](https://react.dev/learn/reusing-logic-with-custom-hooks))
 
 # Effects
-
-Best practices:
-
-- "Resist adding unrelated logic to your Effect only because this logic needs to run at the same time as an Effect you already wrote. For example, let’s say you want to send an analytics event when the user visits the room. You already have an Effect that depends on `roomId`, so you might feel tempted to add the analytics call there . . . But imagine you later add another dependency to this Effect that needs to re-establish the connection. If this Effect re-synchronizes, it will also call `logVisit(roomId)` for the same room, which you did not intend. Logging the visit is a separate process from connecting. Write them as two separate Effects . . . Each Effect in your code should represent a separate and independent synchronization process." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
-- "deleting one Effect wouldn’t break the other Effect’s logic. This is a good indication that they synchronize different things, and so it made sense to split them up. On the other hand, if you split up a cohesive piece of logic into separate Effects, the code may look “cleaner” but will be more difficult to maintain. This is why you should think whether the processes are same or separate, not whether the code looks cleaner." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
-- "Check that your Effect represents an independent synchronization process. If your Effect doesn’t synchronize anything, it might be unnecessary. If it synchronizes several independent things, split it up." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
-- "If you want to read the latest value of props or state without “reacting” to it and re-synchronizing the Effect, you can split your Effect into a reactive part (which you’ll keep in the Effect) and a non-reactive part (which you’ll extract into something called an _Effect Event_)." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
-- "Avoid relying on objects and functions as dependencies. If you create objects and functions during rendering and then read them from an Effect, they will be different on every render. This will cause your Effect to re-synchronize every time." ([React](https://react.dev/learn/lifecycle-of-reactive-effects))
-- "In general, whenever you have to resort to writing Effects, keep an eye out for when you can extract a piece of functionality into a custom Hook with a more declarative and purpose-built API . . . The fewer raw `useEffect` calls you have in your components, the easier you will find to maintain your application." ([React](https://react.dev/learn/you-might-not-need-an-effect))
 
 Use cases:
 
