@@ -2810,7 +2810,9 @@ Alternatively:
 
 ### Introduction
 
-> Imagine that you already have a JSON API and a mockup from a designer. The JSON API returns some data that looks like this:
+> Imagine that you already have a JSON API and a mockup from a designer.
+>
+> The JSON API returns some data that looks like this:
 >
 > ```json
 > [
@@ -2842,6 +2844,10 @@ Alternatively:
 >   { "category": "Vegetables", "price": "$1", "stocked": true, "name": "Peas" }
 > ]
 > ```
+>
+> The mockup looks like this:
+>
+> ![Image](/assets/s_thinking-in-react_ui.png)
 >
 > [React](https://react.dev/learn/thinking-in-react)
 
