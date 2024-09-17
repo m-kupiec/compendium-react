@@ -201,6 +201,8 @@
 
 - **Application-Level**
   - Introduction
+    - Data Model
+    - Mockup
   - Step 1: Designing a Component Hierarchy
   - Step 2: Building a Static Prototype
   - Step 3: Identifying the State
@@ -2810,6 +2812,8 @@ Alternatively:
 
 ### Introduction
 
+#### Data Model
+
 > Imagine that you already have a JSON API and a mockup from a designer.
 >
 > The JSON API returns some data that looks like this:
@@ -2845,6 +2849,10 @@ Alternatively:
 > ]
 > ```
 >
+> [React](https://react.dev/learn/thinking-in-react)
+
+#### Mockup
+
 > The mockup looks like this:
 >
 > ![Image](/assets/s_thinking-in-react_ui.png)
