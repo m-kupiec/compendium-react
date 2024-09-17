@@ -200,7 +200,7 @@
 ### UI Design & Development
 
 - **Application-Level**
-  - Introduction
+  - Preparation
     - Data Model
     - Mockup
   - Step 1: Designing a Component Hierarchy
@@ -2810,7 +2810,7 @@ Alternatively:
 
 ## Application-Level
 
-### Introduction
+### Preparation
 
 #### Data Model
 
