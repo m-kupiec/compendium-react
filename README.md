@@ -210,6 +210,7 @@
   - Step 5: Implementing the State Updates
 - **Component-Level**
   - Overview
+  - Introduction
   - Step 1: Identifying Visual States
   - Step 2: Identifying State Triggers
   - Step 3: Drafting State
@@ -2956,6 +2957,12 @@ Component design and development phases:
 > 5. **Connect** the event handlers to set the state
 >
 > [React](https://react.dev/learn/reacting-to-input-with-state)
+
+### Introduction
+
+> ![Image](/assets/city-quiz-app.png)
+>
+> Screenshot taken at [React](https://react.dev/learn/reacting-to-input-with-state)
 
 ### Step 1: Identifying Visual States
 
