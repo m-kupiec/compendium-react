@@ -200,6 +200,7 @@
 ### UI Design & Development
 
 - **Application-Level**
+  - Introduction
   - Step 1: Designing a Component Hierarchy
   - Step 2: Building a Static Prototype
   - Step 3: Identifying the State
@@ -2807,7 +2808,7 @@ Alternatively:
 
 ## Application-Level
 
-### Step 1: Designing a Component Hierarchy
+### Introduction
 
 > Imagine that you already have a JSON API and a mockup from a designer. The JSON API returns some data that looks like this:
 >
@@ -2842,6 +2843,10 @@ Alternatively:
 > ]
 > ```
 >
+> [React](https://react.dev/learn/thinking-in-react)
+
+### Step 1: Designing a Component Hierarchy
+
 > Start by drawing boxes around every component and subcomponent in the mockup and naming them. If you work with a designer, they may have already named these components in their design tool.
 >
 > . . . a component should ideally only do one thing. If it ends up growing, it should be decomposed into smaller subcomponents.
