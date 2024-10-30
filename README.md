@@ -123,7 +123,7 @@
   - By Cause
     - Event
     - Rendering
-  - By Value Reactivity
+  - By Logic Reactivity
 - **Effects**
   - Operation
   - Lifecycle
@@ -1657,7 +1657,7 @@ const initialTasks = [
 
 "Effects let you specify side effects that are caused by rendering itself, rather than by a particular event. Sending a message in the chat is an _event_ because it is directly caused by the user clicking a specific button. However, setting up a server connection is an _Effect_ because it should happen no matter which interaction caused the component to appear." ([React](https://react.dev/learn/synchronizing-with-effects))
 
-### By Value Reactivity
+### By Logic Reactivity
 
 > Props, state, and variables declared inside your component’s body are called reactive values. . . . They participate in the rendering data flow . . . can change due to a re-render . . .
 >
