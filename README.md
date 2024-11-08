@@ -1,6 +1,10 @@
-# React Reference
+# React Compendium
 
-## TOC
+Welcome to the _React Compendium_, part of the _[Front-End Compendia](https://github.com/m-kupiec/compendia/blob/main/README.md)_ project—a series of Markdown-based notebooks designed to provide in-depth explorations of front-end development topics. This notebook covers React best practices, component design, state management, hooks, and optimization techniques. From essential component structuring to advanced uses of the Context API and custom hooks, this resource provides a structured path to building efficient and scalable React applications.
+
+This compendium is one of several in the _[Front-End Compendia](https://github.com/m-kupiec/compendia/blob/main/README.md)_ project, each dedicated to a specific technology. For other topics, including JavaScript and TypeScript, and a list of upcoming notebooks, visit [the main repository](https://github.com/m-kupiec/compendia/blob/main/README.md) to explore the full project.
+
+## Table of Contents
 
 ### Introduction
 
